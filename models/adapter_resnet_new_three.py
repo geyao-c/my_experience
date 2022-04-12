@@ -357,15 +357,15 @@ class ResNet_New_New(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        # feature = x.clone()
+        feature = x.clone()
 
         if self.num_layer == 56:
             x = self.fc(x)
         else:
             x = self.linear(x)
 
-        # return x, feature
-        return x
+        return x, feature
+        # return x
 
 def adapter9resnet_56(sparsity, num_classes, adapter_sparsity):
     return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
