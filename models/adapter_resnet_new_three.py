@@ -3,16 +3,16 @@ import torch.nn.functional as F
 from .adapter import Adapter, Adapter3, Adapter4, Adapter5
 
 """
-= =  =  =  =  =  =  +  +  +  +  +  =
-= =  =  =  =  =  =  =  =  =  =  =  =
-= =  +  +  +  =  =  =  =  =  =  =  =
-= +  =  =  =  =  =  =  =  =  =  =  =
-= =  =  =  =  +  =  =  +  +  =  =  =
-= =  +  +  +  =  =  =  =  =  =  =  =
-= =  =  =  =  =  =  =  =  =  =  =  =
-= +  =  =  =  =  =  =  =  =  =  =  =
-+ =  +  +  +  +  +  +  +  =  +  +  +
-9 10 11 12 13 14 15 17 18 19 20 21 22
+= =  =  =  =  =  =  +  +  +  +  +  =  =
+= =  =  =  =  =  =  =  =  =  =  =  =  =
+= =  +  +  +  =  =  =  =  =  =  =  =  =
+= +  =  =  =  =  =  =  =  =  =  =  =  =
+= =  =  =  =  +  =  =  +  +  =  =  =  =
+= =  +  +  +  =  =  =  =  =  =  =  =  =
+= =  =  =  =  =  =  =  =  =  =  =  =  =
+= +  =  =  =  =  =  =  =  =  =  =  =  =
++ =  +  +  +  +  +  +  +  =  +  +  +  +
+9 10 11 12 13 14 15 17 18 19 20 21 22 23
 """
 
 adoch_cfg = {
@@ -29,7 +29,8 @@ adoch_cfg = {
     'adapter19': [64 * 8] * 2,
     'adapter20': [32 * 8] * 2 + [64 * 8] * 2,
     'adapter21': [16 * 8] * 2 + [32 * 8] * 2 + [64 * 8] * 2,
-    'adapter22': [16 * 8] + [32 * 8] + [64 * 8]
+    'adapter22': [16 * 8] + [32 * 8] + [64 * 8],
+    'adapter23': [32 * 8] + [64 * 8]
 }
 
 nd_cfg = {
@@ -47,7 +48,8 @@ nd_cfg = {
     'adapter19': [0, 4],
     'adapter20': [0, 8],
     'adapter21': [0, 8],
-    'adapter22': [8]
+    'adapter22': [8],
+    'adapter23': [8]
 }
 
 nd_stage = {
@@ -61,7 +63,8 @@ nd_stage = {
     'adapter19': [3],
     'adapter20': [2, 3],
     'adapter21': [1, 2, 3],
-    'adapter22': [1, 2, 3]
+    'adapter22': [1, 2, 3],
+    'adapter23': [2, 3]
 }
 
 def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
@@ -437,5 +440,10 @@ def adapter22resnet_56(sparsity, num_classes, adapter_sparsity):
                       adapter_out_channel=adoch_cfg['adapter22'], need_adapter=nd_cfg['adapter22'],
                       need_stage=nd_stage['adapter22'])
 
+# adapter22后面两个stage替换最后一层
+def adapter23resnet_56(sparsity, num_classes, adapter_sparsity):
+    return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+                      adapter_out_channel=adoch_cfg['adapter23'], need_adapter=nd_cfg['adapter23'],
+                      need_stage=nd_stage['adapter23'])
 
 
