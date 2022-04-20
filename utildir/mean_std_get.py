@@ -26,16 +26,20 @@ import utils
 import time
 
 # from models import *
-from data import cifar10, cifar100, tinyimagenet
+from data import cifar10, cifar100, tinyimagenet, svhn, dtd
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
-parser.add_argument('--dataset', default='CIFAR100', type=str, help='dataset')
-parser.add_argument('--batch_size', default='128', type=int, help='dataset')
-parser.add_argument('--data_dir', default='/Users/chenjie/dataset/tiny-imagenet-200', type=str, help='dataset')
+parser.add_argument('--dataset', default='dtd', type=str, help='dataset')
+parser.add_argument('--batch_size', default='64', type=int, help='dataset')
+parser.add_argument('--data_dir', default='/Users/chenjie/dataset/dtd', type=str, help='dataset')
+parser.add_argument('--split', default='1', type=str, help='dataset')
 
 args = parser.parse_args()
 
 # train_loader, valid_loader = cifar100.load_cifar_data(args)
-train_loader, valid_loader = tinyimagenet.load_tinyimagenet_data(args)
+# train_loader, valid_loader = tinyimagenet.load_tinyimagenet_data(args)
+# train_loader, valid_loader = svhn.load_svhn_data(args)
+train_loader, valid_loader = dtd.load_dtd_data(args)
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 h, w = 0, 0
 for batch_idx, (inputs, targets) in enumerate(train_loader):
