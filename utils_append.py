@@ -43,7 +43,7 @@ def analysis_sparsity(sparsity):
             assert len(find_num) == 1
             num = int(find_num[0].replace('*', ''))
         find_cprate = re.findall(pat_cprate, x)
-        print(find_cprate)
+        # print(find_cprate)
         assert len(find_cprate) == 1
         cprate += [float(find_cprate[0])] * num
 
@@ -2632,10 +2632,11 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         elif args.arch == 'adapter3resnet_tinyimagenet_56':
             logger.info('adapter3resnet_tinyimagenet_56')
             load_adapter3resnet_tinyimagenet_model(args, model, oristate_dict, 56, logger)
-        else:
+        elif 'resnet_56' in args.arch:
+            logger.info('load resnet 56 model')
             load_resnet_model(args, model, oristate_dict, 56, logger)
-        # else:
-        #     raise
+        else:
+            raise
     # 在不同的模型或者不同的数据集上进行裁剪
     elif graf == True:
         if args.pretrained_arch == args.finetune_arch:

@@ -19,109 +19,6 @@ import utils
 import time
 
 '''
-嫁接裁剪微调，在数据集A上裁剪，然后在数据集B上微调
-更换模型进行裁剪时一般需要修改的参数为 --dataset, --result_dir, --arch, --ci_dir, --pretrain_dir --sparsity
-# 嫁接裁剪cifar10 to cifar100 
-# 裁剪48%
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir \
-./data --pretrained_arch resnet_80 --finetune_arch resnet_80 \
---result_dir ./result/graf_pruned/94.86cifar10tocifar100_resnet_80_pruned_48_2 \
---ci_dir ./calculated_ci/94.86_resnet_80_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.86_resnet_80_cifar10.pth.tar --sparsity [0.]+[0.15]*2+[0.4]*13+[0.4]*13+[0.4]*13
-
-# 裁剪70%
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir \
-./data --pretrained_arch resnet_80 --finetune_arch resnet_80 \
---result_dir ./result/graf_pruned/94.86cifar10tocifar100_resnet_80_pruned_71_2 \
---ci_dir ./calculated_ci/94.86_resnet_80_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.86_resnet_80_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*13+[0.6]*13+[0.75]*13
-
-resnet_80裁剪48%的参数裁剪率设置
-sparsity = '[0.]+[0.15]*2+[0.4]*13+[0.4]*13+[0.4]*13'
-resnet_80裁剪71%的参数裁剪率设置
-sparsity = '[0.]+[0.4]*2+[0.5]*13+[0.6]*13+[0.75]*13'
-# ------------------------------------------------------------------------------------------------------------------
-
-本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
-# graf adapter4resnet to adapter4resnet_tinyimagenet
-# 裁剪48%
---sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9
---adapter_sparsity [0.]*9+[0.1]*9+[0.2]*9
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset tinyimagenet --finetune_data_dir \
-/root/autodl-tmp/tiny-imagenet-200 --pretrained_arch adapter3resnet_56 --finetune_arch adapter3resnet_tinyimagenet_56 \
---result_dir ./result/graf_pruned/94.86cifar10totinyimagenet_adapter3resnet_tinyimagenet_56_pruned_48_1 \
---ci_dir ./calculated_ci/94.86_adapter4resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.86_adapter4resnet_56_cifar10.pth.tar --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 \
---adapter_sparsity [0.]*9+[0.1]*9+[0.2]*9
-# 裁剪71%
---sparsity = [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9
---adapter_sparsity [0.2]*9+[0.3]*9+[0.35]*9
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset tinyimagenet --finetune_data_dir \
-/root/autodl-tmp/tiny-imagenet-200 --pretrained_arch adapter3resnet_56 --finetune_arch adapter3resnet_tinyimagenet_56 \
---result_dir ./result/graf_pruned/94.86cifar10totinyimagenet_adapter4resnet_tinyimagenet_56_pruned_71_1 \
---ci_dir ./calculated_ci/94.86_adapter4resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.86_adapter4resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 \
---adapter_sparsity [0.2]*9+[0.3]*9+[0.35]*9
-
-
-# resnet56 to resnet_tinyimagenet_56裁剪
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset tinyimagenet --finetune_data_dir /root/autodl-tmp/tiny-imagenet-200 \
---pretrained_arch resnet_56 --finetune_arch resnet_tinyimagenet_56 \
---result_dir ./result/graf_pruned/94.78cifar10totinyimagenet_resnet_tinyimagenet_56_pruned_71_1 \
---ci_dir ./calculated_ci/94.78_resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.78_resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9
---sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9
-[0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9
-
-# 裁剪48%命令行
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data \
---result_dir ./result/graf_pruned/94.56cifar10tocifar100_adapter4resnet_56_pruned_48_1 \
---arch adapter3resnet_56 --ci_dir ./calculated_ci/94.56_adapter4resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.56_adapter4resnet_56_cifar10.pth.tar --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 \
---adapter_sparsity [0.]*9+[0.2]*9+[0.2]*9
-# 裁剪48%resnet56
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data \
---result_dir ./result/graf_pruned/94.78cifar10tocifar100_resnet_56_pruned_71_2 \
---arch resnet_56 --ci_dir ./calculated_ci/94.78_resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.78_resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9
-# 裁剪resnet不需要adapter_sparsity参数
---adapter_sparsity [0.]*9+[0.2]*9+[0.2]*9
-
-# adapter裁剪命令
-裁剪48%
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data \
---result_dir ./result/graf_pruned/94.86cifar10tocifar100_adapter4resnet_56_pruned_71_3 \
---arch adapter3resnet_56 --ci_dir ./calculated_ci/94.86_adapter4resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.86_adapter4resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 \
---adapter_sparsity [0.2]*9+[0.4]*9+[0.5]*9
-
-# 裁剪71%命令行
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data \
---result_dir ./result/graf_pruned/94.56cifar10tocifar100_adapter4resnet_56_pruned_71_2 \
---arch adapter3resnet_56 --ci_dir ./calculated_ci/94.56_adapter4resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
---pretrain_dir ./pretrained_models/94.56_adapter4resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 \
---adapter_sparsity [0.15]*9+[0.45]*9+[0.55]*9
-
-# sparsity第一项为第一层的裁剪率，第二项和第三项为第一个和第二个stage的输出裁剪率，
-# 最后三项为三个stage中间层的裁剪率
-# sparsity = [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9  裁剪48%
-# sparsity = [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9   裁剪71%
-# mid_sparsity = [0.]*9+[0.2]*9+[0.2]*9 裁剪48%
-# adapter_sparsity = [0.1]*9+[0.3]*9+[0.3]*9 裁剪71%
-
-已经试了这个: [0.2]*9+[0.4]*9+[0.6]*9
-# 再试一下这个
-# [0.15]*9+[0.45]*9+[0.55]*9
-# [0.2]*9+[0.4]*9+[0.5]*9
 '''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -132,6 +29,7 @@ parser.add_argument('--pretrained_dataset', type=str, default='cifar10', help='m
 # 微调数据集
 parser.add_argument('--finetune_dataset', type=str, default='cifar100', help='model train dataset used')
 parser.add_argument('--dataset', type=str, default=None, help='model train dataset used')
+parser.add_argument('--graf', action="store_false", help='graf pruned or not')
 # 微调数据集文件路径
 parser.add_argument('--finetune_data_dir', type=str, default='./data', help='path to dataset')
 parser.add_argument('--data_dir', type=str, default=None, help='path to dataset')
@@ -243,7 +141,12 @@ def main():
 
     # 将原始模型参数载入到压缩模型中
     logger.info("载入参数1")
-    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
+    # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
+    print('args graf: ', args.graf)
+    if args.graf == False:
+        args.arch = args.pretrained_arch
+        print('here')
+    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
     logger.info("载入参数2")
@@ -253,7 +156,7 @@ def main():
     args.dataset = args.pretrained_dataset
     print('args dataset: ', args.dataset)
     pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
-    logger.info(pruned_origin_model.state_dict().keys())
+    # logger.info(pruned_origin_model.state_dict().keys())
     # 计算压缩后的精度
     pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
                                                                       criterion, args, logger, device)
