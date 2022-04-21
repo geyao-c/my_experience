@@ -142,10 +142,9 @@ def main():
     # 将原始模型参数载入到压缩模型中
     logger.info("载入参数1")
     # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
-    print('args graf: ', args.graf)
+    logger.info('args graf: {}'.format(args.graf))
     if args.graf == False:
         args.arch = args.pretrained_arch
-        print('here')
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
@@ -156,7 +155,7 @@ def main():
     args.dataset = args.pretrained_dataset
     print('args dataset: ', args.dataset)
     pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
-    # logger.info(pruned_origin_model.state_dict().keys())
+    logger.info(pruned_origin_model.state_dict().keys())
     # 计算压缩后的精度
     pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
                                                                       criterion, args, logger, device)

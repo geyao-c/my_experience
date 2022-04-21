@@ -2576,7 +2576,7 @@ def graf_load_adapter1resnet_model(args, model, oristate_dict, layer, logger, na
 def overall_load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 首先得到原始模型参数
     origin_model_arch = args.arch if graf == False else args.pretrained_arch
-    print('origin model arch: ', origin_model_arch)
+    print('overall origin model arch: ', origin_model_arch)
     if origin_model_arch == 'resnet_110':
         new_state_dict = OrderedDict()
         for k, v in ckpt['state_dict'].items():
@@ -2595,7 +2595,6 @@ def overall_load_arch_model(args, model, origin_model, ckpt, logger, graf=False)
 def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 首先得到原始模型参数
     origin_model_arch = args.arch if graf == False else args.pretrained_arch
-    print(args.arch)
     print('origin model arch: ', origin_model_arch)
     if origin_model_arch == 'resnet_110':
         new_state_dict = OrderedDict()
