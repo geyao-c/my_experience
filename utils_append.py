@@ -43,6 +43,7 @@ def analysis_sparsity(sparsity):
             assert len(find_num) == 1
             num = int(find_num[0].replace('*', ''))
         find_cprate = re.findall(pat_cprate, x)
+        print(find_cprate)
         assert len(find_cprate) == 1
         cprate += [float(find_cprate[0])] * num
 
@@ -128,6 +129,126 @@ def load_vgg_model(args, model, oristate_dict, logger, name_base=''):
 
     model.load_state_dict(state_dict)
 
+def overall_load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
+    cfg = {
+        56: [9, 9, 9],
+        80: [13, 13, 13],
+        110: [18, 18, 18],
+    }
+
+    state_dict = model.state_dict()
+
+    current_cfg = cfg[layer]
+    last_select_index = None
+
+    all_conv_weight = []
+    all_bn_weight = []
+
+    prefix = args.ci_dir + '/ci_conv'
+    subfix = ".npy"
+
+    cnt = 1
+    for layer, num in enumerate(current_cfg):
+        layer_name = 'layer' + str(layer + 1) + '.'
+        for k in range(num):
+            for l in range(2):
+
+                cnt += 1
+                cov_id = cnt
+
+                conv_name = layer_name + str(k) + '.conv' + str(l + 1)
+                conv_weight_name = conv_name + '.weight'
+                all_conv_weight.append(conv_weight_name)
+                oriweight = oristate_dict[conv_weight_name]
+                curweight = state_dict[name_base + conv_weight_name]
+                orifilter_num = oriweight.size(0)
+                currentfilter_num = curweight.size(0)
+
+                bn_name = layer_name + str(k) + '.bn' + str(l + 1)
+                bn_weight_name = bn_name + '.weight'
+                bn_bias_name = bn_name + '.bias'
+                bn_runing_mean_name = bn_name + '.running_mean'
+                bn_running_var_name = bn_name + '.running_var'
+                bn_num_batches_tracked_name = bn_name + '.num_batches_tracked'
+                all_bn_weight.extend([bn_name])
+
+                if orifilter_num != currentfilter_num:
+                    logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
+                    ci = np.load(prefix + str(cov_id) + subfix)
+                    select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
+                    select_index.sort()
+
+                    if last_select_index is not None:
+                        for index_i, i in enumerate(select_index):
+                            for index_j, j in enumerate(last_select_index):
+                                state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                    oristate_dict[conv_weight_name][i][j]
+                    else:
+                        for index_i, i in enumerate(select_index):
+                            state_dict[name_base + conv_weight_name][index_i] = \
+                                oristate_dict[conv_weight_name][i]
+
+                    last_select_index = select_index
+
+                    # 加载bn层
+                    for index_i, i in enumerate(select_index):
+                        state_dict[name_base + bn_weight_name][index_i] = oristate_dict[bn_weight_name][i]
+                        state_dict[name_base + bn_bias_name][index_i] = oristate_dict[bn_bias_name][i]
+                        state_dict[name_base + bn_runing_mean_name][index_i] = oristate_dict[bn_runing_mean_name][i]
+                        state_dict[name_base + bn_running_var_name][index_i] = oristate_dict[bn_running_var_name][i]
+                        state_dict[name_base + bn_num_batches_tracked_name] = oristate_dict[bn_num_batches_tracked_name]
+
+
+                elif last_select_index is not None:
+                    for index_i in range(orifilter_num):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                oristate_dict[conv_weight_name][index_i][j]
+                    last_select_index = None
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                    oristate_dict[bn_num_batches_tracked_name]
+                else:
+                    # logger.info('yes yes')
+                    state_dict[name_base + conv_weight_name] = oriweight
+                    last_select_index = None
+
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                        oristate_dict[bn_num_batches_tracked_name]
+
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+
+        if isinstance(module, nn.Conv2d):
+            conv_name = name + '.weight'
+            if 'shortcut' in name:
+                continue
+            if conv_name not in all_conv_weight:
+                state_dict[name_base + conv_name] = oristate_dict[conv_name]
+
+        elif isinstance(module, nn.Linear):
+            state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+            state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+        elif isinstance(module, nn.BatchNorm2d):
+            if name not in all_bn_weight:
+                logger.info('name: {}'.format(name))
+                state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+                state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+                state_dict[name_base + name + '.running_mean'] = oristate_dict[name + '.running_mean']
+                state_dict[name_base + name + '.running_var'] = oristate_dict[name + '.running_var']
+                state_dict[name_base + name + '.num_batches_tracked'] = oristate_dict[name + '.num_batches_tracked']
+
+    model.load_state_dict(state_dict)
+
 def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     cfg = {
         56: [9, 9, 9],
@@ -188,6 +309,7 @@ def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
                     last_select_index = None
 
                 else:
+                    # logger.info('yes yes')
                     state_dict[name_base+conv_weight_name] = oriweight
                     last_select_index = None
 
@@ -204,6 +326,13 @@ def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
         elif isinstance(module, nn.Linear):
             state_dict[name_base+name + '.weight'] = oristate_dict[name + '.weight']
             state_dict[name_base+name + '.bias'] = oristate_dict[name + '.bias']
+        # elif isinstance(module, nn.BatchNorm2d):
+        #     logger.info('name: {}'.format(name))
+        #     state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+        #     state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+        #     state_dict[name_base + name + '.running_mean'] = oristate_dict[name + '.running_mean']
+        #     state_dict[name_base + name + '.running_var'] = oristate_dict[name + '.running_var']
+        #     state_dict[name_base + name + '.num_batches_tracked'] = oristate_dict[name + '.num_batches_tracked']
 
     model.load_state_dict(state_dict)
 
@@ -2444,10 +2573,30 @@ def graf_load_adapter1resnet_model(args, model, oristate_dict, layer, logger, na
 
     model.load_state_dict(state_dict)
 
+def overall_load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
+    # 首先得到原始模型参数
+    origin_model_arch = args.arch if graf == False else args.pretrained_arch
+    print('origin model arch: ', origin_model_arch)
+    if origin_model_arch == 'resnet_110':
+        new_state_dict = OrderedDict()
+        for k, v in ckpt['state_dict'].items():
+            new_state_dict[k.replace('module.', '')] = v
+        origin_model.load_state_dict(new_state_dict)
+    else:
+        origin_model.load_state_dict(ckpt['state_dict'])
+    oristate_dict = origin_model.state_dict()
+    if graf == True:
+        if 'resnet_56' in args.pretrained_arch:
+            logger.info('overall load resnet model')
+            overall_load_resnet_model(args, model, oristate_dict, 56, logger)
+        else:
+            raise
 # 将原始模型的参数载入到压缩模型之中
 def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 首先得到原始模型参数
     origin_model_arch = args.arch if graf == False else args.pretrained_arch
+    print(args.arch)
+    print('origin model arch: ', origin_model_arch)
     if origin_model_arch == 'resnet_110':
         new_state_dict = OrderedDict()
         for k, v in ckpt['state_dict'].items():
@@ -2484,7 +2633,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             logger.info('adapter3resnet_tinyimagenet_56')
             load_adapter3resnet_tinyimagenet_model(args, model, oristate_dict, 56, logger)
         else:
-            raise
+            load_resnet_model(args, model, oristate_dict, 56, logger)
+        # else:
+        #     raise
     # 在不同的模型或者不同的数据集上进行裁剪
     elif graf == True:
         if args.pretrained_arch == args.finetune_arch:
@@ -2674,6 +2825,7 @@ def validate(epoch, val_loader, model, criterion, args, logger, device):
     with torch.no_grad():
         end = time.time()
         for i, (images, target) in enumerate(val_loader):
+            # print(i)
             images = images.to(device)
             target = target.to(device)
 

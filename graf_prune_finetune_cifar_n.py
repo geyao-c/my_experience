@@ -141,6 +141,8 @@ parser.add_argument('--pretrained_arch', type=str, default='resnet_56', #choices
                     help='architecture of pretrained')
 parser.add_argument('--finetune_arch', type=str, default='resnet_56', #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
                     help='architecture of fintune')
+parser.add_argument('--arch', type=str, default=None, #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
+                    help='architecture of fintune')
 parser.add_argument('--lr_type', type=str, default='cos', help='lr type')
 parser.add_argument('--result_dir', type=str, default='./result', help='results path for saving models and loggers')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size')
@@ -192,7 +194,7 @@ def main():
     logger.info('sparsity:' + str(sparsity))
     FINETUNE_CLASSES = utils_append.classes_num(args.finetune_dataset)
     PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
-    # 构建三个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
+    # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
         model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
@@ -201,10 +203,13 @@ def main():
                                                 adapter_sparsity=[0.] * 100).to(device)
         # 加载参数模型使用pretrained_arch
         origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100).to(device)
+        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
     else:
         model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES).to(device)
         original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES).to(device)
         origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES).to(device)
+        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES).to(device)
+
     logger.info(model)
 
     #计算模型参数量
@@ -235,8 +240,24 @@ def main():
     # origin_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0]*100).to(device)
     map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     ckpt = torch.load(args.pretrain_dir, map_location=map_str)
+
     # 将原始模型参数载入到压缩模型中
+    logger.info("载入参数1")
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
+
+    # 压缩原始模型，得到压缩后的精度
+    logger.info("载入参数2")
+    # logger.info('pruned origin model: ', pruned_origin_model)
+    utils_append.overall_load_arch_model(args, pruned_origin_model, origin_model, ckpt, logger, graf=True)
+    # 加载训练前的数据集
+    args.dataset = args.pretrained_dataset
+    print('args dataset: ', args.dataset)
+    pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
+    logger.info(pruned_origin_model.state_dict().keys())
+    # 计算压缩后的精度
+    pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
+                                                                      criterion, args, logger, device)
+    logger.info("=>after pruned accuracy is {:.3f}".format(pruned_valid_top1_acc))
 
     # train the model
     epoch = start_epoch
