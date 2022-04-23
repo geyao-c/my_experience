@@ -16,6 +16,14 @@ import utils
 裁剪一个模型然后进行微调
 本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
 更换模型进行裁剪时一般需要修改的参数为 --dataset, --result_dir, --arch, --ci_dir, --pretrain_dir --sparsity
+
+python prune_finetune_cifar_n.py --data_dir ./data --dataset cifar100 --result_dir \
+./result/normal_pruned/73.310_resnet_56_cifar100_48 \
+--arch resnet_56 --ci_dir ./calculated_ci/73.310_resnet_56_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/73.310_resnet_56_cifar100.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 \
+--adapter_sparsity [0.]*9+[0.2]*9+[0.2]*9
+
 python prune_finetune_cifar_n.py --data_dir /root/autodl-tmp/tiny-imagenet-200 --dataset tinyimagenet --result_dir \
 ./result/normal_pruned/56.19_resnet_tinyimagenet_56_tinyimagenet_pruned_71_1 \
 --arch resnet_tinyimagenet_56 --ci_dir ./calculated_ci/56.19_resnet_tinyimagenet_56_tinyimagenet --batch_size 128 \
@@ -117,6 +125,7 @@ parser.add_argument('--data_dir', type=str, default='./data', help='path to data
 parser.add_argument('--dataset', type=str, default='cifar100', help='dataset used')
 parser.add_argument('--arch', type=str, default='resnet_56', #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
                     help='architecture to calculate feature maps')
+# parser.add_argument('--graf', action="store_true", help='graf pruned or not')
 parser.add_argument('--lr_type', type=str, default='cos', help='lr type')
 parser.add_argument('--result_dir', type=str, default='./result', help='results path for saving models and loggers')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size')
