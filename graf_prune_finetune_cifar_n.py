@@ -153,6 +153,9 @@ def main():
     utils_append.overall_load_arch_model(args, pruned_origin_model, origin_model, ckpt, logger, graf=True)
     # 加载训练前的数据集
     args.dataset = args.pretrained_dataset
+    if args.dataset == 'cifar10' or args.dataset == 'cifar100':
+        args.data_dir = "./data"
+
     print('args dataset: ', args.dataset)
     pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
     logger.info(pruned_origin_model.state_dict().keys())
