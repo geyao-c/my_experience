@@ -107,6 +107,7 @@ def main():
     dst = ['cifar100', 'cifar10', 'tinyimagenet']
     for item in dst:
         if item in fm_list: dataset = item
+    print('model accu: {}, args.arch: {}, dataset: {}'.format(model_accu, args.arch, dataset))
     save_path = os.path.join(save_dir, model_accu + '_' + args.arch + '_' + dataset)
 
     # 计算ci

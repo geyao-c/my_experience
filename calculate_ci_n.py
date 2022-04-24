@@ -106,7 +106,7 @@ def main():
     fm_list = args.feature_map_dir.split('/')[2].split('_')
     model_accu= str(fm_list[0])
     dataset = None
-    dst = ['cifar100', 'cifar10', 'tinyimagenet']
+    dst = ['cifar100', 'cifar10', 'tinyimagenet', 'svhn']
     for item in dst:
         if item in fm_list: dataset = item
     save_path = os.path.join(save_dir, model_accu + '_' + args.arch + '_' + dataset)
