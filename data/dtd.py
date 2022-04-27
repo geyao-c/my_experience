@@ -76,8 +76,9 @@ class Dataloder():
         # mean: [0.5273, 0.4702, 0.4235] std: [0.2340, 0.2207, 0.2319]
         # dtd 64 * 64 mean and std
         # mean: [0.5273, 0.4702, 0.4235] std: [0.2455, 0.2331, 0.2431]
-        # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        normalize = transforms.Normalize(mean=[0.5273, 0.4702, 0.4235], std=[0.2455, 0.2331, 0.2431])
+        # 使用imagenet的mean和std
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        # normalize = transforms.Normalize(mean=[0.5273, 0.4702, 0.4235], std=[0.2455, 0.2331, 0.2431])
         # transform_train = transforms.Compose([
         #     transforms.Resize(256),
         #     transforms.RandomResizedCrop(224),
@@ -97,9 +98,9 @@ class Dataloder():
         ])
 
         transform_test = transforms.Compose([
-            # transforms.Resize(256),
-            # transforms.CenterCrop(224),
-            transforms.Resize([32, 32]),
+            transforms.Resize(36),
+            transforms.CenterCrop(32),
+            # transforms.Resize([32, 32]),
             transforms.ToTensor(),
             normalize,
         ])

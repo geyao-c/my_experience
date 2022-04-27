@@ -3,7 +3,7 @@ import datetime
 import os
 from torch.utils.tensorboard import SummaryWriter
 import re
-from data import cifar10, cifar100, cub, tinyimagenet, svhn
+from data import cifar10, cifar100, cub, tinyimagenet, svhn, dtd
 import torch
 from thop import profile
 from collections import OrderedDict
@@ -53,18 +53,18 @@ def analysis_sparsity(sparsity):
 
 # 根据args.dataset, 返回对应的数据集
 def dstget(args):
-    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn']
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
     dldfunlist = [cifar10.load_cifar_data, cifar100.load_cifar_data, cub.load_cub_data, tinyimagenet.load_tinyimagenet_data,
-                  svhn.load_svhn_data]
+                  svhn.load_svhn_data, dtd.load_dtd_data]
     idx = dsetlist.index(args.dataset)
     train_loader, val_loader = dldfunlist[idx](args)
     return train_loader, val_loader
 
 # 根据args，返回最后一层的神经元数量
 def classes_num(datasetname):
-    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn']
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
     # 最后一层全连接层神经元数量
-    clslist = [10, 100, 200, 200, 10]
+    clslist = [10, 100, 200, 200, 10, 47]
     idx = dsetlist.index(datasetname)
     CLASSES = clslist[idx]
     return CLASSES

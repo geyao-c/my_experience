@@ -107,6 +107,7 @@ def argsget():
     parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
     parser.add_argument('--weight_decay', type=float, default=0.0005, help='weight decay')
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset used')
+    parser.add_argument('--split', type=str, default='1', help='batch size')
     args = parser.parse_args()
     return args
 
