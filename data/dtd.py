@@ -87,10 +87,12 @@ class Dataloder():
         #     transforms.ToTensor(),
         #     normalize,
         # ])
+        image_size = 64
+        image_padding = 8
 
         transform_train = transforms.Compose([
-            transforms.Resize(36),
-            transforms.RandomResizedCrop(32),
+            transforms.Resize(image_size + image_padding),
+            transforms.RandomResizedCrop(image_size),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.ToTensor(),
@@ -98,8 +100,8 @@ class Dataloder():
         ])
 
         transform_test = transforms.Compose([
-            transforms.Resize(36),
-            transforms.CenterCrop(32),
+            transforms.Resize(image_size + image_padding),
+            transforms.CenterCrop(image_size),
             # transforms.Resize([32, 32]),
             transforms.ToTensor(),
             normalize,
