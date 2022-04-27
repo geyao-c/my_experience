@@ -110,8 +110,10 @@ class ResNet(nn.Module):
         self.overall_channel, self.mid_channel = adapt_channel(sparsity, num_layers)
 
         self.layer_num = 0
-        self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+        self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
                                bias=False)
+        # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+        #                        bias=False)
         self.bn1 = nn.BatchNorm2d(self.overall_channel[self.layer_num])
         self.relu = nn.ReLU(inplace=True)
         self.layers = nn.ModuleList()
