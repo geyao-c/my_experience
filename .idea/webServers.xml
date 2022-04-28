@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f1c49f97-1f2b-46fd-9ab7-0473ad4e055a" name="lenovo">
+        <fileTransfer accessType="SFTP" host="122.207.108.56" port="15300" sshConfigId="4725304a-3047-47cb-b3ee-ae1436acd8ee" sshConfig="lenovo@122.207.108.56:15300 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

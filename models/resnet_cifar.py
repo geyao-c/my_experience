@@ -113,7 +113,9 @@ class ResNet(nn.Module):
         self.layer_num = 0
         # 训练dtd的baseline的时候用这个
         if self.dataset == 'dtd':
-            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+            # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+            #                        bias=False)
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
                                    bias=False)
             self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         else:
