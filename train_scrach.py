@@ -299,8 +299,10 @@ def main():
         params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
 
     logger.info(model)
-    if 'tinyimagenet' in args.dataset or 'dtd' == args.dataset:
+    if 'tinyimagenet' in args.dataset:
         input_size = 64
+    elif 'dtd' == args.dataset:
+        input_size = 128
     else:
         input_size = 32
     logger.info('input size: {}'.format(input_size))
