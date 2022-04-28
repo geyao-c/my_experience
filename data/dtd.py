@@ -87,8 +87,8 @@ class Dataloder():
         #     transforms.ToTensor(),
         #     normalize,
         # ])
-        image_size = 64
-        image_padding = 8
+        image_size = 128
+        image_padding = 16
 
         transform_train = transforms.Compose([
             transforms.Resize(image_size + image_padding),
