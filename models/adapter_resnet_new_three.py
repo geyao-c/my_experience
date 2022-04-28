@@ -281,7 +281,7 @@ class ResNet_New(nn.Module):
 
 class ResNet_New_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
-                 adapter_out_channel=None, need_adapter=None, need_stage=None):
+                 adapter_out_channel=None, need_adapter=None, need_stage=None, dataset=None):
         super(ResNet_New_New, self).__init__()
         assert (num_layers - 2) % 6 == 0, 'depth should be 6n+2'
         n = (num_layers - 2) // 6
@@ -296,8 +296,18 @@ class ResNet_New_New(nn.Module):
 
         self.layer_num = 0
         self.adapter_layer = 0
-        self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
-                               bias=False)
+        self.dataset = dataset
+        if self.dataset == 'dtd':
+            # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+            #                        bias=False)
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
+            self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        else:
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
+        # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+        #                        bias=False)
         # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(self.overall_channel[self.layer_num])
         self.relu = nn.ReLU(inplace=True)
@@ -350,6 +360,8 @@ class ResNet_New_New(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
+        if self.dataset == 'dtd':
+            x = self.maxpool1(x)
         x = self.bn1(x)
         x = self.relu(x)
 
@@ -437,15 +449,15 @@ def adapter21resnet_56(sparsity, num_classes, adapter_sparsity):
                       need_stage=nd_stage['adapter21'])
 
 # adapter22每个stage替换了一层，最后一层
-def adapter22resnet_56(sparsity, num_classes, adapter_sparsity):
+def adapter22resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
     return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter22'], need_adapter=nd_cfg['adapter22'],
-                      need_stage=nd_stage['adapter22'])
+                      need_stage=nd_stage['adapter22'], dataset=dataset)
 
 # adapter22后面两个stage替换最后一层
-def adapter23resnet_56(sparsity, num_classes, adapter_sparsity):
+def adapter23resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
     return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter23'], need_adapter=nd_cfg['adapter23'],
-                      need_stage=nd_stage['adapter23'])
+                      need_stage=nd_stage['adapter23'], dataset=dataset)
 
 
