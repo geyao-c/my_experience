@@ -290,14 +290,16 @@ def main():
     CLASSES = utils_append.classes_num(args.dataset)
     # 创建两个模型一个用来训练，另一个用来计算参数
     if 'adapter' in args.arch:
-        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.]*100).to(device)
-        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.] * 100).to(device)
+        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.]*100,
+                                dataset=args.dataset).to(device)
+        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.] * 100,
+                                       dataset=args.dataset).to(device)
     else:
-        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES).to(device)
-        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES).to(device)
+        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
+        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
 
     logger.info(model)
-    if 'tinyimagenet' in args.dataset:
+    if 'tinyimagenet' in args.dataset or 'dtd' == args.dataset:
         input_size = 64
     else:
         input_size = 32
