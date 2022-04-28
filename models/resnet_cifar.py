@@ -101,19 +101,24 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_layers, sparsity, num_classes=10):
+    def __init__(self, block, num_layers, sparsity, num_classes=10, dataset=None):
         super(ResNet, self).__init__()
         assert (num_layers - 2) % 6 == 0, 'depth should be 6n+2'
         n = (num_layers - 2) // 6
 
         self.num_layer = num_layers
+        self.dataset = dataset
         self.overall_channel, self.mid_channel = adapt_channel(sparsity, num_layers)
 
         self.layer_num = 0
-        self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
-                               bias=False)
-        # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
-        #                        bias=False)
+        # 训练dtd的baseline的时候用这个
+        if self.dataset == 'dtd':
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+                                   bias=False)
+            self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        else:
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
         self.bn1 = nn.BatchNorm2d(self.overall_channel[self.layer_num])
         self.relu = nn.ReLU(inplace=True)
         self.layers = nn.ModuleList()
@@ -148,6 +153,8 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
+        if self.dataset == 'dtd':
+            x = self.maxpool1(x)
         x = self.bn1(x)
         x = self.relu(x)
 
@@ -170,8 +177,9 @@ class ResNet(nn.Module):
         # return x, feature
         return x
 
-def resnet_56(sparsity, num_classes):
-    return ResNet(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes)
+def resnet_56(sparsity, num_classes, dataset=None):
+    # 不同的数据集网络结构可能有细微差别
+    return ResNet(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, dataset=dataset)
 
 def resnet_110(sparsity, num_classes):
     return ResNet(BasicBlock, 110, sparsity=sparsity, num_classes=num_classes)

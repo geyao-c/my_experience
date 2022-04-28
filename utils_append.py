@@ -444,7 +444,7 @@ def graf_load_resnet_model(args, model, oristate_dict, layer, logger, name_base=
                 conv_weight_name = conv_name + '.weight'
                 all_conv_weight.append(conv_weight_name)
                 oriweight = oristate_dict[conv_weight_name]
-                curweight =state_dict[name_base+conv_weight_name]
+                curweight = state_dict[name_base+conv_weight_name]
                 orifilter_num = oriweight.size(0)
                 currentfilter_num = curweight.size(0)
 
@@ -485,7 +485,11 @@ def graf_load_resnet_model(args, model, oristate_dict, layer, logger, name_base=
             if 'shortcut' in name:
                 continue
             if conv_name not in all_conv_weight:
-                state_dict[name_base+conv_name] = oristate_dict[conv_name]
+                shape1 = state_dict[name_base+conv_name].size()
+                shape2 = oristate_dict[conv_name].size()
+                logger.info('shape1 is {}, shape2 is {}'.format(shape1, shape2))
+                if shape1 == shape2:
+                    state_dict[name_base+conv_name] = oristate_dict[conv_name]
 
         # elif isinstance(module, nn.Linear):
         #     state_dict[name_base+name + '.weight'] = oristate_dict[name + '.weight']

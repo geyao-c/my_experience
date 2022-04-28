@@ -103,20 +103,24 @@ def main():
         origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100).to(device)
         pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
     else:
-        model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES).to(device)
-        original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES).to(device)
-        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES).to(device)
-        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES).to(device)
+        model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, dataset=args.finetune_dataset).to(device)
+        original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
+                                                         dataset=args.finetune_dataset).to(device)
+        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES,
+                                                  dataset=args.pretrained_dataset).to(device)
+        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES,
+                                                         dataset=args.pretrained_dataset).to(device)
 
     logger.info(model)
 
     #计算模型参数量
     # original_params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
     #                                         adapter_sparsity = [0.] * 100).to(device)
-    if 'tinyimagenet' in args.finetune_dataset:
+    if 'tinyimagenet' in args.finetune_dataset or 'dtd' == args.finetune_dataset:
         input_size = 64
     else:
         input_size = 32
+    logger.info('input size is {}'.format(input_size))
     flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
     logger.info('model flops is {}, params is {}'.format(flops, params))
     logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
