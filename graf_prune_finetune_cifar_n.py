@@ -57,6 +57,7 @@ parser.add_argument('--ci_dir', type=str, default='', help='ci path')
 parser.add_argument('--sparsity', type=str, default=None, help='sparsity of each conv layer')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--adapter_sparsity', type=str, default=None, help='sparsity of each adapter layer')
+parser.add_argument('--split', type=str, default='1', help='batch size')
 args = parser.parse_args()
 
 def main():
@@ -95,13 +96,16 @@ def main():
     # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
-        model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
+        model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, adapter_sparsity = adapter_sparsity,
+                                         dataset=args.finetune_dataset).to(device)
         # 计算参数模型使用finetune_arch
         original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
-                                                adapter_sparsity=[0.] * 100).to(device)
+                                                adapter_sparsity=[0.] * 100, dataset=args.finetune_dataset).to(device)
         # 加载参数模型使用pretrained_arch
-        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100).to(device)
-        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
+        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100,
+                                                  dataset=args.pretrained_dataset).to(device)
+        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity,
+                                                         dataset=args.pretrained_dataset).to(device)
     else:
         model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, dataset=args.finetune_dataset).to(device)
         original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
@@ -190,4 +194,5 @@ def main():
         logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))#
 
 if __name__ == '__main__':
-  main()
+    print('hello world')
+    main()
