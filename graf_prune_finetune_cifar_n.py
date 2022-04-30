@@ -120,8 +120,10 @@ def main():
     #计算模型参数量
     # original_params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
     #                                         adapter_sparsity = [0.] * 100).to(device)
-    if 'tinyimagenet' in args.finetune_dataset or 'dtd' == args.finetune_dataset:
+    if 'tinyimagenet' in args.finetune_dataset:
         input_size = 64
+    elif 'dtd' == args.finetune_dataset:
+        input_size = 128
     else:
         input_size = 32
     logger.info('input size is {}'.format(input_size))
