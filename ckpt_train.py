@@ -23,6 +23,11 @@ python ckpt_train.py --dataset svhn --data_dir ./data/svhn --arch adapter22resne
 --result_dir ./result/ckpt_train/94.43cifar10tosvhn_adapter22resnet_56_pruned_48 \
  --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir ./pretrained_models/model_best1.pth.tar --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 --adapter_sparsity [0.4]+[0.415]+[0.417]
+
+python ckpt_train.py --dataset tinyimagenet --data_dir /Users/chenjie/dataset/tiny-imagenet-200 --arch resnet_56 \
+--result_dir ./result/ckpt_train/scrach_train_tinyimagenet \
+--batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/model_best1.pth.tar --sparsity [0.]*100
 '''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -78,8 +83,8 @@ def main():
     # 解析adapter sparsity
     if args.adapter_sparsity:
         adapter_sparsity = utils_append.analysis_sparsity(args.adapter_sparsity)
-    elif 'adapter' in args.finetune_arch:
-        raise ValueError('adapter sparsity is None')
+    # elif 'adapter' in args.finetune_arch:
+    #     raise ValueError('adapter sparsity is None')
 
     # 解析sparsity
     if args.sparsity:
@@ -100,7 +105,7 @@ def main():
         # origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100).to(device)
         # pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity).to(device)
     else:
-        model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=CLASSES).to(device)
+        model = eval(args.arch)(sparsity=sparsity, num_classes=CLASSES).to(device)
         # original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES).to(device)
         # origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES).to(device)
         # pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES).to(device)
@@ -135,12 +140,24 @@ def main():
     model_state_dict = model.state_dict()
     ckpt_state_dict = ckpt['state_dict']
     for key in model_state_dict.keys():
-        logger.info('key: {}'.format(key))
-        model_state_dict[key] = ckpt_state_dict[key]
+        # logger.info('key: {}'.format(key))
+        print(model_state_dict[key].shape)
+        shape1 = model_state_dict[key].shape
+        shape2 = ckpt_state_dict[key].shape
+        # print('key: ', key)
+        # print("shape1: ", shape1)
+        # print("shape2: ", shape2)
+        if shape1 == shape2:
+            model_state_dict[key] = ckpt_state_dict[key]
+        else:
+            print(key)
+            raise ('error')
     # model.load_state_dict(ckpt['state_dict'])
-    start_epoch = ckpt['epoch']
+    start_epoch = ckpt['epoch'] + 1
     best_top1_acc= ckpt['best_top1_acc']
     optimizer.load_state_dict(ckpt['optimizer'])
+    print(optimizer.state_dict())
+    # optimizer['lr'] =
 
     # train the model
     epoch = start_epoch
