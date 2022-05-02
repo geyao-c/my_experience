@@ -33,6 +33,12 @@ python ckpt_train.py --dataset tinyimagenet --data_dir  ~/dataset/tiny-imagenet-
 --result_dir ./result/ckpt_train/scrach_train_tinyimagenet \
 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir /home/lenovo/code/my_experience/result/scrach_train/resnet56_tinyimagenet/2022-05-01-14:35:25/checkpoint.pth.tar --sparsity [0.]*100
+
+python ckpt_train.py --dataset tinyimagenet --data_dir  ~/dataset/tiny-imagenet-200 --arch adapter22resnet_56 \
+--result_dir ./result/ckpt_train/scrach_train_tinyimagenet \
+--batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir /home/lenovo/code/my_experience/result/scrach_train/adapter22resnet56_tinyimagenet/2022-05-02-10:01:29/checkpoint.pth.tar --sparsity [0.]*100 --adapter_sparsity [0.]*100
+/home/lenovo/code/my_experience/result/scrach_train/adapter22resnet56_tinyimagenet/2022-05-02-10:01:29/checkpoint.pth.tar
 '''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -144,6 +150,8 @@ def main():
     # logger.info('state dicts: {}'.format(state_dict.keys()))
     model_state_dict = model.state_dict()
     ckpt_state_dict = ckpt['state_dict']
+    # print(id(model.state_dict()))
+    # print(id(model_state_dict))
     for key in model_state_dict.keys():
         logger.info('key: {}'.format(key))
         # print(model_state_dict[key].shape)
@@ -157,7 +165,8 @@ def main():
         else:
             print(key)
             raise ('error')
-    model.load_state_dict(ckpt['state_dict'], strict=False)
+    # model.load_state_dict(ckpt['state_dict'], strict=False)
+    model.load_state_dict(ckpt['state_dict'])
     start_epoch = ckpt['epoch'] + 1
     best_top1_acc= ckpt['best_top1_acc']
     optimizer.load_state_dict(ckpt['optimizer'])
