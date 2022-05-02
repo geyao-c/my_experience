@@ -178,7 +178,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         images = images.to(device)
         target = target.to(device)
 
-        adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
+        # adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
         logits = model(images)
@@ -323,6 +323,9 @@ def main():
     # train the model
     epoch = start_epoch
     while epoch < args.epochs:
+        if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
+            for param_group in optimizer.param_groups:
+                param_group['lr'] *= 0.1
         start = time.time()
         train_obj, train_top1_acc, train_top5_acc = train(epoch, train_loader, model, criterion,
                                                           optimizer, args, logger, print_freq)  # , scheduler)

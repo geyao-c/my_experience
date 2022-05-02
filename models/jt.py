@@ -23,6 +23,13 @@ def fun3():
     flops, params, _, _ = utils_append.cal_params(model, torch.device('cpu'), None, 64)
     print('flops: {}, params: {}'.format(flops, params))
 
+def fun4():
+    x = dict()
+    y = x
+    print(id(x))
+    print(id(y))
+
 if __name__ == '__main__':
     # fun1()
-    fun3()
+    # fun3()
+    fun4()
