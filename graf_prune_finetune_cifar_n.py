@@ -134,8 +134,8 @@ def main():
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.to(device)
-    # criterion_smooth = utils.CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
-    # criterion_smooth = criterion_smooth.to(device)
+    criterion_smooth = utils.CrossEntropyLabelSmooth(FINETUNE_CLASSES, args.label_smooth)
+    criterion_smooth = criterion_smooth.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum, weight_decay=args.weight_decay)
     # lr_decay_step = list(map(int, args.lr_decay_step.split(',')))
 
@@ -178,7 +178,7 @@ def main():
     epoch = start_epoch
     while epoch < args.epochs:
         start = time.time()
-        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
+        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion_smooth,
                                                                         optimizer, args, logger, print_freq, device)#, scheduler)
         valid_obj, valid_top1_acc, valid_top5_acc = utils_append.validate(epoch, val_loader, model, criterion, args, logger, device)
         utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
