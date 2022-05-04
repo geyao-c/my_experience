@@ -2786,9 +2786,27 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
 
         adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
+        # logits = model(images)
+        # loss = criterion(logits, target)
+
         # compute outputy
-        logits = model(images)
-        loss = criterion(logits, target)
+        r = np.random.rand(1)
+        if args.beta > 0 and r < args.cutmix_prob:
+            # generate mixed sample
+            lam = np.random.beta(args.beta, args.beta)
+            rand_index = torch.randperm(images.size()[0]).to(device)
+            target_a = target
+            target_b = target[rand_index]
+            bbx1, bby1, bbx2, bby2 = rand_bbox(images.size(), lam)
+            images[:, :, bbx1:bbx2, bby1:bby2] = images[rand_index, :, bbx1:bbx2, bby1:bby2]
+            # adjust lambda to exactly match pixel ratio
+            lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (images.size()[-1] * images.size()[-2]))
+            # compute output
+            logits = model(images)
+            loss = criterion(logits, target_a) * lam + criterion(logits, target_b) * (1. - lam)
+        else:
+            logits = model(images)
+            loss = criterion(logits, target)
 
         # measure accuracy and record loss
         prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
@@ -2817,6 +2835,24 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
     # scheduler.step()
 
     return losses.avg, top1.avg, top5.avg
+
+def rand_bbox(size, lam):
+    W = size[2]
+    H = size[3]
+    cut_rat = np.sqrt(1. - lam)
+    cut_w = np.int(W * cut_rat)
+    cut_h = np.int(H * cut_rat)
+
+    # uniform
+    cx = np.random.randint(W)
+    cy = np.random.randint(H)
+
+    bbx1 = np.clip(cx - cut_w // 2, 0, W)
+    bby1 = np.clip(cy - cut_h // 2, 0, H)
+    bbx2 = np.clip(cx + cut_w // 2, 0, W)
+    bby2 = np.clip(cy + cut_h // 2, 0, H)
+
+    return bbx1, bby1, bbx2, bby2
 
 def validate(epoch, val_loader, model, criterion, args, logger, device):
     batch_time = utils.AverageMeter('Time', ':6.3f')

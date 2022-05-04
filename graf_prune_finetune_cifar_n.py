@@ -58,6 +58,8 @@ parser.add_argument('--sparsity', type=str, default=None, help='sparsity of each
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--adapter_sparsity', type=str, default=None, help='sparsity of each adapter layer')
 parser.add_argument('--split', type=str, default='1', help='batch size')
+parser.add_argument('--beta', default=0, type=float, help='hyperparameter beta')
+parser.add_argument('--cutmix_prob', default=0, type=float, help='cutmix probability')
 args = parser.parse_args()
 
 def main():
@@ -170,12 +172,14 @@ def main():
     pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
     logger.info(pruned_origin_model.state_dict().keys())
     # 计算压缩后的精度
-    pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
-                                                                      criterion, args, logger, device)
-    logger.info("=>after pruned accuracy is {:.3f}".format(pruned_valid_top1_acc))
+    # pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
+    #                                                                   criterion, args, logger, device)
+    # logger.info("=>after pruned accuracy is {:.3f}".format(pruned_valid_top1_acc))
 
     # train the model
     epoch = start_epoch
+    if args.beta > 0 and args.cutmix_prob > 0:
+        logger.info("use cut mix")
     while epoch < args.epochs:
         start = time.time()
         train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion_smooth,
