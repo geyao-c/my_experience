@@ -58,8 +58,13 @@ parser.add_argument('--sparsity', type=str, default=None, help='sparsity of each
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--adapter_sparsity', type=str, default=None, help='sparsity of each adapter layer')
 parser.add_argument('--split', type=str, default='1', help='batch size')
+# cutmix参数
 parser.add_argument('--beta', default=0, type=float, help='hyperparameter beta')
 parser.add_argument('--cutmix_prob', default=0, type=float, help='cutmix probability')
+# cutout参数
+parser.add_argument('--cutout', action='store_true', default=False, help='apply cutout')
+parser.add_argument('--n_holes', type=int, default=1, help='number of holes to cut out from image')
+parser.add_argument('--length', type=int, default=16, help='length of the holes')
 args = parser.parse_args()
 
 def main():
@@ -180,6 +185,9 @@ def main():
     epoch = start_epoch
     if args.beta > 0 and args.cutmix_prob > 0:
         logger.info("use cut mix")
+    if args.cutout:
+        logger.info("use cutout")
+
     while epoch < args.epochs:
         start = time.time()
         train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion_smooth,
