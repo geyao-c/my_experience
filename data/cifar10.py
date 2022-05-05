@@ -4,9 +4,9 @@ https://github.com/lmbxmu/HRankPlus
 import torch
 import torch.utils
 import torch.utils.data.distributed
-
 import torchvision
 from torchvision import datasets, transforms
+from util.cutout import Cutout
 
 def load_cifar_data(args):
     # imagenet mean and std
@@ -28,6 +28,10 @@ def load_cifar_data(args):
         transforms.ToTensor(),
         normalize,
     ])
+
+    if args.cutout:
+        transform_train.transforms.append(Cutout(n_holes=args.n_holes, length=args.length))
+
     # this is a
     trainset = torchvision.datasets.CIFAR10(root=args.data_dir, train=True, download=True, transform=transform_train)
     train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=1)
