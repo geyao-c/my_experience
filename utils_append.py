@@ -2804,6 +2804,16 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
             # compute output
             logits = model(images)
             loss = criterion(logits, target_a) * lam + criterion(logits, target_b) * (1. - lam)
+        elif args.mixup_alpha > 0:
+            lam = np.random.beta(args.mixup_alpha, args.mixup_alpha)
+
+            batch_size = images.size()[0]
+            index = torch.randperm(batch_size).to(device)
+
+            mixed_images = lam * images + (1 - lam) * images[index, :]
+            y_a, y_b = target, target[index]
+            logits = model(mixed_images)
+            loss = lam * criterion(logits, y_a) + (1 - lam) * criterion(logits, y_b)
         else:
             logits = model(images)
             loss = criterion(logits, target)

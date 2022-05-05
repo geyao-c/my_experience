@@ -61,6 +61,9 @@ parser.add_argument('--split', type=str, default='1', help='batch size')
 # cutmix参数
 parser.add_argument('--beta', default=0, type=float, help='hyperparameter beta')
 parser.add_argument('--cutmix_prob', default=0, type=float, help='cutmix probability')
+# mixup参数
+parser.add_argument('--mixup_alpha', default=0, type=float,
+                    help='mixup interpolation coefficient (default: 0)')
 # cutout参数
 parser.add_argument('--cutout', action='store_true', default=False, help='apply cutout')
 parser.add_argument('--n_holes', type=int, default=1, help='number of holes to cut out from image')
