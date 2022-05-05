@@ -190,6 +190,8 @@ def main():
         logger.info("use cut mix")
     if args.cutout:
         logger.info("use cutout")
+    if args.mixup_alpha > 0:
+        logger.info("use mixup")
 
     while epoch < args.epochs:
         start = time.time()
