@@ -140,7 +140,6 @@ def main():
     flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
     logger.info('model flops is {}, params is {}'.format(flops, params))
     logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
-    print("hello world")
 
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
