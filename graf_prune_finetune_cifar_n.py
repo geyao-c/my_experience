@@ -13,7 +13,8 @@ from models.adapter_resnet_new_new import adapter8resnet_56
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, \
     adapter11resnet_56, adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, \
     adapter15resnet_56, adapter17resnet_56, adapter18resnet_56, adapter19resnet_56, \
-    adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56
+    adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56, \
+    adapter24resnet_56
 import utils_append
 import utils
 import time
