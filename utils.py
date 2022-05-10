@@ -10,6 +10,14 @@ import torch
 import torch.nn as nn
 import torch.utils
 
+class TwoCropTransform:
+    """Create two crops of the same image"""
+    def __init__(self, transform):
+        self.transform = transform
+
+    def __call__(self, x):
+        return [self.transform(x), self.transform(x)]
+
 '''record configurations'''
 class record_config():
     def __init__(self, args):

@@ -11,6 +11,7 @@ import torch.nn as nn
 import numpy as np
 import math
 import time
+from data import supconcifar10, supconcifar100
 
 # 构建logger和writer
 def lgwt_construct(args):
@@ -56,6 +57,13 @@ def dstget(args):
     dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
     dldfunlist = [cifar10.load_cifar_data, cifar100.load_cifar_data, cub.load_cub_data, tinyimagenet.load_tinyimagenet_data,
                   svhn.load_svhn_data, dtd.load_dtd_data]
+    idx = dsetlist.index(args.dataset)
+    train_loader, val_loader = dldfunlist[idx](args)
+    return train_loader, val_loader
+
+def supcon_dstget(args):
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
+    dldfunlist = [supconcifar10.load_cifar_data, supconcifar100.load_cifar_data]
     idx = dsetlist.index(args.dataset)
     train_loader, val_loader = dldfunlist[idx](args)
     return train_loader, val_loader
