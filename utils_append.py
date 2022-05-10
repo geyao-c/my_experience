@@ -2888,7 +2888,7 @@ def validate(epoch, val_loader, model, criterion, args, logger, device):
             target = target.to(device)
 
             # compute output
-            logits = model(images)
+            logits, _ = model(images)
             loss = criterion(logits, target)
 
             # measure accuracy and record loss
