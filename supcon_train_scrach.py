@@ -61,6 +61,7 @@ def argsget():
     return args
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
+    warmup_epoch = 10
     if args.lr_type == 'step':
         steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
         if steps > 0:
@@ -73,7 +74,8 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         lr = args.learning_rate * (0.5 ** factor)
 
     elif args.lr_type == 'cos':  # cos without warm-up
-        lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - 5) / (args.epochs - 5)))
+        # lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - 5) / (args.epochs - 5)))
+        lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - warmup_epoch) / (args.epochs - warmup_epoch)))
 
     elif args.lr_type == 'exp':
         step = 1
@@ -86,8 +88,11 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         raise NotImplementedError
 
     # Warmup
+
     if epoch < 5:
-        lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+        # lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+        lr = lr * float(1 + step + epoch * len_iter) / (warmup_epoch. * len_iter)
+
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
