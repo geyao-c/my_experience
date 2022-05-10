@@ -118,9 +118,9 @@ def argsget():
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
     if args.lr_type == 'step':
-        for param_group in optimizer.param_groups:
-            cur_lr = param_group['lr']
-            break
+        # for param_group in optimizer.param_groups:
+        #     cur_lr = param_group['lr']
+        #     break
         # factor = epoch // 125
         # if epoch >= 80:
         #     factor = factor + 1
@@ -128,9 +128,16 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
 
         # factor = epoch // 125
         # if epoch in [args.epochs*0.5, args.epochs*0.75]:
-        lr = cur_lr
-        if epoch in [args.epochs * 0.5, args.epochs * 0.75]:
-            lr = cur_lr / 10
+        # lr = cur_lr
+        # if epoch in [args.epochs * 0.5, args.epochs * 0.75]:
+        #     lr = cur_lr / 10
+        if epoch >= 0 and epoch < args.epoch * 0.5:
+            lr = args.learning_rate
+        elif epoch >= args.epoch * 0.5 and epoch < args.epoch * 0.75:
+            lr = args.learning_rate * 0.1
+        elif epoch >= args.epoch * 0.75:
+            lr = args.learning_rate * 0.01
+
         # lr = args.learning_rate * (0.1 ** factor)
 
     elif args.lr_type == 'step_5':
