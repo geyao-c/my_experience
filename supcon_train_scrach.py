@@ -89,9 +89,9 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
 
     # Warmup
 
-    if epoch < 5:
+    if epoch < warmup_epoch:
         # lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
-        lr = lr * float(1 + step + epoch * len_iter) / (warmup_epoch. * len_iter)
+        lr = lr * float(1 + step + epoch * len_iter) / (warmup_epoch * len_iter)
 
 
     for param_group in optimizer.param_groups:
