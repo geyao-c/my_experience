@@ -272,6 +272,9 @@ class ResNet_New(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
+        # print('x1 shape: ', x.shape)
+        feat = F.normalize(x, dim=1)
+        # print('x2 shape: ', x.shape)
         # feature = x.clone()
 
         if self.num_layer == 56:
@@ -280,7 +283,7 @@ class ResNet_New(nn.Module):
             x = self.linear(x)
 
         # return x, feature
-        return x
+        return x, feat
 
 class ResNet_New_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
@@ -377,6 +380,8 @@ class ResNet_New_New(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
+        feat = F.normalize(x, dim=1)
+        # return feat
         # feature = x.clone()
 
         if self.num_layer == 56:
@@ -385,7 +390,7 @@ class ResNet_New_New(nn.Module):
             x = self.linear(x)
 
         # return x, feature
-        return x
+        return x, feat
 
 def adapter9resnet_56(sparsity, num_classes, adapter_sparsity):
     return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,

@@ -13,7 +13,8 @@ from models.adapter_resnet_new_new import adapter8resnet_56
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, \
     adapter11resnet_56, adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, \
     adapter15resnet_56, adapter17resnet_56, adapter18resnet_56, adapter19resnet_56, \
-    adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56
+    adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56, \
+    adapter24resnet_56
 import utils_append
 import utils
 import time
@@ -137,9 +138,9 @@ def main():
     else:
         input_size = 32
     logger.info('input size is {}'.format(input_size))
-    # flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
-    # logger.info('model flops is {}, params is {}'.format(flops, params))
-    # logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
+    logger.info('model flops is {}, params is {}'.format(flops, params))
+    logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
 
     # 定义优化器
     criterion = nn.CrossEntropyLoss()

@@ -16,7 +16,7 @@ from models.adapter_resnet_new_new import adapter8resnet_56
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, adapter11resnet_56, \
     adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, adapter15resnet_56, adapter17resnet_56, \
     adapter16resnet_56, adapter18resnet_56, adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, \
-    adapter22resnet_56, adapter23resnet_56
+    adapter22resnet_56, adapter23resnet_56, adapter24resnet_56
 '''
 运行命令
 本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
@@ -877,6 +877,43 @@ elif args.arch == 'adapter22resnet_56':
             cnt += 1
 
 elif args.arch == 'adapter23resnet_56':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt=1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        # 每一个stage有9层
+        # 其中第8层为adapter结构
+        for j in range(9):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt+=1
+
+            # cov_layer = block[j].adapter.relu1
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+            #
+            # cov_layer = block[j].adapter.relu2
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
+
+elif args.arch == 'adapter24resnet_56':
 
     cov_layer = eval('model.relu')
     handler = cov_layer.register_forward_hook(get_feature_hook)
