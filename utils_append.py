@@ -2823,7 +2823,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
             logits = model(mixed_images)
             loss = lam * criterion(logits, y_a) + (1 - lam) * criterion(logits, y_b)
         else:
-            logits = model(images)
+            logits, _ = model(images)
             loss = criterion(logits, target)
 
         # measure accuracy and record loss
