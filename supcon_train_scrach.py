@@ -24,70 +24,12 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter23resnet_56, adapter24resnet_56
 from data import cifar10, cifar100, cub
 import utils
+import numpy as np
 from thop import profile
 import time
 
 '''
-从头开始训练一个模型
-更换模型训练时一般需要修改的参数为 --result_dir, --arch, --dataset
-本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
-train the model
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter4resnet_56_cifar10_1 \
---arch adapter3resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
 
-python train_scrach.py --data_dir /root/autodl-tmp/tiny-imagenet-200 --result_dir ./result/scrach_train/resnet_tinyimagenet_56_tinyimagenet_3 \
---arch resnet_tinyimagenet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset tinyimagenet
-
-# train cifar100
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet56_cifar10_2 \
---arch resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# train adapter3resnet_tinyimagenet_56
-python train_scrach.py --data_dir /root/autodl-tmp/tiny-imagenet-200 --result_dir ./result/scrach_train/adapter4resnet_tinyimagenet_56_2 \
---arch adapter3resnet_tinyimagenet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset tinyimagenet
-
-# ----------------------------------------------------------------------------
-# train resnet80 on cifar10
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet80_cifar10_1 \
---arch resnet_80 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# train resnet80 on cifar100
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet80_cifar100_1 \
---arch resnet_80 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# ----------------------------------------------------------------------------
-# 训练adapter5resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter5resnet56_cifar100_1 \
---arch adapter5resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# 训练adapter5resnet56 在cifar10上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter5resnet56_cifar10_1 \
---arch adapter5resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# ----------------------------------------------------------------------------
-# 训练adapter6resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter6resnet56_cifar100_1 \
---arch adapter6resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# 训练adapter6resnet56 在cifar10上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter6resnet56_cifar10_1 \
---arch adapter6resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# ----------------------------------------------------------------------------
-# 训练adapter7resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter7resnet56_cifar100_1 \
---arch adapter7resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
 '''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -97,6 +39,8 @@ def argsget():
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     parser.add_argument('--arch', type=str, default='resnet_56', # choices=('vgg_16_bn', 'resnet_56', 'resnet_110', 'resnet_50'),
                         help='architecture to calculate feature maps')
+    parser.add_argument('--lr_decay_epochs', type=str, default='100, 175, 250',
+                        help='where to decay lr, can be a list')
     parser.add_argument('--lr_type', type=str, default='cos', help='lr type')
     parser.add_argument('--result_dir', type=str, default='./result/scrach_result56',
                         help='results path for saving models and loggers')
@@ -118,27 +62,9 @@ def argsget():
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
     if args.lr_type == 'step':
-        # for param_group in optimizer.param_groups:
-        #     cur_lr = param_group['lr']
-        #     break
-        # factor = epoch // 125
-        # if epoch >= 80:
-        #     factor = factor + 1
-        # lr = args.learning_rate * (0.1 ** factor)
-
-        # factor = epoch // 125
-        # if epoch in [args.epochs*0.5, args.epochs*0.75]:
-        # lr = cur_lr
-        # if epoch in [args.epochs * 0.5, args.epochs * 0.75]:
-        #     lr = cur_lr / 10
-        if epoch >= 0 and epoch < args.epochs * 0.5:
-            lr = args.learning_rate
-        elif epoch >= args.epochs * 0.5 and epoch < args.epochs * 0.75:
-            lr = args.learning_rate * 0.1
-        elif epoch >= args.epochs * 0.75:
-            lr = args.learning_rate * 0.01
-
-        # lr = args.learning_rate * (0.1 ** factor)
+        steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
+        if steps > 0:
+            lr = args.learning_rate * (0.1 ** steps)
 
     elif args.lr_type == 'step_5':
         factor = epoch // 10
@@ -174,8 +100,8 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
     batch_time = utils.AverageMeter('Time', ':6.3f')
     data_time = utils.AverageMeter('Data', ':6.3f')
     losses = utils.AverageMeter('Loss', ':.4e')
-    top1 = utils.AverageMeter('Acc@1', ':6.2f')
-    top5 = utils.AverageMeter('Acc@5', ':6.2f')
+    # top1 = utils.AverageMeter('Acc@1', ':6.2f')
+    # top5 = utils.AverageMeter('Acc@5', ':6.2f')
 
     model.train()
     end = time.time()
@@ -209,15 +135,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
             raise ValueError('contrastive method not supported: {}'.
                              format(args.method))
 
-
-        # loss = criterion(logits, target)
-
-        # measure accuracy and record loss
-        # prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
-        # n = images.size(0)
         losses.update(loss.item(), bsz)  # accumulated loss
-        # top1.update(prec1.item(), n)
-        # top5.update(prec5.item(), n)
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -233,8 +151,6 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
                 'Epoch[{0}]({1}/{2}): '
                 'Loss {loss.avg:.4f}'.format(
                     epoch, i, num_iter, loss=losses))
-
-    # scheduler.step()
 
     return losses.avg #, top1.avg, top5.avg
 
@@ -346,37 +262,29 @@ def main():
     # lr_decay_step = list(map(int, args.lr_decay_step.split(',')))
 
     start_epoch = 0
-    best_top1_acc = 0
+
+    iterations = args.lr_decay_epochs.split(',')
+    args.lr_decay_epochs = list([])
+    for it in iterations:
+        args.lr_decay_epochs.append(int(it))
+    logger.info('lr_decay_epochs is : {}'.format(args.lr_decay_epochs))
 
     # train the model
     epoch = start_epoch
     while epoch < args.epochs:
-        # if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
-        #     for param_group in optimizer.param_groups:
-        #         param_group['lr'] *= 0.1
         start = time.time()
         train_obj = train(epoch, train_loader, model, criterion,
                                                           optimizer, args, logger, print_freq)  # , scheduler)
-        # valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
-        # logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
         end = time.time()
         logger.info('epoch {}, total time {:.2f}, loss is {:.2f}'.
                     format(epoch, end - start, train_obj))
         is_best = False
-        # if valid_top1_acc > best_top1_acc:
-        #     best_top1_acc = valid_top1_acc
-        #     is_best = True
-
         utils.save_checkpoint({
             'epoch': epoch,
             'state_dict': model.state_dict(),
-            # 'best_top1_acc': best_top1_acc,
             'optimizer': optimizer.state_dict(),
         }, is_best, args.result_dir)
-
         epoch += 1
-        # end = time.time()
-        # logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))
 
 if __name__ == '__main__':
     main()
