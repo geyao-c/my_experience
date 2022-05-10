@@ -24,6 +24,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter23resnet_56, adapter24resnet_56
 from data import cifar10, cifar100, cub
 import utils
+import numpy as np
 from thop import profile
 import time
 
@@ -97,6 +98,8 @@ def argsget():
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     parser.add_argument('--arch', type=str, default='resnet_56', # choices=('vgg_16_bn', 'resnet_56', 'resnet_110', 'resnet_50'),
                         help='architecture to calculate feature maps')
+    parser.add_argument('--lr_decay_epochs', type=str, default='100, 175, 250',
+                        help='where to decay lr, can be a list')
     parser.add_argument('--lr_type', type=str, default='cos', help='lr type')
     parser.add_argument('--result_dir', type=str, default='./result/scrach_result56',
                         help='results path for saving models and loggers')
@@ -131,14 +134,10 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         # lr = cur_lr
         # if epoch in [args.epochs * 0.5, args.epochs * 0.75]:
         #     lr = cur_lr / 10
-        if epoch >= 0 and epoch < args.epochs * 0.5:
-            lr = args.learning_rate
-        elif epoch >= args.epochs * 0.5 and epoch < args.epochs * 0.75:
-            lr = args.learning_rate * 0.1
-        elif epoch >= args.epochs * 0.75 and epoch < args.epochs * 0.9:
-            lr = args.learning_rate * 0.01
-        else:
-            lr = args.learning_rate * 0.001
+
+        steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
+        if steps > 0:
+            lr = args.learning_rate * (0.1 ** steps)
 
         # lr = args.learning_rate * (0.1 ** factor)
 
@@ -349,6 +348,12 @@ def main():
 
     start_epoch = 0
     best_top1_acc = 0
+
+    iterations = args.lr_decay_epochs.split(',')
+    args.lr_decay_epochs = list([])
+    for it in iterations:
+        args.lr_decay_epochs.append(int(it))
+    logger.info('lr_decay_epochs is : {}'.format(args.lr_decay_epochs))
 
     # train the model
     epoch = start_epoch
