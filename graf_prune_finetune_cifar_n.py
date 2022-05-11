@@ -15,6 +15,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter15resnet_56, adapter17resnet_56, adapter18resnet_56, adapter19resnet_56, \
     adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56, \
     adapter24resnet_56
+from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 import utils_append
 import utils
 import time
@@ -145,8 +146,8 @@ def main():
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.to(device)
-    criterion_smooth = utils.CrossEntropyLabelSmooth(FINETUNE_CLASSES, args.label_smooth)
-    criterion_smooth = criterion_smooth.to(device)
+    # criterion_smooth = utils.CrossEntropyLabelSmooth(FINETUNE_CLASSES, args.label_smooth)
+    # criterion_smooth = criterion_smooth.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum, weight_decay=args.weight_decay)
     # lr_decay_step = list(map(int, args.lr_decay_step.split(',')))
 
@@ -196,7 +197,7 @@ def main():
 
     while epoch < args.epochs:
         start = time.time()
-        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion_smooth,
+        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
                                                                         optimizer, args, logger, print_freq, device)#, scheduler)
         valid_obj, valid_top1_acc, valid_top5_acc = utils_append.validate(epoch, val_loader, model, criterion, args, logger, device)
         utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
