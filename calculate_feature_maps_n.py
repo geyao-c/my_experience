@@ -94,7 +94,7 @@ else:
 if args.arch=='resnet_50':
     model.load_state_dict(checkpoint)
 else:
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(checkpoint['state_dict'], strict=False)
 
 conv_index = torch.tensor(1)
 
