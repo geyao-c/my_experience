@@ -22,6 +22,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter15resnet_56, adapter17resnet_56, adapter16resnet_56, adapter18resnet_56, \
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
+from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from data import cifar10, cifar100, cub
 import utils
 import numpy as np
@@ -61,7 +62,7 @@ def argsget():
     return args
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
-    warmup_epoch = 10
+    warmup_epoch = 5
     if args.lr_type == 'step':
         steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
         if steps > 0:
@@ -128,7 +129,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
-        _, logits = model(images)
+        logits = model(images)
         f1, f2 = torch.split(logits, [bsz, bsz], dim=0)
         logits = torch.cat([f1.unsqueeze(1), f2.unsqueeze(1)], dim=1)
 
