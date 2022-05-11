@@ -2597,7 +2597,7 @@ def overall_load_arch_model(args, model, origin_model, ckpt, logger, graf=False)
             new_state_dict[k.replace('module.', '')] = v
         origin_model.load_state_dict(new_state_dict)
     else:
-        origin_model.load_state_dict(ckpt['state_dict'])
+        origin_model.load_state_dict(ckpt['state_dict'], strict=False)
     oristate_dict = origin_model.state_dict()
     if graf == True:
         if 'resnet_56' in args.pretrained_arch:
@@ -2618,7 +2618,7 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             new_state_dict[k.replace('module.', '')] = v
         origin_model.load_state_dict(new_state_dict)
     else:
-        origin_model.load_state_dict(ckpt['state_dict'])
+        origin_model.load_state_dict(ckpt['state_dict'], strict=False)
     oristate_dict = origin_model.state_dict()
     # 当在同一个模型上进行裁剪时
     if graf == False:
