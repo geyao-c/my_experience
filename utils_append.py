@@ -1890,6 +1890,8 @@ def graf_load_adapter15resnet_model(args, model, oristate_dict, layer, logger, n
                     last_select_index = None
 
     for name, module in model.named_modules():
+        # print(name)
+        # print(module)
         name = name.replace('module.', '')
 
         if isinstance(module, nn.Conv2d):
@@ -2608,6 +2610,8 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 首先得到原始模型参数
     origin_model_arch = args.arch if graf == False else args.pretrained_arch
     logger.info('origin model arch: {}'.format(origin_model_arch))
+    # logger.info('original model arch')
+    # logger.info(origin_model)
     if origin_model_arch == 'resnet_110':
         new_state_dict = OrderedDict()
         for k, v in ckpt['state_dict'].items():
