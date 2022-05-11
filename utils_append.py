@@ -2607,7 +2607,7 @@ def overall_load_arch_model(args, model, origin_model, ckpt, logger, graf=False)
 def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 首先得到原始模型参数
     origin_model_arch = args.arch if graf == False else args.pretrained_arch
-    print('origin model arch: ', origin_model_arch)
+    logger.info('origin model arch: {}'.format(origin_model_arch))
     if origin_model_arch == 'resnet_110':
         new_state_dict = OrderedDict()
         for k, v in ckpt['state_dict'].items():
@@ -2723,6 +2723,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             elif args.pretrained_arch == 'adapter3resnet_56' and args.finetune_arch == 'adapter3resnet_tinyimagenet_56':
                 logger.info('graf_load_adapter3resnet2adapter3resnettinyimagenet_model')
                 graf_load_adapter3resnet2adapter3resnet_tinyimagenet_model(args, model, oristate_dict, 56, logger)
+            elif args.pretrained_arch == 'supcon_adapter15resnet_56' and args.finetune_arch == 'adapter15resnet_56':
+                logger.info('supcon_adapter15resnet to adapter15resnet')
+                graf_load_adapter15resnet_model(args, model, oristate_dict, 56, logger)
             else:
                 raise
 # 学习率调整
