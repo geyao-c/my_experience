@@ -4,8 +4,10 @@ from resnet_cifar import resnet_56
 from torchsummary import summary
 from models.adapter_resnet_new_three import adapter23resnet_56, adapter22resnet_56, \
     adapter24resnet_56
+from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 import torchvision
 import utils_append
+import numpy as np
 
 def fun2():
     torchvision.models.resnet50()
@@ -37,8 +39,30 @@ def fun5():
     flops, params, _, _ = utils_append.cal_params(model, torch.device('cpu'), None, 64)
     print('flops: {}, params: {}'.format(flops, params))
 
+def fun6():
+    model = supcon_adapter15resnet_56([0.]*100, 10, [0.]*100)
+    print(model)
+
+def fun7():
+    x = np.array([1, 2, 3, 4, 5, 6])
+    x = torch.from_numpy(x)
+    print(x)
+
+def fun8():
+    x = torch.arange(12)
+    print(x)
+    x = x.reshape(2, 2, 3)
+    print(x)
+    x1 = x.view(x.shape[0], -1)
+    print(x1)
+    x2 = torch.flatten(x, 1)
+    print(x2)
+
 if __name__ == '__main__':
     # fun1()
     # fun3()
     # fun4()
-    fun5()
+    # fun5()
+    # fun6()
+    # fun7()
+    fun8()
