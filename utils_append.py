@@ -2833,7 +2833,8 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
             logits = model(mixed_images)
             loss = lam * criterion(logits, y_a) + (1 - lam) * criterion(logits, y_b)
         else:
-            logits, _ = model(images)
+            # logits, _ = model(images)
+            logits = model(images)
             loss = criterion(logits, target)
 
         # measure accuracy and record loss
@@ -2898,7 +2899,8 @@ def validate(epoch, val_loader, model, criterion, args, logger, device):
             target = target.to(device)
 
             # compute output
-            logits, _ = model(images)
+            # logits, _ = model(images)
+            logits = model(images)
             loss = criterion(logits, target)
 
             # measure accuracy and record loss
