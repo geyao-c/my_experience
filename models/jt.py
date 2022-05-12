@@ -5,6 +5,7 @@ from torchsummary import summary
 from models.adapter_resnet_new_three import adapter23resnet_56, adapter22resnet_56, \
     adapter24resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
+from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 import torchvision
 import utils_append
 import numpy as np
@@ -58,6 +59,10 @@ def fun8():
     x2 = torch.flatten(x, 1)
     print(x2)
 
+def fun9():
+    model = sl_mlp_adapter15resnet_56([0.]*100, 10, [0.]*100)
+    print(model)
+
 if __name__ == '__main__':
     # fun1()
     # fun3()
@@ -65,4 +70,5 @@ if __name__ == '__main__':
     # fun5()
     # fun6()
     # fun7()
-    fun8()
+    # fun8()
+    fun9()
