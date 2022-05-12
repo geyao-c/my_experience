@@ -21,6 +21,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter15resnet_56, adapter17resnet_56, adapter16resnet_56, adapter18resnet_56, \
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
+from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from data import cifar10, cifar100, cub
 import utils
 from thop import profile
