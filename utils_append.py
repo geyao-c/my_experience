@@ -2733,6 +2733,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             elif args.pretrained_arch == 'sl_mlp_resnet_56' and args.finetune_arch == 'resnet_56':
                 logger.info('sl_mlp_resnet to resnet')
                 graf_load_resnet_model(args, model, oristate_dict, 56, logger)
+            elif args.pretrained_arch == 'sl_mlp_adapter15resnet_56' and args.finetune_arch == 'adapter15resnet_56':
+                logger.info('sl_mlp_adapter15resnet to resnet')
+                graf_load_adapter15resnet_model(args, model, oristate_dict, 56, logger)
             else:
                 raise
 # 学习率调整
