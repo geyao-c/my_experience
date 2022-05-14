@@ -25,6 +25,7 @@ from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub
+from util.losses import SupConLoss
 import utils
 from thop import profile
 import time
@@ -314,10 +315,13 @@ def main():
     logger.info('model flops is {}, params is {}'.format(flops, params))
 
     # 定义优化器
-    # criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss()
     # 使用focalloss
-    criterion = FocalLoss(gamma=2)
+    # criterion = FocalLoss(gamma=2)
     criterion = criterion.to(device)
+
+    supcon_criterion = SupConLoss()
+
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                 weight_decay=args.weight_decay)
     # lr_decay_step = list(map(int, args.lr_decay_step.split(',')))

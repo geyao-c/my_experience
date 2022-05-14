@@ -227,16 +227,16 @@ class ResNet_New(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-        self.head = nn.Sequential(
-            nn.Linear(64, 128),
-            nn.ReLU(inplace=True),
-            nn.Linear(128, 64)
-        )
+        # self.head = nn.Sequential(
+        #     nn.Linear(64, 128),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(128, 64)
+        # )
 
-        # if self.num_layer == 56:
-        #     self.fc = nn.Linear(64 * expansion, num_classes)
-        # else:
-        #     self.linear = nn.Linear(64 * expansion, num_classes)
+        if self.num_layer == 56:
+            self.fc = nn.Linear(64 * expansion, num_classes)
+        else:
+            self.linear = nn.Linear(64 * expansion, num_classes)
 
     def _make_layer(self, block, blocks_num, stride, stage):
         layers = []
@@ -278,18 +278,18 @@ class ResNet_New(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        x = F.normalize(self.head(x), dim=1)
-        # feat = F.normalize(x, dim=1)
+        # feat = F.normalize(self.head(x), dim=1)
+        feat = F.normalize(x, dim=1)
         # print('x2 shape: ', x.shape)
         # feature = x.clone()
 
-        # if self.num_layer == 56:
-        #     x = self.fc(x)
-        # else:
-        #     x = self.linear(x)
+        if self.num_layer == 56:
+            x = self.fc(x)
+        else:
+            x = self.linear(x)
 
-        # return x, feature
-        return x
+        return x, feat
+        # return x
 
 class ResNet_New_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
@@ -337,11 +337,11 @@ class ResNet_New_New(nn.Module):
         #     self.fc = nn.Linear(64 * expansion, num_classes)
         # else:
         #     self.linear = nn.Linear(64 * expansion, num_classes)
-        self.head = nn.Sequential(
-            nn.Linear(64, 128),
-            nn.ReLU(inplace=True),
-            nn.Linear(128, 64)
-        )
+        # self.head = nn.Sequential(
+        #     nn.Linear(64, 128),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(128, 64)
+        # )
 
     def _make_layer(self, block, blocks_num, stride, stage):
         layers = []
@@ -392,8 +392,8 @@ class ResNet_New_New(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
 
-        x = F.normalize(self.head(x), dim=1)
-        # feat = F.normalize(x, dim=1)
+        # x = F.normalize(self.head(x), dim=1)
+        feat = F.normalize(x, dim=1)
         # return feat
         # feature = x.clone()
 

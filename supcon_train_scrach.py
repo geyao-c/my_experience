@@ -102,12 +102,14 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         logger.info('learning_rate: ' + str(lr))
 
 
-def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq, scheduler=None):
+def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq, supcon_criterion=None, scheduler=None):
     batch_time = utils.AverageMeter('Time', ':6.3f')
     data_time = utils.AverageMeter('Data', ':6.3f')
     losses = utils.AverageMeter('Loss', ':.4e')
-    # top1 = utils.AverageMeter('Acc@1', ':6.2f')
-    # top5 = utils.AverageMeter('Acc@5', ':6.2f')
+    supcon_losses = utils.AverageMeter('Loss', ':.4e')
+    ce_losses = utils.AverageMeter('Loss', ':.4e')
+    top1 = utils.AverageMeter('Acc@1', ':6.2f')
+    top5 = utils.AverageMeter('Acc@5', ':6.2f')
 
     model.train()
     end = time.time()
@@ -129,18 +131,28 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
-        logits = model(images)
-        f1, f2 = torch.split(logits, [bsz, bsz], dim=0)
-        logits = torch.cat([f1.unsqueeze(1), f2.unsqueeze(1)], dim=1)
+        ce_logits, supcon_logits = model(images)
+        f1, f2 = torch.split(supcon_logits, [bsz, bsz], dim=0)
+        ce_logits1, ce_logits2 = torch.split(ce_logits, [bsz, bsz], dim=0)
+        supcon_logits = torch.cat([f1.unsqueeze(1), f2.unsqueeze(1)], dim=1)
 
         if args.method == 'SupCon':
-            loss = criterion(logits, target)
+            supcon_loss = supcon_criterion(supcon_logits, target)
         elif args.method == 'SimCLR':
-            loss = criterion(logits)
+            supcon_loss = supcon_criterion(supcon_logits)
         else:
             raise ValueError('contrastive method not supported: {}'.
                              format(args.method))
 
+        ce_loss = criterion(ce_logits1, target)
+        loss = ce_loss + supcon_loss
+
+        prec1, prec5 = utils.accuracy(ce_logits1, target, topk=(1, 5))
+
+        top1.update(prec1.item(), bsz)
+        top5.update(prec5.item(), bsz)
+        supcon_losses.update(supcon_loss.item(), bsz)
+        ce_losses.update(ce_loss.item(), bsz)
         losses.update(loss.item(), bsz)  # accumulated loss
 
         # compute gradient and do SGD step
@@ -155,10 +167,12 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         if i % print_freq == 0:
             logger.info(
                 'Epoch[{0}]({1}/{2}): '
-                'Loss {loss.avg:.4f}'.format(
-                    epoch, i, num_iter, loss=losses))
+                'supcon loss is {supcon_loss.avg:.4f}, ce loss is {ce_loss.avg:.4f}, Loss {loss.avg:.4f}, '
+                'Prec@1(1,5) {top1.avg:.2f}, {top5.avg:.2f}'.format(
+                    epoch, i, num_iter, supcon_loss=supcon_losses, ce_loss=ce_losses,
+                    loss=losses, top1=top1, top5=top5))
 
-    return losses.avg #, top1.avg, top5.avg
+    return losses.avg, supcon_losses.avg, ce_losses.avg, top1.avg, top5.avg
 
 
 def validate(epoch, val_loader, model, criterion, args, logger):
@@ -231,7 +245,7 @@ def main():
 
     # 加载数据
     # train_loader, val_loader = utils_append.dstget(args)
-    train_loader, _ = utils_append.supcon_dstget(args)
+    train_loader, val_loader = utils_append.supcon_dstget(args)
     logger.info('the training dataset is {}'.format(args.dataset))
 
     # 构建模型
@@ -260,14 +274,16 @@ def main():
     logger.info('model flops is {}, params is {}'.format(flops, params))
 
     # 定义优化器
-    criterion = SupConLoss(temperature=args.temp)
-    # criterion = nn.CrossEntropyLoss()
+    supcon_criterion = SupConLoss(temperature=args.temp)
+    supcon_criterion.to(device)
+    criterion = nn.CrossEntropyLoss()
     criterion = criterion.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                 weight_decay=args.weight_decay)
     # lr_decay_step = list(map(int, args.lr_decay_step.split(',')))
 
     start_epoch = 0
+    best_top1_acc = 0
 
     iterations = args.lr_decay_epochs.split(',')
     args.lr_decay_epochs = list([])
@@ -279,11 +295,17 @@ def main():
     epoch = start_epoch
     while epoch < args.epochs:
         start = time.time()
-        train_obj = train(epoch, train_loader, model, criterion,
-                                                          optimizer, args, logger, print_freq)  # , scheduler)
-        end = time.time()
-        logger.info('epoch {}, total time {:.2f}, loss is {:.2f}'.
-                    format(epoch, end - start, train_obj))
+        total_loss, supcon_loss, ce_loss, top1_accu, top5_accu = train(epoch, train_loader, model, criterion, optimizer, args,
+                          logger, print_freq, supcon_criterion=supcon_criterion)  # , scheduler)
+        valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
+
+        is_best = False
+        if valid_top1_acc > best_top1_acc:
+            best_top1_acc = valid_top1_acc
+            is_best = True
+
+        logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, ce_loss is {:.2f}'.
+                    format(epoch, total_loss, supcon_loss, ce_loss))
         is_best = False
         utils.save_checkpoint({
             'epoch': epoch,
@@ -291,6 +313,9 @@ def main():
             'optimizer': optimizer.state_dict(),
         }, is_best, args.result_dir)
         epoch += 1
+        end = time.time()
+        logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))
+
 
 if __name__ == '__main__':
     main()

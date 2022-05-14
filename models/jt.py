@@ -9,6 +9,7 @@ from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 import torchvision
 import utils_append
 import numpy as np
+import torch.nn.functional as F
 
 def fun2():
     torchvision.models.resnet50()
@@ -63,6 +64,20 @@ def fun9():
     model = sl_mlp_adapter15resnet_56([0.]*100, 10, [0.]*100)
     print(model)
 
+def fun10():
+
+    x = torch.tensor([[1, 2, 3], [3, 5, 6]], dtype=torch.float)
+    softx = F.softmax(x, dim=1)
+    print('softx: ', softx)
+    print(np.log(softx))
+    print(F.softmax(x))
+    log_softx = F.log_softmax(x)
+    # print(F.log_softmax(x))
+    print('log_softx: ', log_softx)
+    print(log_softx.data.exp())
+    # print(F.log_softmax(x, dim=1))
+
+
 if __name__ == '__main__':
     # fun1()
     # fun3()
@@ -71,4 +86,5 @@ if __name__ == '__main__':
     # fun6()
     # fun7()
     # fun8()
-    fun9()
+    # fun9()
+    fun10()
