@@ -23,6 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter23resnet_56, adapter24resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
+from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub
 import utils
 from thop import profile
@@ -313,7 +314,11 @@ def main():
     logger.info('model flops is {}, params is {}'.format(flops, params))
 
     # 定义优化器
-    criterion = nn.CrossEntropyLoss()
+    # criterion = nn.CrossEntropyLoss()
+    # 使用focalloss
+    gamma = 0.5
+    criterion = FocalLoss(gamma=gamma)
+    logger.info('gamma is : {}'.format(gamma))
     criterion = criterion.to(device)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                 weight_decay=args.weight_decay)
