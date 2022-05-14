@@ -58,6 +58,8 @@ def argsget():
     # method
     parser.add_argument('--method', type=str, default='SupCon',
                         choices=['SupCon', 'SimCLR'], help='choose method')
+    parser.add_argument('--splossxs', type=int, default=1)
+    parser.add_argument('--celossxs', type=int, default=1)
     args = parser.parse_args()
     return args
 
@@ -145,7 +147,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
                              format(args.method))
 
         ce_loss = criterion(ce_logits1, target)
-        loss = ce_loss + supcon_loss
+        loss = args.celossxs * ce_loss + args.splossxs * supcon_loss
 
         prec1, prec5 = utils.accuracy(ce_logits1, target, topk=(1, 5))
 
