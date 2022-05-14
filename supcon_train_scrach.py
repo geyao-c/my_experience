@@ -58,8 +58,8 @@ def argsget():
     # method
     parser.add_argument('--method', type=str, default='SupCon',
                         choices=['SupCon', 'SimCLR'], help='choose method')
-    parser.add_argument('--splossxs', type=int, default=1)
-    parser.add_argument('--celossxs', type=int, default=1)
+    parser.add_argument('--splossxs', type=float, default=1.0)
+    parser.add_argument('--celossxs', type=float, default=1.0)
     args = parser.parse_args()
     return args
 
