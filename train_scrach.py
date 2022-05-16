@@ -317,13 +317,9 @@ def main():
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
     # 使用focalloss
-<<<<<<< HEAD
-    # criterion = FocalLoss(gamma=2)
-=======
     gamma = 0.5
     criterion = FocalLoss(gamma=gamma)
     logger.info('gamma is : {}'.format(gamma))
->>>>>>> d323533a69f5f6bda9c2ad87a63d15aa8149a5f4
     criterion = criterion.to(device)
 
     supcon_criterion = SupConLoss()

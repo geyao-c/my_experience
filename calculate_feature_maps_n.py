@@ -75,7 +75,12 @@ cudnn.enabled = True
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 加载数据
-train_loader, _ = utils_append.dstget(args)
+if 'supcon-ce' in args.pretrain_dir:
+    print('loader dataset from supcon dataset')
+    train_loader, _ = utils_append.supcon_dstget(args)
+else:
+    print('loader dataset from normal dataset')
+    train_loader, _ = utils_append.dstget(args)
 CLASSES = utils_append.classes_num(args.dataset)
 
 # Load pretrained model.
@@ -125,7 +130,11 @@ def inference():
             if batch_idx >= repeat:
                break
 
-            inputs, targets = inputs.to(device), targets.to(device)
+            if 'supcon-ce' in args.pretrain_dir:
+                print('supcon-ce dataset loader')
+                inputs, targets = inputs[0].to(device), targets.to(device)
+            else:
+                inputs, targets = inputs.to(device), targets.to(device)
 
             model(inputs)
 
