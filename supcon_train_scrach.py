@@ -23,6 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
+from models.supcon_adapter_resnet import selfsupcon_adapter15resnet_56
 from data import cifar10, cifar100, cub
 import utils
 import numpy as np
@@ -294,7 +295,7 @@ def main():
     for it in iterations:
         args.lr_decay_epochs.append(int(it))
     logger.info('lr_decay_epochs is : {}'.format(args.lr_decay_epochs))
-
+    logger.info('method is {}'.format(args.method))
     # train the model
     epoch = start_epoch
     while epoch < args.epochs:
