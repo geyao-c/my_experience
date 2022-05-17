@@ -65,7 +65,7 @@ def argsget():
     return args
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
-    warmup_epoch = 5
+    warmup_epoch = 10
     if args.lr_type == 'step':
         steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
         if steps > 0:
