@@ -298,6 +298,7 @@ def main():
     logger.info('method is {}'.format(args.method))
     # train the model
     epoch = start_epoch
+    logger.info("device is {}".format(device))
     while epoch < args.epochs:
         start = time.time()
         total_loss, supcon_loss, ce_loss, top1_accu, top5_accu = train(epoch, train_loader, model, criterion, optimizer, args,
