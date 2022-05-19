@@ -196,6 +196,7 @@ def main():
         logger.info("use cutout")
     if args.mixup_alpha > 0:
         logger.info("use mixup")
+    logger.info('device: {}'.format(device))
 
     while epoch < args.epochs:
         start = time.time()
