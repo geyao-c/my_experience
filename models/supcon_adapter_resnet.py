@@ -227,11 +227,11 @@ class ResNet_New(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-        # self.head = nn.Sequential(
-        #     nn.Linear(64, 128),
-        #     nn.ReLU(inplace=True),
-        #     nn.Linear(128, 64)
-        # )
+        self.head = nn.Sequential(
+            nn.Linear(64, 512),
+            nn.ReLU(inplace=True),
+            nn.Linear(512, 64)
+        )
 
         if self.num_layer == 56:
             self.fc = nn.Linear(64 * expansion, num_classes)
@@ -278,8 +278,8 @@ class ResNet_New(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        # feat = F.normalize(self.head(x), dim=1)
-        feat = F.normalize(x, dim=1)
+        feat = F.normalize(self.head(x), dim=1)
+        # feat = F.normalize(x, dim=1)
         # print('x2 shape: ', x.shape)
         # feature = x.clone()
 
