@@ -23,24 +23,23 @@ import utils
 import time
 
 '''
+python random_init_prune_finetune_cifar.py --finetune_dataset cifar100 --finetune_data_dir ./data --finetune_arch resnet_56 \
+--result_dir ./result/random_init_pruned/cifar10_adapter15resnet_56_pruned_48 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9
 '''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # 先解析参数
 parser = argparse.ArgumentParser("CIFAR prune training")
-# 训练数据集
-parser.add_argument('--pretrained_dataset', type=str, default='cifar10', help='model train dataset used')
 # 微调数据集
 parser.add_argument('--finetune_dataset', type=str, default='cifar100', help='model train dataset used')
 parser.add_argument('--dataset', type=str, default=None, help='model train dataset used')
-parser.add_argument('--graf', action="store_false", help='graf pruned or not')
 # 微调数据集文件路径
 parser.add_argument('--finetune_data_dir', type=str, default='./data', help='path to dataset')
 parser.add_argument('--data_dir', type=str, default=None, help='path to dataset')
 # parser.add_argument('--arch', type=str, default='resnet_56', #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
 #                     help='architecture to calculate feature maps')
-parser.add_argument('--pretrained_arch', type=str, default='resnet_56', #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
-                    help='architecture of pretrained')
 parser.add_argument('--finetune_arch', type=str, default='resnet_56', #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
                     help='architecture of fintune')
 parser.add_argument('--arch', type=str, default=None, #choices=('vgg_16_bn','resnet_56','resnet_110','resnet_50'),
@@ -56,8 +55,6 @@ parser.add_argument('--learning_rate', type=float, default=0.1, help='init learn
 parser.add_argument('--lr_decay_step', default='50,100', type=str, help='learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=0.0005, help='weight decay')
-parser.add_argument('--pretrain_dir', type=str, default='', help='pretrain model path')
-parser.add_argument('--ci_dir', type=str, default='', help='ci path')
 parser.add_argument('--sparsity', type=str, default=None, help='sparsity of each conv layer')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--adapter_sparsity', type=str, default=None, help='sparsity of each adapter layer')
@@ -106,7 +103,6 @@ def main():
 
     logger.info('sparsity:' + str(sparsity))
     FINETUNE_CLASSES = utils_append.classes_num(args.finetune_dataset)
-    PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
     # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
@@ -115,23 +111,14 @@ def main():
         # 计算参数模型使用finetune_arch
         original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
                                                 adapter_sparsity=[0.] * 100, dataset=args.finetune_dataset).to(device)
-        # 加载参数模型使用pretrained_arch
-        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0] * 100,
-                                                  dataset=args.pretrained_dataset).to(device)
-        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES, adapter_sparsity = adapter_sparsity,
-                                                         dataset=args.pretrained_dataset).to(device)
     else:
         model = eval(args.finetune_arch)(sparsity=sparsity, num_classes=FINETUNE_CLASSES, dataset=args.finetune_dataset).to(device)
         original_params_model = eval(args.finetune_arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
                                                          dataset=args.finetune_dataset).to(device)
-        origin_model = eval(args.pretrained_arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES,
-                                                  dataset=args.pretrained_dataset).to(device)
-        pruned_origin_model = eval(args.pretrained_arch)(sparsity=sparsity, num_classes=PRETRAINED_CLASSES,
-                                                         dataset=args.pretrained_dataset).to(device)
 
     logger.info(model)
 
-    #计算模型参数量
+    # 计算模型参数量
     # original_params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=FINETUNE_CLASSES,
     #                                         adapter_sparsity = [0.] * 100).to(device)
     if 'tinyimagenet' in args.finetune_dataset:
@@ -155,38 +142,6 @@ def main():
 
     start_epoch = 0
     best_top1_acc= 0
-
-    # 加载训练模型，训练模型在不同的数据集上训练
-    logger.info('resuming from pretrain model')
-    # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
-    # origin_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0]*100).to(device)
-    map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    ckpt = torch.load(args.pretrain_dir, map_location=map_str)
-
-    # 将原始模型参数载入到压缩模型中
-    logger.info("载入参数1")
-    # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
-    logger.info('args graf: {}'.format(args.graf))
-    if args.graf == False:
-        args.arch = args.pretrained_arch
-    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
-
-    # 压缩原始模型，得到压缩后的精度
-    # logger.info("载入参数2")
-    # logger.info('pruned origin model: ', pruned_origin_model)
-    # utils_append.overall_load_arch_model(args, pruned_origin_model, origin_model, ckpt, logger, graf=True)
-    # 加载训练前的数据集
-    # args.dataset = args.pretrained_dataset
-    # if args.dataset == 'cifar10' or args.dataset == 'cifar100':
-    #     args.data_dir = "./data"
-
-    # print('args dataset: ', args.dataset)
-    # pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
-    # logger.info(pruned_origin_model.state_dict().keys())
-    # 计算压缩后的精度
-    # pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
-    #                                                                   criterion, args, logger, device)
-    # logger.info("=>after pruned accuracy is {:.3f}".format(pruned_valid_top1_acc))
 
     # train the model
     epoch = start_epoch
