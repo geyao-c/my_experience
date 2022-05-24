@@ -55,7 +55,17 @@ if __name__ == '__main__':
 
     train_loader, val_loader = cifar10.load_cifar_data(args)
 
-    model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
+    # name = '4.30_supcon-ce_adapter15resnet_56_cifar10'
+    name = '7.99_supcon-ce_adapter15resnet_56_cifar10'
+    # name = '43.46_selfsupcon-ce_adapter15resnet_56_cifar100'
+    # name = '3.15-1_supcon-ce_adapter15resnet_56_cifar100'
+    # name = '41.80_selfsupcon-ce_adapter15resnet_56_cifar10'
+    # name = '6.31_supcon_adapter15resnet_56_cifar100'
+    # name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
+    # name = '0.57_selfsupcon-ce_adapter15resnet_56_cifar100'
+    # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
+    model1 = get_model('./pretrained_models/' + name + '.pth.tar')
+    # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     model2 = get_model('./pretrained_models/94.54_resnet_56_cifar10.pth.tar')
 
     val_features1, val_targets1 = model_val(model1, val_loader)
@@ -84,9 +94,9 @@ if __name__ == '__main__':
     print(cs_tg1)
     print(cs_tg2)
     # 只绘制三类
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(5, 5))
 
-    plt.subplot(121)
+    # plt.subplot(121)
     # plt.scatter(X_tsne1[:, 0], X_tsne1[:, 1], c=val_targets1, label="new", s=1)
     ax = plt.scatter(cs_xtsne1[:, 0], cs_xtsne1[:, 1], c=cs_tg1, label="new", s=1)
     plt.xlim(-90, 90)
@@ -100,7 +110,7 @@ if __name__ == '__main__':
     # plt.ylim(-90, 90)
 
     plt.legend()
-    plt.savefig('image/image.png', dpi=600)
+    plt.savefig('images/' + name + '.png', dpi=600)
     plt.show()
 
 
