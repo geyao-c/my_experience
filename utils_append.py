@@ -2928,3 +2928,9 @@ def logstore(writer, train_losses, train_accuracy, test_losses, test_accuracy, e
     writer.add_scalar('accuracy/train accuracy', train_accuracy, epoch)
     writer.add_scalar('losses/test losses', test_losses, epoch)
     writer.add_scalar('accuracy/test accuracy', test_accuracy, epoch)
+
+# 保存相关变量到tensorboard中
+def lossstore(writer, train_losses, selfsupcon_losses, supcon_losses, epoch):
+    writer.add_scalar('losses/train losses', train_losses, epoch)
+    writer.add_scalar('losses/selfsupcon losses', selfsupcon_losses, epoch)
+    writer.add_scalar('losses/supcon losses', supcon_losses, epoch)
