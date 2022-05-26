@@ -148,7 +148,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         supcon_loss = supcon_criterion(logits, target)
         selfsupcon_loss = selfsupcon_criterion(logits)
 
-        loss = args.selfsuplossxs * selfsupcon_loss + args.suplossxs * supcon_loss
+        loss = args.selfsupconlossxs * selfsupcon_loss + args.supconlossxs * supcon_loss
 
         # prec1, prec5 = utils.accuracy(ce_logits1, target, topk=(1, 5))
 
