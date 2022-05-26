@@ -156,7 +156,7 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         # top5.update(prec5.item(), bsz)
 
         supcon_losses.update(supcon_loss.item(), bsz)
-        selfsupcon_losses.update(supcon_loss.item(), bsz)
+        selfsupcon_losses.update(selfsupcon_loss.item(), bsz)
         # ce_losses.update(ce_loss.item(), bsz)
         losses.update(loss.item(), bsz)  # accumulated loss
 
@@ -307,7 +307,7 @@ def main():
                           logger, print_freq, supcon_criterion=supcon_criterion, selfsupcon_criterion=selfsupcon_criterion)  # , scheduler)
         # valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
         utils_append.lossstore(writer, train_losses=total_loss, selfsupcon_losses=selfsupcon_loss,
-                               supcon_losses=supcon_loss)
+                               supcon_losses=supcon_loss, epoch=epoch)
         # is_best = False
         # if valid_top1_acc > best_top1_acc:
         #     best_top1_acc = valid_top1_acc
