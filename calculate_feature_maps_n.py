@@ -75,7 +75,7 @@ cudnn.enabled = True
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 加载数据
-if 'supcon-ce' in args.pretrain_dir:
+if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
     print('loader dataset from supcon dataset')
     train_loader, _ = utils_append.supcon_dstget(args)
 else:
@@ -130,7 +130,7 @@ def inference():
             if batch_idx >= repeat:
                break
 
-            if 'supcon-ce' in args.pretrain_dir:
+            if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
                 print('supcon-ce dataset loader')
                 inputs, targets = inputs[0].to(device), targets.to(device)
             else:
@@ -618,6 +618,43 @@ elif args.arch == 'adapter13resnet_56':
             cnt += 1
 
 elif args.arch == 'adapter14resnet_56':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt=1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        # 每一个stage有9层
+        # 其中第8层为adapter结构
+        for j in range(9):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt+=1
+
+            # cov_layer = block[j].adapter.relu1
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+            #
+            # cov_layer = block[j].adapter.relu2
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
+
+elif args.arch == 'adapter15resnet_56':
 
     cov_layer = eval('model.relu')
     handler = cov_layer.register_forward_hook(get_feature_hook)
