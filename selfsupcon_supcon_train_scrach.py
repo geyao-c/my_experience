@@ -116,9 +116,6 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
     losses = utils.AverageMeter('Loss', ':.4e')
     supcon_losses = utils.AverageMeter('Loss', ':.4e')
     selfsupcon_losses = utils.AverageMeter('Loss', ':.4e')
-    ce_losses = utils.AverageMeter('Loss', ':.4e')
-    top1 = utils.AverageMeter('Acc@1', ':6.2f')
-    top5 = utils.AverageMeter('Acc@5', ':6.2f')
 
     model.train()
     end = time.time()
@@ -140,24 +137,20 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
-        ce_logits, supcon_logits = model(images)
-        f1, f2 = torch.split(supcon_logits, [bsz, bsz], dim=0)
-        ce_logits1, ce_logits2 = torch.split(ce_logits, [bsz, bsz], dim=0)
-        logits = torch.cat([f1.unsqueeze(1), f2.unsqueeze(1)], dim=1)
+        selfsupcon_logits, supcon_logits = model(images)
+        # ce_logits, supcon_logits = model(images)
+        supconf1, supconf2 = torch.split(supcon_logits, [bsz, bsz], dim=0)
+        selfsupconf1, selfsupconf2 = torch.split(selfsupcon_logits, [bsz, bsz], dim=0)
+        psupcon_logits = torch.cat([supconf1.unsqueeze(1), supconf2.unsqueeze(1)], dim=1)
+        pselfsupcon_logits = torch.cat([selfsupconf1.unsqueeze(1), selfsupconf2.unsqueeze(1)], dim=1)
 
-        supcon_loss = supcon_criterion(logits, target)
-        selfsupcon_loss = selfsupcon_criterion(logits)
+        supcon_loss = supcon_criterion(psupcon_logits, target)
+        selfsupcon_loss = selfsupcon_criterion(pselfsupcon_logits)
 
         loss = args.selfsupconlossxs * selfsupcon_loss + args.supconlossxs * supcon_loss
 
-        # prec1, prec5 = utils.accuracy(ce_logits1, target, topk=(1, 5))
-
-        # top1.update(prec1.item(), bsz)
-        # top5.update(prec5.item(), bsz)
-
         supcon_losses.update(supcon_loss.item(), bsz)
         selfsupcon_losses.update(selfsupcon_loss.item(), bsz)
-        # ce_losses.update(ce_loss.item(), bsz)
         losses.update(loss.item(), bsz)  # accumulated loss
 
         # compute gradient and do SGD step
