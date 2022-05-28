@@ -3,7 +3,7 @@ import torchvision
 from torchvision import transforms
 from models.resnet_cifar import resnet_56
 from models.adapter_resnet_new_three import adapter15resnet_56, adapter21resnet_56
-from models.supcon_adapter_resnet import supcon_adapter15resnet_56
+from models.supcon_adapter_resnet import supcon_adapter15resnet_56, selfsupcon_adapter15resnet_56
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56
 import torch
 from data import cifar10, cifar100
@@ -13,21 +13,27 @@ import matplotlib.pyplot as plt
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-def get_model(modelpath):
+def get_model(modelpath, args):
     # 加载模型
-    if 'adapter' in modelpath:
-        # model = adapter15resnet_56([0.]*100, 10, [0.]*100)
-        # model = supcon_adapter15resnet_56([0.]*100, 10, [0.]*100)
-        model = selfsupcon_supcon_adapter15resnet_56([0.]*100, 100, [0.]*100)
-    else:
-        model = resnet_56([0.] * 100, 100)
-        # model = resnet_56([0.] * 100, 10)
+    num_classes = 10
+    if args.dataset == 'cifar100':
+        num_classes = 100
+
+    model = None
+    print('args arc is: {}'.format(args.arc))
+    if args.arc == 'adapter15resnet_56':
+        model = adapter15resnet_56([0.]*100, num_classes, [0.]*100)
+    elif args.arc == 'resnet_56':
+        model = resnet_56([0.]*100, num_classes)
+    elif args.arc == 'selfsupcon_adapter15resnet_56':
+        model = selfsupcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
+
     map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     ckpt = torch.load(modelpath, map_location=map_str)
-    model.load_state_dict(ckpt['state_dict'])
+    model.load_state_dict(ckpt['state_dict'], strict=False)
     return model
 
-def model_val(model, val_loader):
+def model_val(model, val_loader, args):
     val_features = None
     val_targets = None
     tot, count = len(val_loader.dataset), 0
@@ -38,15 +44,22 @@ def model_val(model, val_loader):
             print('{}/ {}'.format(count, tot))
             images = images.to(device)
             target = target.to(device)
-            # compute output
-            logits, _, feature = model(images)
+            if args.arc == 'resnet_56':
+                logits, feature = model(images)
+            elif args.arc == 'adapter15resnet_56':
+                print('logits feature')
+                logits, feature = model(images)
+            elif args.arc == 'selfsupcon_adapter15resnet_56':
+                print('selfsupcon logits feature')
+                logits, feature = model(images)
+            else:
+                logits, _, feature = model(images)
             feature, target = feature.numpy(), target.numpy()
             if val_features is None:
                 val_features, val_targets = feature, target
             else:
                 val_features = np.vstack((val_features, feature))
                 val_targets = np.hstack((val_targets, target))
-            # break
     return val_features, val_targets
 
 if __name__ == '__main__':
@@ -54,10 +67,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser("CIFAR prune training")
     parser.add_argument('--batch_size', type=int, default=128, help='batch size')
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
+    parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
+    # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
     args = parser.parse_args()
 
-    # train_loader, val_loader = cifar10.load_cifar_data(args)
-    train_loader, val_loader = cifar100.load_cifar_data(args)
+    if args.dataset == 'cifar10':
+        train_loader, val_loader = cifar10.load_cifar_data(args)
+    elif args.dataset == 'cifar100':
+        train_loader, val_loader = cifar100.load_cifar_data(args)
 
     # name = '4.30_supcon-ce_adapter15resnet_56_cifar10'
     # name = '7.99_supcon-ce_adapter15resnet_56_cifar10'
@@ -65,16 +84,18 @@ if __name__ == '__main__':
     # name = '3.15-1_supcon-ce_adapter15resnet_56_cifar100'
     # name = '41.80_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '6.31_supcon_adapter15resnet_56_cifar100'
-    # name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
+    name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '0.57_selfsupcon-ce_adapter15resnet_56_cifar100'
     # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # name = "72.68_resnet_56_cifar100"
-    name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
-    model1 = get_model('./pretrained_models/' + name + '.pth.tar')
+    # name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
+    # name = "94.55_adapter15resnet_56_cifar10"
+    # name = "93.77_adapter15resnet_56_cifar10"
+    model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # model2 = get_model('./pretrained_models/94.54_resnet_56_cifar10.pth.tar')
 
-    val_features1, val_targets1 = model_val(model1, val_loader)
+    val_features1, val_targets1 = model_val(model1, val_loader, args)
     # val_features2, val_targets2 = model_val(model2, val_loader)
 
     # val_features1, val_targets1 = model_val(model1, train_loader)

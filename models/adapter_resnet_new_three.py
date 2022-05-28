@@ -275,16 +275,16 @@ class ResNet_New(nn.Module):
         # print('x1 shape: ', x.shape)
         # feat = F.normalize(x, dim=1)
         # print('x2 shape: ', x.shape)
-        # feature = x.clone()
+        feature = x.clone()
 
         if self.num_layer == 56:
             x = self.fc(x)
         else:
             x = self.linear(x)
 
-        # return x, feature
+        return x, feature
         # return x, feat
-        return x
+        # return x
 
 class ResNet_New_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
