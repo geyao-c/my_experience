@@ -27,6 +27,8 @@ def get_model(modelpath, args):
         model = resnet_56([0.]*100, num_classes)
     elif args.arc == 'selfsupcon_adapter15resnet_56':
         model = selfsupcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
+    elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
+        model = selfsupcon_supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
 
     map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     ckpt = torch.load(modelpath, map_location=map_str)
@@ -52,8 +54,9 @@ def model_val(model, val_loader, args):
             elif args.arc == 'selfsupcon_adapter15resnet_56':
                 print('selfsupcon logits feature')
                 logits, feature = model(images)
-            else:
-                logits, _, feature = model(images)
+            elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
+                print('selfsupcon-seupcon logits features')
+                feature, _, _ = model(images)
             feature, target = feature.numpy(), target.numpy()
             if val_features is None:
                 val_features, val_targets = feature, target
@@ -70,7 +73,9 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
     # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='selfsupcon-supcon_adapter15resnet_56', help='arcs')
+
     args = parser.parse_args()
 
     if args.dataset == 'cifar10':
@@ -84,11 +89,12 @@ if __name__ == '__main__':
     # name = '3.15-1_supcon-ce_adapter15resnet_56_cifar100'
     # name = '41.80_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '6.31_supcon_adapter15resnet_56_cifar100'
-    name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
+    # name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '0.57_selfsupcon-ce_adapter15resnet_56_cifar100'
     # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # name = "72.68_resnet_56_cifar100"
     # name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
+    name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
     # name = "94.55_adapter15resnet_56_cifar10"
     # name = "93.77_adapter15resnet_56_cifar10"
     model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
