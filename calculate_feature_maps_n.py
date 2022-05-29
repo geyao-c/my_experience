@@ -75,8 +75,11 @@ cudnn.enabled = True
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 加载数据
-if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
+if 'supcon-ce' in args.pretrain_dir:
     print('loader dataset from supcon dataset')
+    train_loader, _ = utils_append.supcon_dstget(args)
+elif 'selfsupcon-supcon' in args.pretrain_dir:
+    print('selfsupcon-supcon in args pretrain dir')
     train_loader, _ = utils_append.supcon_dstget(args)
 else:
     print('loader dataset from normal dataset')

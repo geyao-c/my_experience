@@ -298,8 +298,8 @@ class ResNet_New(nn.Module):
 
         # return x, feat
         # return x, x
-        # return selfsupcon_x, supcon_x, x
-        return selfsupcon_x, supcon_x
+        return selfsupcon_x, supcon_x, x
+        # return selfsupcon_x, supcon_x
 
 
 class ResNet_New_New(nn.Module):
