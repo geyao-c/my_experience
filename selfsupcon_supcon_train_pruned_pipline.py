@@ -357,14 +357,14 @@ def main():
             fmap_cal_cmd = "python calculate_feature_maps_n.py --arch {} --dataset cifar10 --data_dir ./data " \
                            "--pretrain_dir {} --save_dir {}".format(args.arch, jieduan_ckpt_path, fmap_saved_dir)
             print(fmap_cal_cmd)
-            # execute_command([fmap_cal_cmd])
+            execute_command([fmap_cal_cmd])
 
             # 计算ci
             ci_save_dir = os.path.join('./calculated_ci', 'selfsupcon-supcon_scrach_train', now, str(total_loss) + '_' +
                                        args.arch + '_' + args.dataset)
             ci_cal_cmd = 'python calculate_ci_n.py --arch adapter15resnet_56 --repeat 5 --num_layers 55 \
             --feature_map_dir {} --save_dir {}'.format(fmap_saved_dir, ci_save_dir)
-            # execute_command([ci_cal_cmd])
+            execute_command([ci_cal_cmd])
 
             # 压缩并微调
             graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
