@@ -37,7 +37,7 @@ parser.add_argument('--arch', type=str, default='resnet_56', # choices=('vgg_16_
 parser.add_argument('--repeat', type=int, default=5, help='repeat times')
 parser.add_argument('--num_layers', type=int, default=55, help='conv layers in the model')
 parser.add_argument('--feature_map_dir', type=str, default='./conv_feature_map', help='feature maps dir')
-parser.add_argument('--save_dir', type=str, default='./calculated_ci', help='ci saved dir')
+parser.add_argument('--save_dir', type=str, default=None, help='ci saved dir')
 parser.add_argument('--save_path', type=str, default=None, help='ci saved dir')
 
 args = parser.parse_args()
@@ -101,19 +101,20 @@ def main():
     num_layers = args.num_layers
 
     # 构建save_path
-    save_dir = args.save_dir
-    # 根据feature_map_dir得到准确率和数据集
-    # 提取出模型准确率
-    fm_list = args.feature_map_dir.split('/')[2].split('_')
-    model_accu= str(fm_list[0])
-    dataset = None
-    dst = ['cifar100', 'cifar10', 'tinyimagenet', 'svhn']
-    for item in dst:
-        if item in fm_list: dataset = item
-    save_path = os.path.join(save_dir, model_accu + '_' + args.arch + '_' + dataset)
-    if args.save_path is not None:
-        save_path = os.path.join(save_dir, save_path)
-    print(save_path)
+    # 默认为从 "./calculated_ci开始"
+    if args.save_dir is None:
+        save_dir = './calculated_ci'
+        # 根据feature_map_dir得到准确率和数据集
+        # 提取出模型准确率
+        fm_list = args.feature_map_dir.split('/')[2].split('_')
+        model_accu = str(fm_list[0])
+        dataset = None
+        dst = ['cifar100', 'cifar10', 'tinyimagenet', 'svhn']
+        for item in dst:
+            if item in fm_list: dataset = item
+        save_dir = os.path.join(save_dir, model_accu + '_' + args.arch + '_' + dataset)
+    else:
+        save_dir = args.save_dir
 
     # 计算ci
     ci = mean_repeat_ci(repeat, num_layers)
@@ -122,9 +123,9 @@ def main():
         num_layers = 53
     for i in range(num_layers):
         print(i)
-        if not os.path.exists(save_path):
-            os.makedirs(save_path)
-        np.save(save_path + "/ci_conv{0}.npy".format(str(i + 1)), ci[i])
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        np.save(save_dir + "/ci_conv{0}.npy".format(str(i + 1)), ci[i])
 
 if __name__ == '__main__':
     main()
