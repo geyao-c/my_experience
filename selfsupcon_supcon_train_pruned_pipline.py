@@ -342,7 +342,7 @@ def main():
         if (epoch + 1) % 1 == 0:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_selfsupcon-supcon_{}_{}.pth.tar'.format(total_loss,
-                                            epoch + 1, args.arc, args.dataset)
+                                            epoch + 1, args.arch, args.dataset)
             jieduan_ckpt_path = os.path.join(jieduan_ckpt_dir, jieduan_ckpt_model_name)
             utils.save_jieduan_checkpoint({'epoch': epoch, 'state_dict': model.state_dict(), 'optimizer':
                 optimizer.state_dict(),}, jieduan_ckpt_path)
