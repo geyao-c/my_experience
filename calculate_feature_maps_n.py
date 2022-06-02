@@ -20,6 +20,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
+from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56
 '''
 运行命令
 本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
@@ -79,7 +80,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 if 'supcon-ce' in args.pretrain_dir:
     print('loader dataset from supcon dataset')
     train_loader, _ = utils_append.supcon_dstget(args)
-elif 'selfsupcon-supcon' in args.pretrain_dir:
+elif 'selfsupcon-supcon' in args.pretrain_dir or 'selfsupcon-supcon' in args.pretrain_dir:
+    print('loader dataset from supcon dataset')
     print('selfsupcon-supcon in args pretrain dir')
     train_loader, _ = utils_append.supcon_dstget(args)
 else:
@@ -699,7 +701,7 @@ elif args.arch == 'adapter15resnet_56':
             handler.remove()
             cnt += 1
 
-elif args.arch == 'adapter15resnet_56':
+elif args.arch == 'selfsupcon_supcon_adapter15resnet_56':
 
     cov_layer = eval('model.relu')
     handler = cov_layer.register_forward_hook(get_feature_hook)
