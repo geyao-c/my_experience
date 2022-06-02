@@ -15,11 +15,9 @@ from data import supconcifar10, supconcifar100
 
 # 构建logger和writer
 def lgwt_construct(args):
-    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
-    args.result_dir = os.path.join(args.result_dir, now)
     # 建立日志
     utils.record_config(args)  # 建立config.txt文件
-    logger = utils.get_logger(os.path.join(args.result_dir, 'logger' + now + '.log'))  # 运行时日志文件
+    logger = utils.get_logger(os.path.join(args.result_dir, 'logger' + '.log'))  # 运行时日志文件
     writer = SummaryWriter(os.path.join(args.result_dir, 'tensorboard'))  # tensorboard文件夹
     # 返回日志和tensorboard写入器
     return logger, writer

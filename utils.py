@@ -126,11 +126,11 @@ def save_checkpoint(state, is_best, save):
         shutil.copyfile(filename, best_filename)
 
 
-def save_jieduan_checkpoint(state, epoch, save):
-    if not os.path.exists(save):
-        os.makedirs(save)
-    filename = os.path.join(save, '{}checkpoint.pth.tar'.format(epoch))
-    torch.save(state, filename)
+def save_jieduan_checkpoint(state, savepath):
+    # if not os.path.exists(save):
+    #     os.makedirs(save)
+    # filename = os.path.join(save, save_path)
+    torch.save(state, savepath)
 
 def adjust_learning_rate(optimizer, epoch, args):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""

@@ -67,6 +67,7 @@ parser.add_argument('--data_dir', type=str, default='./data', help='dataset path
 parser.add_argument('--pretrain_dir', type=str, default=None, help='dir for the pretriained model to calculate feature maps')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size for one batch.')
 parser.add_argument('--repeat', type=int, default=5, help='the number of different batches for calculating feature maps.')
+parser.add_argument('--save_dir', type=str, default=None, help='save dir')
 # parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 args = parser.parse_args()
 
@@ -109,13 +110,17 @@ else:
 conv_index = torch.tensor(1)
 
 # 提取出模型准确率
-model_accu = str(args.pretrain_dir.split('/')[2].split('_')[0])
+if args.save_dir is None:
+    model_accu = str(args.pretrain_dir.split('/')[2].split('_')[0])
 print('model accuracy: {}'.format(model_accu))
 
 def get_feature_hook(self, input, output):
     global conv_index
 
-    dirpath = os.path.join('../conv_feature_map', model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat))
+    if args.save_dir is None:
+        dirpath = os.path.join('../conv_feature_map', model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat))
+    else:
+        dirpath = args.saved_dir
     # dirpath = os.path.join('conv_feature_map', args.arch + '_repeat%d' % (args.repeat))
     if not os.path.isdir(dirpath):
         os.makedirs(dirpath)

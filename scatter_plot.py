@@ -27,6 +27,8 @@ def get_model(modelpath, args):
         model = resnet_56([0.]*100, num_classes)
     elif args.arc == 'selfsupcon_adapter15resnet_56':
         model = selfsupcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
+    elif args.arc == 'supcon_adapter15resnet_56':
+        model = supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
     elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
         model = selfsupcon_supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
 
@@ -54,9 +56,12 @@ def model_val(model, val_loader, args):
             elif args.arc == 'selfsupcon_adapter15resnet_56':
                 print('selfsupcon logits feature')
                 logits, feature = model(images)
+            elif args.arc == 'supcon_adapter15resnet_56':
+                print('supcon logits feature')
+                logits, feature = model(images)
             elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
-                print('selfsupcon-seupcon logits features')
-                feature, _, _ = model(images)
+                print('selfsupcon-supcon logits features')
+                _, _, feature = model(images)
             feature, target = feature.numpy(), target.numpy()
             if val_features is None:
                 val_features, val_targets = feature, target
@@ -72,9 +77,10 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
     # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
-    # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='selfsupcon-supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon-supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
 
     args = parser.parse_args()
 
@@ -94,14 +100,17 @@ if __name__ == '__main__':
     # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # name = "72.68_resnet_56_cifar100"
     # name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
-    name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
-    # name = "94.55_adapter15resnet_56_cifar10"
+    # name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
+    # name = "50.94_epoch800_selfsupcon-supcon_adapter15resnet_56_cifar10"
+    # name = "51.65_epoch600_selfsupcon-supcon_adapter15resnet_56_cifar10"
+    name = "94.55_adapter15resnet_56_cifar10"
     # name = "93.77_adapter15resnet_56_cifar10"
     model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # model2 = get_model('./pretrained_models/94.54_resnet_56_cifar10.pth.tar')
 
-    val_features1, val_targets1 = model_val(model1, val_loader, args)
+    # val_features1, val_targets1 = model_val(model1, val_loader, args)
+    val_features1, val_targets1 = model_val(model1, train_loader, args)
     # val_features2, val_targets2 = model_val(model2, val_loader)
 
     # val_features1, val_targets1 = model_val(model1, train_loader)
