@@ -247,6 +247,7 @@ def execute_command(cmdstring_list, cwd=None, timeout=None, shell=True):
 
     # subprocess.poll()方法：检查子进程是否结束了，如果结束了，设定并返回码，放在subprocess.returncode变量中
     while isok(sub_list) == False:
+        print('还没执行完')
         time.sleep(0.1)
 
     # return str(sub.returncode)
