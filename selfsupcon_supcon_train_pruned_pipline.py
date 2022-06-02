@@ -222,7 +222,7 @@ def isok(sub_list):
             return False
     return True
 
-def execute_command(cmdstring_list, cwd=None, timeout=None, shell=False):
+def execute_command(cmdstring_list, cwd=None, timeout=None, shell=True):
     """执行一个SHELL命令
         封装了subprocess的Popen方法, 支持超时判断，支持读取stdout和stderr
         参数:
