@@ -350,13 +350,13 @@ def main():
             # 计算conv feature map
             # model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat)
             fmap_saved_dir = os.path.join("../conv_feature_map", 'selfsupcon-supcon_scrach_train', now,
-                                          total_loss + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (5))
+                                          str(total_loss) + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (5))
             fmap_cal_cmd = "python calculate_feature_maps_n.py --arch selfsupcon_supcon_dapter15resnet_56 --dataset \
             cifar10 --data_dir ./data --pretrain_dir {} --saved_dir {}".format(jieduan_ckpt_path, fmap_saved_dir)
             execute_command([fmap_cal_cmd])
 
             # 计算ci
-            ci_save_dir = os.path.join('./calculated_ci', 'selfsupcon-supcon_scrach_train', now, total_loss + '_' +
+            ci_save_dir = os.path.join('./calculated_ci', 'selfsupcon-supcon_scrach_train', now, str(total_loss) + '_' +
                                        args.arch + '_' + args.dataset)
             ci_cal_cmd = 'python calculate_ci_n.py --arch adapter15resnet_56 --repeat 5 --num_layers 55 \
             --feature_map_dir {} --save_dir {}'.format(fmap_saved_dir, ci_save_dir)
