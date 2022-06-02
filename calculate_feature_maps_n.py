@@ -122,7 +122,7 @@ def get_feature_hook(self, input, output):
     if args.save_dir is None:
         dirpath = os.path.join('../conv_feature_map', model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat))
     else:
-        dirpath = args.saved_dir
+        dirpath = args.save_dir
     # dirpath = os.path.join('conv_feature_map', args.arch + '_repeat%d' % (args.repeat))
     if not os.path.isdir(dirpath):
         os.makedirs(dirpath)
