@@ -329,6 +329,7 @@ def main():
         start = time.time()
         total_loss, supcon_loss, selfsupcon_loss = train(epoch, train_loader, model, criterion, optimizer, args,
                           logger, print_freq, supcon_criterion=supcon_criterion, selfsupcon_criterion=selfsupcon_criterion)  # , scheduler)
+        total_loss, supcon_loss, selfsupcon_loss = round(total_loss, 2), round(supcon_loss, 2), round(selfsupcon_loss, 2)
         # valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
         utils_append.lossstore(writer, train_losses=total_loss, selfsupcon_losses=selfsupcon_loss,
                                supcon_losses=supcon_loss, epoch=epoch)
