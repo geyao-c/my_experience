@@ -114,7 +114,7 @@ conv_index = torch.tensor(1)
 # 提取出模型准确率
 if args.save_dir is None:
     model_accu = str(args.pretrain_dir.split('/')[2].split('_')[0])
-print('model accuracy: {}'.format(model_accu))
+    print('model accuracy: {}'.format(model_accu))
 
 def get_feature_hook(self, input, output):
     global conv_index
