@@ -125,10 +125,10 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
         psupcon_logits = torch.cat([supconf1.unsqueeze(1), supconf2.unsqueeze(1)], dim=1)
         pselfsupcon_logits = torch.cat([selfsupconf1.unsqueeze(1), selfsupconf2.unsqueeze(1)], dim=1)
 
-        supcon_loss = supcon_criterion(psupcon_logits, target)
-        selfsupcon_loss = selfsupcon_criterion(pselfsupcon_logits)
+        supcon_loss = args.supconlossxs * supcon_criterion(psupcon_logits, target)
+        selfsupcon_loss = args.selfsupconlossxs * selfsupcon_criterion(pselfsupcon_logits)
 
-        loss = args.selfsupconlossxs * selfsupcon_loss + args.supconlossxs * supcon_loss
+        loss =  selfsupcon_loss +  supcon_loss
 
         supcon_losses.update(supcon_loss.item(), bsz)
         selfsupcon_losses.update(selfsupcon_loss.item(), bsz)
