@@ -227,16 +227,18 @@ class ResNet_New(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
+        indim = 128
+
         self.selfsupconhead = nn.Sequential(
-            nn.Linear(64, 64),
+            nn.Linear(64, indim),
             nn.ReLU(inplace=True),
-            nn.Linear(64, 64)
+            nn.Linear(indim, 64)
         )
 
         self.supconhead = nn.Sequential(
-            nn.Linear(64, 64),
+            nn.Linear(64, indim),
             nn.ReLU(inplace=True),
-            nn.Linear(64, 64)
+            nn.Linear(indim, 64)
         )
 
         # if self.num_layer == 56:
