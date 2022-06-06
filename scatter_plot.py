@@ -29,7 +29,7 @@ def get_model(modelpath, args):
         model = selfsupcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
     elif args.arc == 'supcon_adapter15resnet_56':
         model = supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
-    elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
+    elif args.arc == 'selfsupcon_supcon_adapter15resnet_56':
         model = selfsupcon_supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
 
     map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
@@ -59,7 +59,7 @@ def model_val(model, val_loader, args):
             elif args.arc == 'supcon_adapter15resnet_56':
                 print('supcon logits feature')
                 logits, feature = model(images)
-            elif args.arc == 'selfsupcon-supcon_adapter15resnet_56':
+            elif args.arc == 'selfsupcon_supcon_adapter15resnet_56':
                 print('selfsupcon-supcon logits features')
                 _, _, feature = model(images)
             feature, target = feature.numpy(), target.numpy()
@@ -75,12 +75,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser("CIFAR prune training")
     parser.add_argument('--batch_size', type=int, default=128, help='batch size')
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
-    parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
+    parser.add_argument('--dataset', type=str, default='cifar100', help='dataset')
     # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
-    # parser.add_argument('--arc', type=str, default='selfsupcon-supcon_adapter15resnet_56', help='arcs')
-    # parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
 
     args = parser.parse_args()
 
@@ -92,18 +92,23 @@ if __name__ == '__main__':
     # name = '4.30_supcon-ce_adapter15resnet_56_cifar10'
     # name = '7.99_supcon-ce_adapter15resnet_56_cifar10'
     # name = '43.46_selfsupcon-ce_adapter15resnet_56_cifar100'
-    # name = '3.15-1_supcon-ce_adapter15resnet_56_cifar100'
+    name = '3.15-1_supcon-ce_adapter15resnet_56_cifar100'
     # name = '41.80_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '6.31_supcon_adapter15resnet_56_cifar100'
     # name = '41.93_selfsupcon-ce_adapter15resnet_56_cifar10'
     # name = '0.57_selfsupcon-ce_adapter15resnet_56_cifar100'
     # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # name = "72.68_resnet_56_cifar100"
+    # name = "72.23_resnet_56_cifar100"
     # name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
+    # name = "48.77_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar100"
     # name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
     # name = "50.94_epoch800_selfsupcon-supcon_adapter15resnet_56_cifar10"
     # name = "51.65_epoch600_selfsupcon-supcon_adapter15resnet_56_cifar10"
-    name = "94.55_adapter15resnet_56_cifar10"
+    # name = "94.55_adapter15resnet_56_cifar10"
+    # name = "51.55_epoch650_selfsupcon_supcon_adapter15resnet_56_cifar10"
+    # name = "50.07_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10_pipline"
+    # name = "51.92_epoch400_selfsupcon_supcon_adapter15resnet_56_cifar100"
     # name = "93.77_adapter15resnet_56_cifar10"
     model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
@@ -122,7 +127,7 @@ if __name__ == '__main__':
     print(type(X_tsne1))
     cs_xtsne1, cs_xtsne2 = [], []
     cs_tg1, cs_tg2 = [], []
-    cs_num = [i for i in range(20)]
+    cs_num = [i for i in range(10)]
     # cs_num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     # cs_num = [9]
     # cs_num = [7, 8, 9]
