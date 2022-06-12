@@ -75,12 +75,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser("CIFAR prune training")
     parser.add_argument('--batch_size', type=int, default=128, help='batch size')
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
-    parser.add_argument('--dataset', type=str, default='cifar100', help='dataset')
+    parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
     # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
-    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
 
     args = parser.parse_args()
 
@@ -105,6 +105,10 @@ if __name__ == '__main__':
     # name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
     # name = "50.94_epoch800_selfsupcon-supcon_adapter15resnet_56_cifar10"
     # name = "51.65_epoch600_selfsupcon-supcon_adapter15resnet_56_cifar10"
+    # name = "60.4_epoch600_selfsupcon_supcon_adapter15resnet_56_cifar10"
+    # name = "58.04_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10"
+    # name = "38.52_epoch700_selfsupcon_supcon_adapter15resnet_56_cifar10"
+    name = "37.02_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "94.55_adapter15resnet_56_cifar10"
     # name = "51.55_epoch650_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "50.07_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10_pipline"
@@ -114,8 +118,8 @@ if __name__ == '__main__':
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # model2 = get_model('./pretrained_models/94.54_resnet_56_cifar10.pth.tar')
 
-    # val_features1, val_targets1 = model_val(model1, val_loader, args)
-    val_features1, val_targets1 = model_val(model1, train_loader, args)
+    val_features1, val_targets1 = model_val(model1, val_loader, args)
+    # val_features1, val_targets1 = model_val(model1, train_loader, args)
     # val_features2, val_targets2 = model_val(model2, val_loader)
 
     # val_features1, val_targets1 = model_val(model1, train_loader)

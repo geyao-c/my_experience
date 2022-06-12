@@ -367,38 +367,38 @@ def main():
             execute_command([ci_cal_cmd])
 
             # 压缩并微调
-            graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
-                                                     'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
-            # graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now,
-            #                                          str(total_loss) + '_' +
-            #                                          'cifar100tocifar10' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
-            graf_pruned_48_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
-                                 "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
-                                 "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
-                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 " \
-                                 "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir, jieduan_ckpt_path)
-            # graf_pruned_48_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
+            # graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
+            #                                          'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
+            graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now,
+                                                     str(total_loss) + '_' +
+                                                     'cifar100tocifar10' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
+            # graf_pruned_48_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
+            #                      "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
             #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
             #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 " \
-            #                      "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir,
-            #                                                        jieduan_ckpt_path)
-            graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
-                                                     'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
-            # graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now,
-            #                                          str(total_loss) + '_' +
-            #                                          'cifar100tocifar110' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
-            graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
-                                 "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
+            #                      "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir, jieduan_ckpt_path)
+            graf_pruned_48_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
-                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
-                                 "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir, jieduan_ckpt_path)
-            # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
+                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 " \
+                                 "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir,
+                                                                   jieduan_ckpt_path)
+            # graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
+            #                                          'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
+            graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now,
+                                                     str(total_loss) + '_' +
+                                                     'cifar100tocifar110' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
+            # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
+            #                      "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
             #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
             #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
-            #                      "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir,
-            #                                                        jieduan_ckpt_path)
+            #                      "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir, jieduan_ckpt_path)
+            graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
+                                 "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
+                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
+                                 "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir,
+                                                                   jieduan_ckpt_path)
             execute_command([graf_pruned_48_cmd, graf_pruned_70_cmd])
 
         utils.save_checkpoint({'epoch': epoch, 'state_dict': model.state_dict(), 'optimizer':
