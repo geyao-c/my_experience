@@ -82,8 +82,9 @@ if 'supcon-ce' in args.pretrain_dir:
     train_loader, _ = utils_append.supcon_dstget(args)
 elif 'selfsupcon-supcon' in args.pretrain_dir or 'selfsupcon-supcon' in args.pretrain_dir:
     print('loader dataset from supcon dataset')
-    print('selfsupcon-supcon in args pretrain dir')
-    train_loader, _ = utils_append.supcon_dstget(args)
+    print('new selfsupcon-supcon in args pretrain dir')
+    # train_loader, _ = utils_append.supcon_dstget(args)
+    train_loader, _ = utils_append.dstget(args)
 else:
     print('loader dataset from normal dataset')
     train_loader, _ = utils_append.dstget(args)
@@ -141,8 +142,9 @@ def inference():
                break
 
             if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
-                print('supcon-ce dataset loader')
-                inputs, targets = inputs[0].to(device), targets.to(device)
+                print('new supcon-ce dataset loader')
+                # inputs, targets = inputs[0].to(device), targets.to(device)
+                inputs, targets = inputs.to(device), targets.to(device)
             else:
                 inputs, targets = inputs.to(device), targets.to(device)
 
