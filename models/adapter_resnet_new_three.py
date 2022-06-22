@@ -275,7 +275,7 @@ class ResNet_New(nn.Module):
         # print('x1 shape: ', x.shape)
         # feat = F.normalize(x, dim=1)
         # print('x2 shape: ', x.shape)
-        feature = x.clone()
+        # feature = x.clone()
 
         if self.num_layer == 56:
             x = self.fc(x)

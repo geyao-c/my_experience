@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.utils
 import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
+import datetime
+import os
 from models.resnet_cifar import resnet_56,resnet_110, resnet_80
 from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, \
     adapter5resnet_56, adapter6resnet_56
@@ -80,7 +82,9 @@ def main():
 
     print_freq = (256 * 50) // args.batch_size
 
-    # 构建日志和writer
+    # 建立日志
+    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
+    args.result_dir = os.path.join(args.result_dir, now)
     logger, writer = utils_append.lgwt_construct(args)
     logger.info("args = %s", args)
 

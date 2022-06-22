@@ -111,7 +111,7 @@ def argsget():
     parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
     parser.add_argument('--weight_decay', type=float, default=0.0005, help='weight decay')
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset used')
-    parser.add_argument('--split', type=str, default='1', help='batch size')
+    # parser.add_argument('--split', type=str, default='1', help='batch size')
     args = parser.parse_args()
     return args
 
@@ -318,13 +318,7 @@ def main():
 
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
-    # 使用focalloss
-    # gamma = 0.5
-    # criterion = FocalLoss(gamma=gamma)
-    # logger.info('gamma is : {}'.format(gamma))
     criterion = criterion.to(device)
-
-    supcon_criterion = SupConLoss()
 
     optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,
                                 weight_decay=args.weight_decay)
