@@ -387,7 +387,7 @@ def main():
             #                                          'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
             graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now,
                                                      str(total_loss) + '_' +
-                                                     'cifar100tocifar110' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
+                                                     'cifar100tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
             # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
             #                      "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
             #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
