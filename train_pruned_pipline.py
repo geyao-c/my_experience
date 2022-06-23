@@ -242,6 +242,7 @@ def execute_command(cmdstring_list, cwd=None, timeout=None, shell=True):
     # 没有指定标准输出和错误输出的管道，因此会打印到屏幕上；
     for i, item in enumerate(cmdstring_list):
         sub = subprocess.Popen(item, cwd=cwd, stdin=subprocess.PIPE, shell=shell, bufsize=4096)
+        time.sleep(5)
         sub_list.append(sub)
 
     # subprocess.poll()方法：检查子进程是否结束了，如果结束了，设定并返回码，放在subprocess.returncode变量中
@@ -256,8 +257,8 @@ def pruned_finetune_pipline(args, now, accu, model):
     jieduan_ckpt_dir = os.path.join('./pretrained_models', '{}_scrach_train_{}'.format(args.arch, args.dataset), now)
     if not os.path.exists(jieduan_ckpt_dir):
         os.makedirs(jieduan_ckpt_dir)
-    # if accu >= 93.59 and accu <= 93.73:
-    if accu >= 0.0 and accu <= 100:
+    if accu >= 93.59 and accu <= 93.73:
+    # if accu >= 0.0 and accu <= 100:
         jieduan_ckpt_model_name = '{}_{}_{}.pth.tar'.format(accu, args.arch, args.dataset)
         jieduan_ckpt_path = os.path.join(jieduan_ckpt_dir, jieduan_ckpt_model_name)
         utils.save_jieduan_checkpoint({'state_dict': model.state_dict()}, jieduan_ckpt_path)
@@ -288,7 +289,7 @@ def pruned_finetune_pipline(args, now, accu, model):
                              "--momentum 0.9 --weight_decay 0.0005 --graf --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
                              "--adapter_sparsity [0.7]".format(args.dataset, args.dataset, args.data_dir, args.arch, args.arch,
                                                                graf_pruned_70_result_dir, ci_save_dir, jieduan_ckpt_path)
-        execute_command([graf_pruned_70_cmd])
+        execute_command([graf_pruned_70_cmd, graf_pruned_70_cmd])
 
 def main():
     # 使用cudnn库加速卷积计算
