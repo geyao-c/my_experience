@@ -367,7 +367,8 @@ def main():
         epoch += 1
         end = time.time()
         logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))
-
+    best_top1_acc = round(best_top1_acc, 2)
+    valid_top1_acc = round(valid_top1_acc, 2)
     # 训练完成后会有两个模型精度，一个是最后一个模型，一个是验证集上精度最好的一个模型
     # 在这个精度范围内的模型才进行后续裁剪和微调操作
     pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
