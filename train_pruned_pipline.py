@@ -325,7 +325,7 @@ def main():
             model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
             params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
 
-        # logger.info(model)
+        logger.info(model)
         input_size = 32
         logger.info('input size: {}'.format(input_size))
 
