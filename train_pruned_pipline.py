@@ -297,86 +297,86 @@ def main():
     cudnn.enabled = True
 
     args = argsget()
+    while 1:
+        # 建立日志
+        now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
+        args.result_dir = os.path.join(args.result_dir, now)
+        logger, writer = utils_append.lgwt_construct(args)
+        logger.info("args = %s", args)
 
-    # 建立日志
-    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
-    args.result_dir = os.path.join(args.result_dir, now)
-    logger, writer = utils_append.lgwt_construct(args)
-    logger.info("args = %s", args)
+        print_freq = (256 * 50) // args.batch_size
 
-    print_freq = (256 * 50) // args.batch_size
+        # 加载数据
+        train_loader, val_loader = utils_append.dstget(args)
+        logger.info('the training dataset is {}'.format(args.dataset))
 
-    # 加载数据
-    train_loader, val_loader = utils_append.dstget(args)
-    logger.info('the training dataset is {}'.format(args.dataset))
+        # 构建模型
+        logger.info('construct model')
+        CLASSES = utils_append.classes_num(args.dataset)
+        # 创建两个模型一个用来训练，另一个用来计算参数
+        if 'adapter' in args.arch:
+            model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.]*100, dataset=args.dataset).to(device)
+            params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.] * 100, dataset=args.dataset).to(device)
+        else:
+            model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
+            params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
 
-    # 构建模型
-    logger.info('construct model')
-    CLASSES = utils_append.classes_num(args.dataset)
-    # 创建两个模型一个用来训练，另一个用来计算参数
-    if 'adapter' in args.arch:
-        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.]*100, dataset=args.dataset).to(device)
-        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, adapter_sparsity=[0.] * 100, dataset=args.dataset).to(device)
-    else:
-        model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
-        params_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=CLASSES, dataset=args.dataset).to(device)
+        logger.info(model)
+        input_size = 32
+        logger.info('input size: {}'.format(input_size))
 
-    logger.info(model)
-    input_size = 32
-    logger.info('input size: {}'.format(input_size))
+        # 计算模型参数量
+        flops, params, flops_ratio, params_ratio = utils_append.cal_params(model=params_model, device=device, input_size=input_size)
+        logger.info('model flops is {}, params is {}'.format(flops, params))
 
-    # 计算模型参数量
-    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model=params_model, device=device, input_size=input_size)
-    logger.info('model flops is {}, params is {}'.format(flops, params))
+        # 设置损失，默认使用交叉山损失函数
+        criterion = nn.CrossEntropyLoss()
+        criterion = criterion.to(device)
 
-    # 设置损失，默认使用交叉山损失函数
-    criterion = nn.CrossEntropyLoss()
-    criterion = criterion.to(device)
+        # 定义优化器
+        optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,weight_decay=args.weight_decay)
 
-    # 定义优化器
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum,weight_decay=args.weight_decay)
+        start_epoch = 0
+        best_top1_acc = 0
 
-    start_epoch = 0
-    best_top1_acc = 0
+        # 训练模型
+        epoch = start_epoch
+        best_accu_model, valid_top1_acc = None, None
 
-    # 训练模型
-    epoch = start_epoch
-    best_accu_model, valid_top1_acc = None, None
+        while epoch < args.epochs:
+            # 学习率在0.5和0.75的时候乘以0.1
+            if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
+                for param_group in optimizer.param_groups:
+                    param_group['lr'] *= 0.1
 
-    while epoch < args.epochs:
-        # 学习率在0.5和0.75的时候乘以0.1
-        if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
-            for param_group in optimizer.param_groups:
-                param_group['lr'] *= 0.1
+            start = time.time()
+            train_obj, train_top1_acc, train_top5_acc = train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq)
+            valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
+            logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
 
-        start = time.time()
-        train_obj, train_top1_acc, train_top5_acc = train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq)
-        valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
-        logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
+            is_best = False
+            if valid_top1_acc > best_top1_acc:
+                best_top1_acc = valid_top1_acc
+                best_accu_model = copy.copy(model)
+                is_best = True
 
-        is_best = False
-        if valid_top1_acc > best_top1_acc:
-            best_top1_acc = valid_top1_acc
-            best_accu_model = copy.copy(model)
-            is_best = True
+            utils.save_checkpoint({
+                'epoch': epoch,
+                'state_dict': model.state_dict(),
+                'best_top1_acc': best_top1_acc,
+                'optimizer': optimizer.state_dict(),
+            }, is_best, args.result_dir)
 
-        utils.save_checkpoint({
-            'epoch': epoch,
-            'state_dict': model.state_dict(),
-            'best_top1_acc': best_top1_acc,
-            'optimizer': optimizer.state_dict(),
-        }, is_best, args.result_dir)
-
-        epoch += 1
-        end = time.time()
-        logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))
-    logger.info("best top1 accu is {}, valid top1 accu is {}".format(best_top1_acc, valid_top1_acc))
-    best_top1_acc = round(best_top1_acc.item(), 2)
-    valid_top1_acc = round(valid_top1_acc.item(), 2)
-    # 训练完成后会有两个模型精度，一个是最后一个模型，一个是验证集上精度最好的一个模型
-    # 在这个精度范围内的模型才进行后续裁剪和微调操作
-    pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
-    pruned_finetune_pipline(args, now, valid_top1_acc, model)
+            epoch += 1
+            end = time.time()
+            logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))
+        logger.info("best top1 accu is {}, valid top1 accu is {}".format(best_top1_acc, valid_top1_acc))
+        best_top1_acc = round(best_top1_acc.item(), 2)
+        valid_top1_acc = round(valid_top1_acc.item(), 2)
+        # 训练完成后会有两个模型精度，一个是最后一个模型，一个是验证集上精度最好的一个模型
+        # 在这个精度范围内的模型才进行后续裁剪和微调操作
+        pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
+        pruned_finetune_pipline(args, now, valid_top1_acc, model)
 
 if __name__ == '__main__':
     main()
