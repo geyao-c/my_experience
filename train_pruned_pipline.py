@@ -297,10 +297,12 @@ def main():
     cudnn.enabled = True
 
     args = argsget()
+    mid_result_dir = args.result_dir
+
     while 1:
         # 建立日志
         now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
-        args.result_dir = os.path.join(args.result_dir, now)
+        args.result_dir = os.path.join(mid_result_dir, now)
         logger, writer = utils_append.lgwt_construct(args)
         logger.info("args = %s", args)
 
@@ -375,8 +377,8 @@ def main():
         valid_top1_acc = round(valid_top1_acc.item(), 2)
         # 训练完成后会有两个模型精度，一个是最后一个模型，一个是验证集上精度最好的一个模型
         # 在这个精度范围内的模型才进行后续裁剪和微调操作
-        pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
-        pruned_finetune_pipline(args, now, valid_top1_acc, model)
+        # pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
+        # pruned_finetune_pipline(args, now, valid_top1_acc, model)
 
 if __name__ == '__main__':
     main()
