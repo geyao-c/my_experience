@@ -300,6 +300,8 @@ def main():
     mid_result_dir = args.result_dir
 
     while 1:
+        logger, writer = None, None
+
         # 建立日志
         now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
         args.result_dir = os.path.join(mid_result_dir, now)
