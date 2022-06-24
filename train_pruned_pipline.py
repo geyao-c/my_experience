@@ -257,7 +257,7 @@ def pruned_finetune_pipline(args, now, accu, model):
     jieduan_ckpt_dir = os.path.join('./pretrained_models', '{}_scrach_train_{}'.format(args.arch, args.dataset), now)
     if not os.path.exists(jieduan_ckpt_dir):
         os.makedirs(jieduan_ckpt_dir)
-    if accu >= 93.59 and accu <= 93.73:
+    if accu >= 93.26 and accu <= 93.73:
     # if accu >= 0.0 and accu <= 100:
         jieduan_ckpt_model_name = '{}_{}_{}.pth.tar'.format(accu, args.arch, args.dataset)
         jieduan_ckpt_path = os.path.join(jieduan_ckpt_dir, jieduan_ckpt_model_name)
