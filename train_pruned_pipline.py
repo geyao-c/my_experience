@@ -379,6 +379,7 @@ def main():
         valid_top1_acc = round(valid_top1_acc.item(), 2)
         # 训练完成后会有两个模型精度，一个是最后一个模型，一个是验证集上精度最好的一个模型
         # 在这个精度范围内的模型才进行后续裁剪和微调操作
+        logger.handlers = []
         # pruned_finetune_pipline(args, now, best_top1_acc, best_accu_model)
         # pruned_finetune_pipline(args, now, valid_top1_acc, model)
 
