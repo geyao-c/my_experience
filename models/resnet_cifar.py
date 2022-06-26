@@ -176,8 +176,8 @@ class ResNet(nn.Module):
         else:
             x = self.linear(x)
 
-        return x, feature
-        # return x
+        # return x, feature
+        return x
 
 def resnet_56(sparsity, num_classes, dataset=None):
     # 不同的数据集网络结构可能有细微差别
