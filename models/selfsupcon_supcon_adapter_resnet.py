@@ -560,7 +560,7 @@ def selfsupcon_supcon_adapter15resnet_56(sparsity, num_classes, adapter_sparsity
                       adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
                       need_stage=nd_stage['adapter15'])
 
-def selfsupcon_supcon_resnet_56(sparsity, num_classes):
+def selfsupcon_supcon_resnet_56(sparsity, num_classes, dataset=None):
     return ResNet(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes)
 
 
