@@ -118,6 +118,35 @@ def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
     # return overall_channel, mid_channel, adapter_channel
     return overall_channel, mid_channel, adapter_channel
 
+def resnet_adapt_channel(sparsity, num_layers):
+    repeat = (num_layers - 2) // 6
+    stage_repeat = [repeat] * 3
+    stage_out_channel = [16] + [16] * repeat + [32] * repeat + [64] * repeat
+
+    # 每一层的裁剪率
+    stage_oup_cprate = []
+    # 第一层的裁剪率直接就是sparsity的第一项
+    stage_oup_cprate += [sparsity[0]]
+    # 计算接下来两个stage的裁剪率，最后一个stage输出通道数不能进行裁剪
+    for i in range(len(stage_repeat)-1):
+        stage_oup_cprate += [sparsity[i+1]] * stage_repeat[i]
+    stage_oup_cprate += [0.] * stage_repeat[-1]
+    mid_cprate = sparsity[len(stage_repeat):]
+    # overall_channel为每一个block的输出通道数
+    overall_channel = []
+    # mid_channel为每一个block的中间层输出通道数
+    mid_channel = []
+    for i in range(len(stage_out_channel)):
+        if i == 0 :
+            overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
+        else:
+            overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
+            mid_channel += [int(stage_out_channel[i] * (1-mid_cprate[i-1]))]
+
+    print('overall_channel: ', overall_channel)
+    print('mid_channel: ', mid_channel)
+    return overall_channel, mid_channel
+
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
@@ -195,6 +224,99 @@ class BasicBlock(nn.Module):
         out = self.relu2(out)
 
         return out
+
+class ResNet(nn.Module):
+    def __init__(self, block, num_layers, sparsity, num_classes=10, dataset=None):
+        super(ResNet, self).__init__()
+        assert (num_layers - 2) % 6 == 0, 'depth should be 6n+2'
+        n = (num_layers - 2) // 6
+
+        self.num_layer = num_layers
+        self.dataset = dataset
+        self.overall_channel, self.mid_channel = resnet_adapt_channel(sparsity, num_layers)
+
+        self.layer_num = 0
+        # 训练dtd的baseline的时候用这个
+        if self.dataset == 'dtd':
+            # self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=5, stride=1, padding=2,
+            #                        bias=False)
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
+            self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        else:
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
+        self.bn1 = nn.BatchNorm2d(self.overall_channel[self.layer_num])
+        self.relu = nn.ReLU(inplace=True)
+        self.layers = nn.ModuleList()
+        self.layer_num += 1
+
+        #self.layers = nn.ModuleList()
+        self.layer1 = self._make_layer(block, blocks_num=n, stride=1)
+        self.layer2 = self._make_layer(block, blocks_num=n, stride=2)
+        self.layer3 = self._make_layer(block, blocks_num=n, stride=2)
+
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+
+        indim = 128
+
+        self.selfsupconhead = nn.Sequential(
+            nn.Linear(64, indim),
+            nn.ReLU(inplace=True),
+            nn.Linear(indim, 64)
+        )
+
+        self.supconhead = nn.Sequential(
+            nn.Linear(64, indim),
+            nn.ReLU(inplace=True),
+            nn.Linear(indim, 64)
+        )
+
+        # if self.num_layer == 56:
+        #     self.fc = nn.Linear(64 * BasicBlock.expansion, num_classes)
+        # else:
+        #     self.linear = nn.Linear(64 * BasicBlock.expansion, num_classes)
+
+
+    def _make_layer(self, block, blocks_num, stride):
+        layers = []
+        # block中的参数分别为中间层输出通道，block输入通道数，block输出通道数
+        layers.append(block(self.mid_channel[self.layer_num - 1], self.overall_channel[self.layer_num - 1],
+                                 self.overall_channel[self.layer_num], stride))
+        self.layer_num += 1
+
+        for i in range(1, blocks_num):
+            layers.append(block(self.mid_channel[self.layer_num - 1], self.overall_channel[self.layer_num - 1],
+                                     self.overall_channel[self.layer_num]))
+            self.layer_num += 1
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        if self.dataset == 'dtd':
+            x = self.maxpool1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+
+        for i, block in enumerate(self.layer1):
+            x = block(x)
+        for i, block in enumerate(self.layer2):
+            x = block(x)
+        for i, block in enumerate(self.layer3):
+            x = block(x)
+
+        x = self.avgpool(x)
+
+        x = x.view(x.size(0), -1)
+
+        selfsupcon_x = self.selfsupconhead(x)
+        selfsupcon_x = F.normalize(selfsupcon_x, dim=1)
+
+        supcon_x = self.supconhead(x)
+        supcon_x = F.normalize(supcon_x, dim=1)
+
+        return selfsupcon_x, supcon_x
 
 
 class ResNet_New(nn.Module):
@@ -437,4 +559,8 @@ def selfsupcon_supcon_adapter15resnet_56(sparsity, num_classes, adapter_sparsity
     return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
                       need_stage=nd_stage['adapter15'])
+
+def selfsupcon_supcon_resnet_56(sparsity, num_classes):
+    return ResNet(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes)
+
 

@@ -6,27 +6,6 @@ import time
 
 """
 # adapter使用的层数
-python calculate_ci_n.py --arch adapter3resnet_56 --repeat 5 --num_layers 109 \
---feature_map_dir ../conv_feature_map/94.86_adapter4resnet_56_cifar10_repeat5
-
-# 计算resnet_80的在cifar10上的
-python calculate_ci_n.py --arch resnet_80 --repeat 5 --num_layers 79 \
---feature_map_dir ../conv_feature_map/94.86_resnet_80_cifar10_repeat5
-# 计算resnet_80的在cifar100上的
-python calculate_ci_n.py --arch resnet_80 --repeat 5 --num_layers 79 \
---feature_map_dir ../conv_feature_map/74.56_resnet_80_cifar100_repeat5
-
-# 计算adapter5resnet_56在cifar100上的
-python calculate_ci_n.py --arch adapter5resnet_56 --repeat 5 --num_layers 109 \
---feature_map_dir ../conv_feature_map/74.85_adapter5resnet_56_cifar100_repeat5
-# 计算adapter6resnet_56在cifar100上的
-python calculate_ci_n.py --arch adapter6resnet_56 --repeat 5 --num_layers 109 \
---feature_map_dir ../conv_feature_map/74.51_adapter6resnet_56_cifar100_repeat5
-
-
-python calculate_ci_n.py --arch resnet_tinyimagenet_56 --repeat 5 --num_layers 55 \
---feature_map_dir ../conv_feature_map/56.19_resnet_tinyimagenet_56_tinyimagenet_repeat5
-
 python calculate_ci_n.py --arch adapter3resnet_tinyimagenet_56 --repeat 5 --num_layers 109 \
 --feature_map_dir ../conv_feature_map/56.2_adapter4resnet_tinyimagenet_56_tinyimagenet_repeat5
 """
