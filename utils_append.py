@@ -290,7 +290,8 @@ def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
                 currentfilter_num = curweight.size(0)
 
                 if orifilter_num != currentfilter_num:
-                    logger.info('loading reserve ci from: ' + prefix + str(cov_id) + subfix)
+                    # logger.info('loading reserve ci from: ' + prefix + str(cov_id) + subfix)
+                    logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
                     ci = np.load(prefix + str(cov_id) + subfix)
                     select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
                     # select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
