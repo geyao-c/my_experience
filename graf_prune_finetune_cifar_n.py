@@ -173,7 +173,9 @@ def main():
     logger.info('args graf: {}'.format(args.graf))
     if args.graf == False:
         args.arch = args.pretrained_arch
-    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
+
+    logger.info('random init')
+    # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
     # logger.info("载入参数2")
