@@ -52,5 +52,5 @@ class VGG(nn.Module):
         x = self.classifier(x)
         return x
 
-def vgg_16_bn(sparsity):
-    return VGG(sparsity=sparsity)
+def vgg_16_bn(sparsity, num_classes=10, dataset=None):
+    return VGG(sparsity=sparsity, num_classes=num_classes)
