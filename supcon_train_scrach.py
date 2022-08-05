@@ -23,6 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
+from models.supcon_adapter_resnet import selfsupcon_adapter15resnet_56
 from data import cifar10, cifar100, cub
 import utils
 import numpy as np
@@ -40,7 +41,7 @@ def argsget():
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     parser.add_argument('--arch', type=str, default='resnet_56', # choices=('vgg_16_bn', 'resnet_56', 'resnet_110', 'resnet_50'),
                         help='architecture to calculate feature maps')
-    parser.add_argument('--lr_decay_epochs', type=str, default='100, 175, 250',
+    parser.add_argument('--lr_decay_epochs', type=str, default='100, 150',
                         help='where to decay lr, can be a list')
     parser.add_argument('--lr_type', type=str, default='cos', help='lr type')
     parser.add_argument('--result_dir', type=str, default='./result/scrach_result56',
@@ -64,11 +65,13 @@ def argsget():
     return args
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
-    warmup_epoch = 5
+    warmup_epoch = 10
     if args.lr_type == 'step':
         steps = np.sum(epoch > np.asarray(args.lr_decay_epochs))
         if steps > 0:
             lr = args.learning_rate * (0.1 ** steps)
+        else:
+            lr = args.learning_rate
 
     elif args.lr_type == 'step_5':
         factor = epoch // 10
@@ -292,9 +295,10 @@ def main():
     for it in iterations:
         args.lr_decay_epochs.append(int(it))
     logger.info('lr_decay_epochs is : {}'.format(args.lr_decay_epochs))
-
+    logger.info('method is {}'.format(args.method))
     # train the model
     epoch = start_epoch
+    logger.info("device is {}".format(device))
     while epoch < args.epochs:
         start = time.time()
         total_loss, supcon_loss, ce_loss, top1_accu, top5_accu = train(epoch, train_loader, model, criterion, optimizer, args,
@@ -308,7 +312,6 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, ce_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, ce_loss))
-        is_best = False
         utils.save_checkpoint({
             'epoch': epoch,
             'state_dict': model.state_dict(),

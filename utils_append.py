@@ -15,11 +15,9 @@ from data import supconcifar10, supconcifar100
 
 # 构建logger和writer
 def lgwt_construct(args):
-    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
-    args.result_dir = os.path.join(args.result_dir, now)
     # 建立日志
     utils.record_config(args)  # 建立config.txt文件
-    logger = utils.get_logger(os.path.join(args.result_dir, 'logger' + now + '.log'))  # 运行时日志文件
+    logger = utils.get_logger(os.path.join(args.result_dir, 'logger' + '.log'))  # 运行时日志文件
     writer = SummaryWriter(os.path.join(args.result_dir, 'tensorboard'))  # tensorboard文件夹
     # 返回日志和tensorboard写入器
     return logger, writer
@@ -292,9 +290,12 @@ def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
                 currentfilter_num = curweight.size(0)
 
                 if orifilter_num != currentfilter_num:
+                    # logger.info('loading reserve ci from: ' + prefix + str(cov_id) + subfix)
                     logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
                     ci = np.load(prefix + str(cov_id) + subfix)
                     select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
+                    # select_index = np.argsort(-ci)[orifilter_num - currentfilter_num:]  # preserved filter id
+
                     select_index.sort()
 
                     if last_select_index is not None:
@@ -2928,3 +2929,9 @@ def logstore(writer, train_losses, train_accuracy, test_losses, test_accuracy, e
     writer.add_scalar('accuracy/train accuracy', train_accuracy, epoch)
     writer.add_scalar('losses/test losses', test_losses, epoch)
     writer.add_scalar('accuracy/test accuracy', test_accuracy, epoch)
+
+# 保存相关变量到tensorboard中
+def lossstore(writer, train_losses, selfsupcon_losses, supcon_losses, epoch):
+    writer.add_scalar('losses/train losses', train_losses, epoch)
+    writer.add_scalar('losses/selfsupcon losses', selfsupcon_losses, epoch)
+    writer.add_scalar('losses/supcon losses', supcon_losses, epoch)

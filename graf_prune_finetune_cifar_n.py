@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.utils
 import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
+import datetime
+import os
 from models.resnet_cifar import resnet_56,resnet_110, resnet_80
 from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, \
     adapter5resnet_56, adapter6resnet_56
@@ -80,7 +82,9 @@ def main():
 
     print_freq = (256 * 50) // args.batch_size
 
-    # 构建日志和writer
+    # 建立日志
+    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
+    args.result_dir = os.path.join(args.result_dir, now)
     logger, writer = utils_append.lgwt_construct(args)
     logger.info("args = %s", args)
 
@@ -141,9 +145,9 @@ def main():
     else:
         input_size = 32
     logger.info('input size is {}'.format(input_size))
-    # flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
-    # logger.info('model flops is {}, params is {}'.format(flops, params))
-    # logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
+    logger.info('model flops is {}, params is {}'.format(flops, params))
+    logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
 
     # 定义优化器
     criterion = nn.CrossEntropyLoss()
@@ -169,20 +173,22 @@ def main():
     logger.info('args graf: {}'.format(args.graf))
     if args.graf == False:
         args.arch = args.pretrained_arch
+
+    # logger.info('random init')
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
-    logger.info("载入参数2")
+    # logger.info("载入参数2")
     # logger.info('pruned origin model: ', pruned_origin_model)
-    utils_append.overall_load_arch_model(args, pruned_origin_model, origin_model, ckpt, logger, graf=True)
+    # utils_append.overall_load_arch_model(args, pruned_origin_model, origin_model, ckpt, logger, graf=True)
     # 加载训练前的数据集
-    args.dataset = args.pretrained_dataset
-    if args.dataset == 'cifar10' or args.dataset == 'cifar100':
-        args.data_dir = "./data"
+    # args.dataset = args.pretrained_dataset
+    # if args.dataset == 'cifar10' or args.dataset == 'cifar100':
+    #     args.data_dir = "./data"
 
-    print('args dataset: ', args.dataset)
-    pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
-    logger.info(pruned_origin_model.state_dict().keys())
+    # print('args dataset: ', args.dataset)
+    # pretrained_train_loader, pretrained_val_loader = utils_append.dstget(args)
+    # logger.info(pruned_origin_model.state_dict().keys())
     # 计算压缩后的精度
     # pruned_valid_obj, pruned_valid_top1_acc, pruned_valid_top5_acc = utils_append.validate(None, pretrained_val_loader, pruned_origin_model,
     #                                                                   criterion, args, logger, device)
@@ -196,6 +202,7 @@ def main():
         logger.info("use cutout")
     if args.mixup_alpha > 0:
         logger.info("use mixup")
+    logger.info('device: {}'.format(device))
 
     while epoch < args.epochs:
         start = time.time()

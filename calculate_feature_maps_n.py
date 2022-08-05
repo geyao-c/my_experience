@@ -20,6 +20,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
+from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56
 '''
 运行命令
 本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
@@ -67,6 +68,7 @@ parser.add_argument('--data_dir', type=str, default='./data', help='dataset path
 parser.add_argument('--pretrain_dir', type=str, default=None, help='dir for the pretriained model to calculate feature maps')
 parser.add_argument('--batch_size', type=int, default=128, help='batch size for one batch.')
 parser.add_argument('--repeat', type=int, default=5, help='the number of different batches for calculating feature maps.')
+parser.add_argument('--save_dir', type=str, default=None, help='save dir')
 # parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 args = parser.parse_args()
 
@@ -75,7 +77,17 @@ cudnn.enabled = True
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # 加载数据
-train_loader, _ = utils_append.dstget(args)
+if 'supcon-ce' in args.pretrain_dir:
+    print('loader dataset from supcon dataset')
+    train_loader, _ = utils_append.supcon_dstget(args)
+elif 'selfsupcon-supcon' in args.pretrain_dir or 'selfsupcon-supcon' in args.pretrain_dir:
+    print('loader dataset from supcon dataset')
+    print('new selfsupcon-supcon in args pretrain dir')
+    train_loader, _ = utils_append.supcon_dstget(args)
+    # train_loader, _ = utils_append.dstget(args)
+else:
+    print('loader dataset from normal dataset')
+    train_loader, _ = utils_append.dstget(args)
 CLASSES = utils_append.classes_num(args.dataset)
 
 # Load pretrained model.
@@ -101,13 +113,17 @@ else:
 conv_index = torch.tensor(1)
 
 # 提取出模型准确率
-model_accu = str(args.pretrain_dir.split('/')[2].split('_')[0])
-print('model accuracy: {}'.format(model_accu))
+if args.save_dir is None:
+    model_accu = str(args.pretrain_dir.split('/')[2].split('_')[0])
+    print('model accuracy: {}'.format(model_accu))
 
 def get_feature_hook(self, input, output):
     global conv_index
 
-    dirpath = os.path.join('../conv_feature_map', model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat))
+    if args.save_dir is None:
+        dirpath = os.path.join('../conv_feature_map', model_accu + '_' + args.arch + '_' + args.dataset + '_repeat%d' % (args.repeat))
+    else:
+        dirpath = args.save_dir
     # dirpath = os.path.join('conv_feature_map', args.arch + '_repeat%d' % (args.repeat))
     if not os.path.isdir(dirpath):
         os.makedirs(dirpath)
@@ -125,7 +141,12 @@ def inference():
             if batch_idx >= repeat:
                break
 
-            inputs, targets = inputs.to(device), targets.to(device)
+            if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
+                print('new supcon-ce dataset loader')
+                inputs, targets = inputs[0].to(device), targets.to(device)
+                # inputs, targets = inputs.to(device), targets.to(device)
+            else:
+                inputs, targets = inputs.to(device), targets.to(device)
 
             model(inputs)
 
@@ -646,6 +667,80 @@ elif args.arch == 'adapter14resnet_56':
             cnt += 1
 
 elif args.arch == 'adapter15resnet_56':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt=1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        # 每一个stage有9层
+        # 其中第8层为adapter结构
+        for j in range(9):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt+=1
+
+            # cov_layer = block[j].adapter.relu1
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+            #
+            # cov_layer = block[j].adapter.relu2
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
+
+elif args.arch == 'selfsupcon_supcon_adapter15resnet_56':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt=1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        # 每一个stage有9层
+        # 其中第8层为adapter结构
+        for j in range(9):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt+=1
+
+            # cov_layer = block[j].adapter.relu1
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+            #
+            # cov_layer = block[j].adapter.relu2
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
+
+elif args.arch == 'selfsupcon_supcon_resnet_56':
 
     cov_layer = eval('model.relu')
     handler = cov_layer.register_forward_hook(get_feature_hook)
