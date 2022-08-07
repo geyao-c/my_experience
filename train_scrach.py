@@ -10,6 +10,7 @@ import torch.utils.data.distributed
 
 import utils_append
 from models.resnet_cifar import resnet_56, resnet_110, resnet_80
+from models.vgg_cifar10 import vgg_16_bn
 from models.adapter_resnet_new import adapter1resnet_56, adapter2resnet_56, \
     adapter3resnet_56, adapter5resnet_56, adapter6resnet_56, adapter7resnet_56
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
@@ -22,6 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub
@@ -29,69 +31,6 @@ from util.losses import SupConLoss
 import utils
 from thop import profile
 import time
-
-'''
-从头开始训练一个模型
-更换模型训练时一般需要修改的参数为 --result_dir, --arch, --dataset
-本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
-train the model
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter4resnet_56_cifar10_1 \
---arch adapter3resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-python train_scrach.py --data_dir /root/autodl-tmp/tiny-imagenet-200 --result_dir ./result/scrach_train/resnet_tinyimagenet_56_tinyimagenet_3 \
---arch resnet_tinyimagenet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset tinyimagenet
-
-# train cifar100
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet56_cifar10_2 \
---arch resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# train adapter3resnet_tinyimagenet_56
-python train_scrach.py --data_dir /root/autodl-tmp/tiny-imagenet-200 --result_dir ./result/scrach_train/adapter4resnet_tinyimagenet_56_2 \
---arch adapter3resnet_tinyimagenet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset tinyimagenet
-
-# ----------------------------------------------------------------------------
-# train resnet80 on cifar10
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet80_cifar10_1 \
---arch resnet_80 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# train resnet80 on cifar100
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/resnet80_cifar100_1 \
---arch resnet_80 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# ----------------------------------------------------------------------------
-# 训练adapter5resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter5resnet56_cifar100_1 \
---arch adapter5resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# 训练adapter5resnet56 在cifar10上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter5resnet56_cifar10_1 \
---arch adapter5resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# ----------------------------------------------------------------------------
-# 训练adapter6resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter6resnet56_cifar100_1 \
---arch adapter6resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-
-# 训练adapter6resnet56 在cifar10上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter6resnet56_cifar10_1 \
---arch adapter6resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar10
-
-# ----------------------------------------------------------------------------
-# 训练adapter7resnet56 在cifar100上
-python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter7resnet56_cifar100_1 \
---arch adapter7resnet_56 --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 \
---weight_decay 0.0005 --dataset cifar100
-'''
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

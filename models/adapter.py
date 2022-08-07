@@ -116,4 +116,28 @@ class Adapter5(nn.Module):
         out = self.relu2(out)
         return out
 
+class VGG_Adapter(nn.Module):
+    # 输入通道数，隐藏通道数
+    def __init__(self, in_channels, hidden_channels, out_channels):
+        super(VGG_Adapter, self).__init__()
+        # 缩小
+        self.conv1 = nn.Conv2d(in_channels, hidden_channels, kernel_size=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(hidden_channels)
+        self.relu1 = nn.ReLU(inplace=True)
+
+        # 变大
+        self.conv2 = nn.Conv2d(hidden_channels, out_channels, kernel_size=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(in_channels)
+        self.relu2 = nn.ReLU(inplace=True)
+
+    def forward(self, x):
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu1(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = self.relu2(out)
+        return out
+
 
