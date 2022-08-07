@@ -10,6 +10,7 @@ from models.resnet_cifar import resnet_56,resnet_110, resnet_80
 from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, \
     adapter5resnet_56, adapter6resnet_56
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
+from models.vgg_cifar10 import vgg_16_bn
 from models.adapter_resnet_tinyimagenet import adapter3resnet_tinyimagenet_56
 from models.adapter_resnet_new_new import adapter8resnet_56
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, \

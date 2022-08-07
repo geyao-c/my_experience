@@ -11,14 +11,12 @@ python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/vgg_
 #### Vgg-16 normal pruned
 
 ```python
-python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch resnet_56 --finetune_arch resnet_56 \
---result_dir ./result/normal_pruned/93.59cifar10tocifar10_resnet_56_pruned_70 \
---ci_dir ./calculated_ci/93.59_resnet_56_cifar10 --batch_size 128 \
---epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.005 \
---graf --pretrain_dir ./pretrained_models/93.59_resnet_56_cifar10.pth.tar --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn \
+--result_dir ./result/normal_pruned/93.96_cifar10tocifar10_vgg_16_pruned_81 \
+--ci_dir ./calculated_ci/93.96_vgg_16_bn_cifar10 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
+--graf --pretrain_dir ./pretrained_models/93.96_vgg_16_bn_cifar10.pth.tar --sparsity [0.21]*7+[0.75]*5
 ```
-
-
 
 #### adapter-Vgg-16 train scarch
 
@@ -33,5 +31,12 @@ python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adap
 ```python
 python calculate_feature_maps_n.py --arch vgg_16_bn --dataset cifar10 --data_dir \
 ./data --pretrain_dir ./pretrained_models/93.96_vgg_16_bn_cifar10.pth.tar
+```
+
+### 三、ci计算
+
+```python
+python calculate_ci_n.py --arch vgg_16_bn --repeat 5 --num_layers 12 \
+--feature_map_dir ../conv_feature_map/93.96_vgg_16_bn_cifar10_repeat5
 ```
 
