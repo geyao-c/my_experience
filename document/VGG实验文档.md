@@ -28,12 +28,29 @@ python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adap
 
 ### 二、feature map计算
 
+#### Vgg-16 train scarch
+
+##### Cifar 10
+
 ```python
 python calculate_feature_maps_n.py --arch vgg_16_bn --dataset cifar10 --data_dir \
 ./data --pretrain_dir ./pretrained_models/93.96_vgg_16_bn_cifar10.pth.tar
 ```
 
+#### adapter-Vgg-16 train scarch
+
+##### Cifar 10
+
+```python
+python calculate_feature_maps_n.py --arch adapter_vgg_16_bn --dataset cifar10 --data_dir \
+./data --pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar
+```
+
 ### 三、ci计算
+
+#### Vgg-16 train scarch
+
+##### Cifar 10
 
 ```python
 python calculate_ci_n.py --arch vgg_16_bn --repeat 5 --num_layers 12 \
