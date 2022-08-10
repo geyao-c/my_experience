@@ -11,6 +11,7 @@ from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, \
     adapter5resnet_56, adapter6resnet_56
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
 from models.vgg_cifar10 import vgg_16_bn
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
 from models.adapter_resnet_tinyimagenet import adapter3resnet_tinyimagenet_56
 from models.adapter_resnet_new_new import adapter8resnet_56
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, \
@@ -98,9 +99,10 @@ def main():
     # 根据微调数据集构建模型
     logger.info('==> Building model..')
     # 解析adapter sparsity
+    adapter_sparsity = None
     if args.adapter_sparsity:
         adapter_sparsity = utils_append.analysis_sparsity(args.adapter_sparsity)
-    elif 'adapter' in args.finetune_arch:
+    elif 'adapter' in args.finetune_arch and 'vgg' not in args.finetune_arch:
         raise ValueError('adapter sparsity is None')
 
     # 解析sparsity
