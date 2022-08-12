@@ -165,7 +165,7 @@ if args.arch=='vgg_16_bn':
         inference()
         handler.remove()
 
-elif args.arch=='adapter_vgg_16_bn':
+elif args.arch=='adapter_vgg_16_bn' or args.arch == 'adapter_vgg_16_bn_v4':
 
     # if len(args.gpu) > 1:
     #     relucfg = model.module.relucfg
