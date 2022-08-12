@@ -14,7 +14,7 @@ from models.resnet_tinyimagenet import resnet_tinyimagenet_56
 from models.adapter_resnet_tinyimagenet import adapter3resnet_tinyimagenet_56
 from models.adapter_resnet_new_new import adapter8resnet_56
 from models.vgg_cifar10 import vgg_16_bn
-from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v4
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, adapter11resnet_56, \
     adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, adapter15resnet_56, adapter17resnet_56, \
     adapter16resnet_56, adapter18resnet_56, adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, \
@@ -165,7 +165,7 @@ if args.arch=='vgg_16_bn':
         inference()
         handler.remove()
 
-elif args.arch=='adapter_vgg_16_bn':
+elif args.arch=='adapter_vgg_16_bn' or args.arch == 'adapter_vgg_16_bn_v4':
 
     # if len(args.gpu) > 1:
     #     relucfg = model.module.relucfg
