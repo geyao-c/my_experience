@@ -23,7 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
-from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v2
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub
