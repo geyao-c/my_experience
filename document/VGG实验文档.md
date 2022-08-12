@@ -42,6 +42,22 @@ python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adap
 python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter_vgg_16_bn_v2_cifar100 --arch adapter_vgg_16_bn_v2 --batch_size 128 --epochs 200 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 --dataset cifar100
 ```
 
+#### adapter-Vgg-16-v2
+
+##### Cifar 10
+
+```
+python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter_vgg_16_bn_v2_cifar10 --arch adapter_vgg_16_bn_v2 --batch_size 128 --epochs 200 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 --dataset cifar10
+```
+
+##### Cifar 100
+
+```
+python train_scrach.py --data_dir ./data --result_dir ./result/scrach_train/adapter_vgg_16_bn_v3_cifar100 --arch adapter_vgg_16_bn_v3 --batch_size 128 --epochs 200 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 --dataset cifar100
+```
+
+
+
 ### 二、feature map计算
 
 #### Vgg-16 
