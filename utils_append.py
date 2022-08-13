@@ -2630,6 +2630,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         elif args.arch == 'adapter_vgg_16_bn':
             logger.info('load_adapter_vgg_model')
             load_vgg_model(args, model, oristate_dict, logger)
+        elif args.arch == 'adapter_vgg_16_bn_v4':
+            logger.info('load_adapter_vgg_v4_model')
+            load_vgg_model(args, model, oristate_dict, logger)
         elif args.arch == 'resnet_56':
             logger.info('load_resnet_model')
             load_resnet_model(args, model, oristate_dict, 56, logger)
