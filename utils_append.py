@@ -135,6 +135,55 @@ def load_vgg_model(args, model, oristate_dict, logger, name_base=''):
 
     model.load_state_dict(state_dict)
 
+def graf_load_vgg_model(args, model, oristate_dict, logger, name_base=''):
+    state_dict = model.state_dict()
+    last_select_index = None #Conv index selected in the previous layer
+
+    cnt=0
+    prefix = args.ci_dir+'/ci_conv'
+    subfix = ".npy"
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+
+        if isinstance(module, nn.Conv2d):
+
+            cnt+=1
+            oriweight = oristate_dict[name + '.weight']
+            curweight = state_dict[name_base+name + '.weight']
+            orifilter_num = oriweight.size(0)
+            currentfilter_num = curweight.size(0)
+
+            if orifilter_num != currentfilter_num:
+
+                cov_id = cnt
+                logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
+                ci = np.load(prefix + str(cov_id) + subfix)
+                select_index = np.argsort(ci)[orifilter_num-currentfilter_num:]  # preserved filter id
+                select_index.sort()
+
+                if last_select_index is not None:
+                    for index_i, i in enumerate(select_index):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base+name + '.weight'][index_i][index_j] = \
+                                oristate_dict[name + '.weight'][i][j]
+                else:
+                    for index_i, i in enumerate(select_index):
+                       state_dict[name_base+name + '.weight'][index_i] = \
+                            oristate_dict[name + '.weight'][i]
+
+                last_select_index = select_index
+
+            elif last_select_index is not None:
+                for i in range(orifilter_num):
+                    for index_j, j in enumerate(last_select_index):
+                        state_dict[name_base+name + '.weight'][i][index_j] = \
+                            oristate_dict[name + '.weight'][i][j]
+            else:
+                state_dict[name_base+name + '.weight'] = oriweight
+                last_select_index = None
+
+    model.load_state_dict(state_dict)
+
 def overall_load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     cfg = {
         56: [9, 9, 9],
@@ -2668,6 +2717,10 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             elif args.finetune_arch == 'resnet_80':
                 logger.info('graf_load_resnet_model')
                 graf_load_resnet_model(args, model, oristate_dict, 80, logger)
+            elif args.finetune_arch == 'vgg_16_bn':
+                logger.info('graf_load_vgg_16_bn_model')
+                graf_load_vgg_model(args, model, oristate_dict, logger)
+                # graf_load_resnet_model(args, model, oristate_dict, 80, logger)
             elif args.finetune_arch == 'adapter1resnet_56':
                 logger.info('graf_load_adapter1resnet_model')
                 graf_load_adapter1resnet_model(args, model, oristate_dict, 56, logger)
