@@ -385,7 +385,7 @@ def main():
             #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9 " \
             #                      "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir, jieduan_ckpt_path)
             graf_pruned_83_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-                                 "cifar10 --finetune_data_dir ./data --pretrained_arch {} --finetune_arch {} " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.30]*7+[0.75]*5" \
                                  "".format(args.arch, args.arch, graf_pruned_83_result_dir, ci_save_dir, jieduan_ckpt_path)
@@ -414,7 +414,7 @@ def main():
             #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
             #                      "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir, jieduan_ckpt_path)
             graf_pruned_87_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-                                 "cifar10 --finetune_data_dir ./data --pretrained_arch {} --finetune_arch {} " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.45]*7+[0.78]*5" \
                                  "".format(args.arch, args.arch, graf_pruned_87_result_dir, ci_save_dir, jieduan_ckpt_path)
