@@ -96,7 +96,7 @@ class VGG(nn.Module):
         supcon_x = self.supconhead(x)
         supcon_x = F.normalize(supcon_x, dim=1)
 
-        return selfsupcon_x, supcon_x, x
+        return selfsupcon_x, supcon_x
 
 
 def adapter_vgg_16_bn(sparsity, adapter_sparsity = None, num_classes=10, dataset=None):
