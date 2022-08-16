@@ -310,7 +310,7 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_da
 
 # lr = 0.01
 python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
---result_dir ./result/normal_pruned/93.99_cifar10tocifar10_vgg_16_pruned_81 \
+--result_dir ./result/normal_pruned/93.99_cifar10tocifar10_vgg_16_pruned_87 \
 --ci_dir ./calculated_ci/93.99_adapter_vgg_16_bn_cifar10 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar --sparsity [0.45]*7+[0.78]*5
@@ -440,5 +440,24 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 --ci_dir ./calculated_ci/74.09_adapter_vgg_16_bn_cifar100 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.30]*7+[0.75]*5
+```
+
+###### 裁剪87%
+
+```python
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/graf_pruned/74.09_cifar100tocifar10_adapter_vgg_16_bn_pruned_87 \
+--ci_dir ./calculated_ci/74.09_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
+```
+
+---
+
+### Selfsupcon supcon train scrach
+
+```python
+python vgg_selfsupcon_supcon_train_scrach.py --data_dir ./data --result_dir ./result/vgg-selfsupcon-supcon_scrach_train/selfsupcon_supcon_adapter_vgg_16_bn_cifar100 \
+--arch selfsupcon_supcon_adapter_vgg_16_bn --batch_size 1024 --epochs 1000 --lr_type cos --learning_rate 0.5 --momentum 0.9 --weight_decay 0.0005 --dataset cifar100 --selfsupconlossxs 1.0 --supconlossxs 1.0 --selfsupcontemp 0.5 --supcontemp 0.1
 ```
 
