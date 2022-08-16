@@ -343,7 +343,7 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        if (epoch + 1) % 50 == 0:
+        if (epoch + 1) % 5 == 0:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_{}_{}.pth.tar'.format(total_loss,
                                             epoch + 1, args.arch, args.dataset)
