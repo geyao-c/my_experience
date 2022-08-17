@@ -85,8 +85,12 @@ def main():
     print_freq = (256 * 50) // args.batch_size
 
     # 建立日志
-    now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
-    args.result_dir = os.path.join(args.result_dir, now)
+    if '2022' in args.result_dir:
+        if not os.path.exists(args.result_dir):
+            os.makedirs(args.result_dir)
+    else:
+        now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
+        args.result_dir = os.path.join(args.result_dir, now)
     logger, writer = utils_append.lgwt_construct(args)
     logger.info("args = %s", args)
 
