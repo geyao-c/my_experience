@@ -364,7 +364,7 @@ def main():
             # 计算ci
             ci_save_dir = os.path.join('./calculated_ci', 'vgg-selfsupcon-supcon_scrach_train', now, str(total_loss) + '_' +
                                        args.arch + '_' + args.dataset)
-            ci_cal_cmd = 'python calculate_ci_n.py --arch {} --repeat 5 --num_layers 55 \
+            ci_cal_cmd = 'python calculate_ci_n.py --arch {} --repeat 5 --num_layers 12 \
             --feature_map_dir {} --save_dir {}'.format(args.arch, fmap_saved_dir, ci_save_dir)
             execute_command([ci_cal_cmd])
 
