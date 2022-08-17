@@ -343,7 +343,7 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        elist = [100, 200, 300, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
+        elist = [5, 100, 200, 300, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
         if (epoch + 1) in elist:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_{}_{}.pth.tar'.format(total_loss,
@@ -364,7 +364,7 @@ def main():
             # 计算ci
             ci_save_dir = os.path.join('./calculated_ci', 'vgg-selfsupcon-supcon_scrach_train', now, str(total_loss) + '_' +
                                        args.arch + '_' + args.dataset)
-            ci_cal_cmd = 'python calculate_ci_n.py --arch {} --repeat 5 --num_layers 55 \
+            ci_cal_cmd = 'python calculate_ci_n.py --arch {} --repeat 5 --num_layers 12 \
             --feature_map_dir {} --save_dir {}'.format(args.arch, fmap_saved_dir, ci_save_dir)
             execute_command([ci_cal_cmd])
 
