@@ -343,7 +343,7 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        elist = [5, 100, 200, 300, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
+        elist = [100, 200, 300, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
         if (epoch + 1) in elist:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_{}_{}.pth.tar'.format(total_loss,
@@ -379,17 +379,17 @@ def main():
             #                                          str(total_loss) + '_' +
             #                                          'cifar100tocifar10' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
 
-            # graf_pruned_83_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
-            #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
-            #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.30]*7+[0.75]*5" \
-            #                      "".format(graf_pruned_83_result_dir, ci_save_dir, jieduan_ckpt_path)
-
             graf_pruned_83_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-                                 "cifar10 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.30]*7+[0.75]*5" \
                                  "".format(graf_pruned_83_result_dir, ci_save_dir, jieduan_ckpt_path)
+
+            # graf_pruned_83_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
+            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn " \
+            #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
+            #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.30]*7+[0.75]*5" \
+            #                      "".format(graf_pruned_83_result_dir, ci_save_dir, jieduan_ckpt_path)
 
             # graf_pruned_48_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
             #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
@@ -408,17 +408,17 @@ def main():
             #                                          str(total_loss) + '_' +
             #                                          'cifar100tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
 
-            # graf_pruned_87_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
-            #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
-            #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.45]*7+[0.78]*5" \
-            #                      "".format(graf_pruned_87_result_dir, ci_save_dir, jieduan_ckpt_path)
-
             graf_pruned_87_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
-                                 "cifar10 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn " \
+                                 "cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.45]*7+[0.78]*5" \
                                  "".format(graf_pruned_87_result_dir, ci_save_dir, jieduan_ckpt_path)
+
+            # graf_pruned_87_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
+            #                      "cifar10 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn " \
+            #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
+            #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.45]*7+[0.78]*5" \
+            #                      "".format(graf_pruned_87_result_dir, ci_save_dir, jieduan_ckpt_path)
 
             # graf_pruned_87_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset " \
             #                      "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
