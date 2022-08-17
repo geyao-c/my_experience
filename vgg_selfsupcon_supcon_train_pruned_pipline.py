@@ -10,7 +10,7 @@ import torch.utils.data.distributed
 import utils_append
 from util.losses import SupConLoss
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56
-from models.selfsupcon_supcon_adapter_vgg import selfsupcon_supcon_adapter_vgg_16_bn
+from models.selfsupcon_supcon_adapter_vgg import selfsupcon_supcon_adapter_vgg_16_bn, selfsupcon_supcon_vgg_16_bn
 from data import cifar10, cifar100
 import utils
 import numpy as np
