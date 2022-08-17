@@ -457,7 +457,12 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 ### Selfsupcon supcon train scrach
 
 ```python
+# selfsupcon_supcon_adapter_vgg_16_bn
 python vgg_selfsupcon_supcon_train_pruned_pipline.py --data_dir ./data --result_dir ./result/vgg-selfsupcon-supcon_scrach_train/selfsupcon_supcon_adapter_vgg_16_bn_cifar100 \
 --arch selfsupcon_supcon_adapter_vgg_16_bn --batch_size 1024 --epochs 1000 --lr_type cos --learning_rate 0.5 --momentum 0.9 --weight_decay 0.0005 --dataset cifar100 --selfsupconlossxs 0.5 --supconlossxs 2.0 --selfsupcontemp 0.5 --supcontemp 0.1
+
+# selfsupcon_supcon_vgg_16_bn
+python vgg_selfsupcon_supcon_train_pruned_pipline.py --data_dir ./data --result_dir ./result/vgg-selfsupcon-supcon_scrach_train/selfsupcon_supcon_adapter_vgg_16_bn_cifar100 \
+--arch selfsupcon_supcon_vgg_16_bn --batch_size 1024 --epochs 1000 --lr_type cos --learning_rate 0.5 --momentum 0.9 --weight_decay 0.0005 --dataset cifar100 --selfsupconlossxs 0.5 --supconlossxs 2.0 --selfsupcontemp 0.5 --supcontemp 0.1
 ```
 
