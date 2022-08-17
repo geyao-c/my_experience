@@ -16,8 +16,8 @@ adapter_cfg_v3 = [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512 * 8, 
 adapter_cfg_v4 = [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512 * 8, 512, 512]
 relucfg = [2, 6, 9, 13, 16, 19, 23, 26, 29, 33, 36, 39]
 
-# adapter_lid = [15, 16]
-adapter_lid = []
+adapter_lid = [15, 16]
+# adapter_lid = []
 adapter_lid_2 = [11, 12, 15, 16]
 adapter_lid_3 = [11, 12]
 adapter_lid_4 = [14, 15]
