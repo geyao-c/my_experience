@@ -100,7 +100,7 @@ class VGG(nn.Module):
 
 
 def selfsupcon_supcon_vgg_16_bn(sparsity, adapter_sparsity = None, num_classes=10, dataset=None):
-    return VGG(sparsity=sparsity, cfg=adapter_cfg, num_classes=num_classes)
+    return VGG(sparsity=sparsity, cfg=defaultcfg, num_classes=num_classes)
 
 def selfsupcon_supcon_adapter_vgg_16_bn(sparsity, adapter_sparsity = None, num_classes=10, dataset=None):
     return VGG(sparsity=sparsity, cfg=adapter_cfg, num_classes=num_classes)
