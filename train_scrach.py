@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
 
 import utils_append
-from models.resnet_cifar import resnet_56, resnet_110, resnet_80
+from models.resnet_cifar import resnet_56, resnet_110, resnet_80, resnet_20
 from models.vgg_cifar10 import vgg_16_bn
 from models.adapter_resnet_new import adapter1resnet_56, adapter2resnet_56, \
     adapter3resnet_56, adapter5resnet_56, adapter6resnet_56, adapter7resnet_56
