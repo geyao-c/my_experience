@@ -69,10 +69,25 @@ nd_stage = {
     'adapter23': [2, 3],
     'adapter24': [2]
 }
+adoch_20_cfg = {
+    'adapter15': [64 * 8]
+}
+
+nd_20_cfg = {
+    'adapter15': [2],
+}
+
+nd_20_stage = {
+    'adapter15': [3]
+}
 
 def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
     print('adapter_sparsity: ', adapter_sparsity)
-    if num_layers == 56:
+    if num_layers == 20:
+        stage_repeat = [3, 3, 3]
+        stage_out_channel = [16] + [16] * 3 + [32] * 3 + [64] * 3
+
+    elif num_layers == 56:
         stage_repeat = [9, 9, 9]
         # 每一个stage的输出通道数，第一个stage为16，第二个为32最后一个stage为64
         stage_out_channel = [16] + [16] * 9 + [32] * 9 + [64] * 9
@@ -83,7 +98,6 @@ def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
         # adapter_out_channel = [32] * 9 + [64] * 9 + [128] * 9
         # adapter8resnet的时候用这个
         # adapter_out_channel = [16 * 9] * 4 + [32 * 9] * 4 + [64 * 9] * 4
-
     elif num_layers == 110:
         stage_repeat = [18, 18, 18]
         stage_out_channel = [16] + [16] * 18 + [32] * 18 + [64] * 18
@@ -474,6 +488,12 @@ def adapter24resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
     return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter24'], need_adapter=nd_cfg['adapter24'],
                       need_stage=nd_stage['adapter24'], dataset=dataset)
+
+# adapter24中间一个stage替换最后一层
+def adapter15resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
+    return ResNet_New(BasicBlock, 20, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+                      adapter_out_channel=adoch_20_cfg['adapter15'], need_adapter=nd_20_cfg['adapter15'],
+                      need_stage=nd_20_stage['adapter15'])
 
 
 
