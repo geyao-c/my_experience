@@ -1,0 +1,33 @@
+2022-08-17-10:36:13
+
+pretrained_dataset: cifar100
+finetune_dataset: cifar10
+dataset: None
+graf: True
+finetune_data_dir: ./data
+data_dir: None
+pretrained_arch: adapter_vgg_16_bn
+finetune_arch: adapter_vgg_16_bn
+arch: None
+lr_type: cos
+result_dir: selfsupcon_supcon_vgg_16_bn/2022-08-17-10:36:13
+batch_size: 128
+epochs: 300
+label_smooth: 0
+learning_rate: 0.01
+lr_decay_step: 50,100
+momentum: 0.9
+weight_decay: 0.0005
+pretrain_dir: ./result/vgg-selfsupcon-supcon_graf_pruned/2022-08-17-10:34:49/43.38_cifar100tocifar10_selfsupcon_supcon_vgg_16_bn_pruned_87
+ci_dir: selfsupcon_supcon_vgg_16_bn
+sparsity: [0.45]*7+[0.78]*5
+gpu: 0
+adapter_sparsity: None
+split: 1
+beta: 0
+cutmix_prob: 0
+mixup_alpha: 0
+cutout: False
+n_holes: 1
+length: 16
+
