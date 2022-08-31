@@ -440,6 +440,12 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 --ci_dir ./calculated_ci/74.09_adapter_vgg_16_bn_cifar100 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.30]*7+[0.75]*5
+
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/graf_pruned/34.4_cifar100tocifar10_adapter_vgg_16_bn_pruned_83 \
+--ci_dir ./calculated_ci/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/34.4_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/34.4_epoch700_selfsupcon_supcon_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.30]*7+[0.75]*5
 ```
 
 ###### 裁剪87%
@@ -450,6 +456,18 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 --ci_dir ./calculated_ci/74.09_adapter_vgg_16_bn_cifar100 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
+
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/graf_pruned/34.4_cifar100tocifar10_adapter_vgg_16_bn_pruned_87 \
+--ci_dir ./calculated_ci/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/34.4_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/34.4_epoch700_selfsupcon_supcon_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
+    
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/graf_pruned/35.02_cifar100tocifar10_adapter_vgg_16_bn_pruned_87 \
+--ci_dir ./calculated_ci/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/35.02_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/vgg-selfsupcon-supcon_scrach_train/2022-08-17-16:09:17/35.02_epoch650_selfsupcon_supcon_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
 ```
 
 ---
