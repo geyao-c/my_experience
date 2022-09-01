@@ -7,7 +7,7 @@ import torch.backends.cudnn as cudnn
 from data import cifar10, imagenet, cifar100, cub
 import time
 import utils_append
-from models.resnet_cifar import resnet_56, resnet_110, resnet_80
+from models.resnet_cifar import resnet_56, resnet_110, resnet_80, resnet_20
 from models.resnet_imagenet import resnet_50
 from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, adapter5resnet_56, adapter6resnet_56
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
@@ -191,6 +191,30 @@ elif args.arch == 'selfsupcon_supcon_adapter_vgg_16_bn' or args.arch == 'selfsup
         handler = cov_layer.register_forward_hook(get_feature_hook)
         inference()
         handler.remove()
+
+elif args.arch=='resnet_20':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    # ResNet18 per block
+    cnt=1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        for j in range(3):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt+=1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
 
 elif args.arch=='resnet_56':
 
