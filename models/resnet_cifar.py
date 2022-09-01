@@ -6,6 +6,7 @@ def adapt_channel(sparsity, num_layers):
     repeat = (num_layers - 2) // 6
     stage_repeat = [repeat] * 3
     stage_out_channel = [16] + [16] * repeat + [32] * repeat + [64] * repeat
+    print('stage_out_channel: ', stage_out_channel)
 
     # 每一层的裁剪率
     stage_oup_cprate = []
