@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
 import datetime
 import os
-from models.resnet_cifar import resnet_56,resnet_110, resnet_80
+from models.resnet_cifar import resnet_56,resnet_110, resnet_80, resnet_20
 from models.adapter_resnet_new import adapter1resnet_56, adapter3resnet_56, \
     adapter5resnet_56, adapter6resnet_56
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
