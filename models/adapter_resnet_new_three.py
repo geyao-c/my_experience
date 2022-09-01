@@ -101,7 +101,8 @@ def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
     elif num_layers == 110:
         stage_repeat = [18, 18, 18]
         stage_out_channel = [16] + [16] * 18 + [32] * 18 + [64] * 18
-
+    else:
+        raise('no such model')
     # 每一层的裁剪率
     stage_oup_cprate = []
     stage_oup_cprate += [sparsity[0]]
