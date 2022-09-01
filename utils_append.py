@@ -2707,6 +2707,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         elif args.arch == 'adapter3resnet_tinyimagenet_56':
             logger.info('adapter3resnet_tinyimagenet_56')
             load_adapter3resnet_tinyimagenet_model(args, model, oristate_dict, 56, logger)
+        elif args.arch == 'adapter15resnet_20':
+            logger.info('load adapter15 resnet 20 model')
+            load_resnet_model(args, model, oristate_dict, 20, logger)
         elif 'resnet_56' in args.arch:
             logger.info('load resnet 56 model')
             load_resnet_model(args, model, oristate_dict, 56, logger)
