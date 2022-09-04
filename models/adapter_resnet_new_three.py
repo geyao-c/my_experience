@@ -72,19 +72,22 @@ nd_stage = {
 adoch_20_cfg = {
     'adapter15': [64 * 8],
     'adapter16': [32 * 8] + [64 * 8],
-    'adapter17': [16 * 8] + [32 * 8] + [64 * 8]
+    'adapter17': [16 * 8] + [32 * 8] + [64 * 8],
+    'adapter18': [16 * 8] + [32 * 8]
 }
 
 nd_20_cfg = {
     'adapter15': [2],
     'adapter16': [2],
-    'adapter17': [2]
+    'adapter17': [2],
+    'adapter18': [2]
 }
 
 nd_20_stage = {
     'adapter15': [3],
     'adapter16': [2, 3],
-    'adapter17': [1, 2, 3]
+    'adapter17': [1, 2, 3],
+    'adapter18': [1, 2]
 }
 
 def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
@@ -513,6 +516,12 @@ def adapter17resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
     return ResNet_New(BasicBlock, 20, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_20_cfg['adapter17'], need_adapter=nd_20_cfg['adapter17'],
                       need_stage=nd_20_stage['adapter17'])
+
+# adapter24中间一个stage替换最后一层
+def adapter18resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
+    return ResNet_New(BasicBlock, 20, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+                      adapter_out_channel=adoch_20_cfg['adapter18'], need_adapter=nd_20_cfg['adapter18'],
+                      need_stage=nd_20_stage['adapter18'])
 
 
 
