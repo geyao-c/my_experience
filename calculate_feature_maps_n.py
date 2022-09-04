@@ -19,7 +19,7 @@ from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v4
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, adapter11resnet_56, \
     adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, adapter15resnet_56, adapter17resnet_56, \
     adapter16resnet_56, adapter18resnet_56, adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, \
-    adapter22resnet_56, adapter23resnet_56, adapter24resnet_56, adapter15resnet_20
+    adapter22resnet_56, adapter23resnet_56, adapter24resnet_56, adapter15resnet_20, adapter19resnet_20
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
@@ -756,7 +756,7 @@ elif args.arch == 'adapter15resnet_56':
             handler.remove()
             cnt += 1
 
-elif args.arch == 'adapter15resnet_20':
+elif args.arch == 'adapter15resnet_20' or args.arch == 'adapter19resnet_20':
 
     cov_layer = eval('model.relu')
     handler = cov_layer.register_forward_hook(get_feature_hook)
