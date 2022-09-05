@@ -268,7 +268,7 @@ def execute_command(cmdstring_list, cwd=None, timeout=None, shell=True):
     for i, item in enumerate(cmdstring_list):
         sub = subprocess.Popen(item, cwd=cwd, stdin=subprocess.PIPE, shell=shell, bufsize=4096)
         sub_list.append(sub)
-        time.sleep(1)
+        time.sleep(3)
 
     # subprocess.poll()方法：检查子进程是否结束了，如果结束了，设定并返回码，放在subprocess.returncode变量中
     print('开始执行')
