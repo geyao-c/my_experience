@@ -119,6 +119,9 @@ class ResNet(nn.Module):
             self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
                                    bias=False)
             self.maxpool1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        if self.dataset == 'mnist':
+            self.conv1 = nn.Conv2d(1, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
         else:
             self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
                                    bias=False)

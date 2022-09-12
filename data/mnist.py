@@ -7,7 +7,7 @@ import torch.utils.data.distributed
 import torchvision
 from torchvision import datasets, transforms
 
-def load_cifar_data(args):
+def load_mnist_data(args):
     normalize = transforms.Normalize((0.1307,), (0.3081,))
 
     transform_train = transforms.Compose([

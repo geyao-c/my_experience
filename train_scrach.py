@@ -253,7 +253,8 @@ def main():
         input_size = 32
     logger.info('input size: {}'.format(input_size))
     # 计算模型参数量
-    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model=params_model, device=device, input_size=input_size)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model=params_model, device=device, input_size=input_size,
+                                                                       dtst=args.dataset)
     logger.info('model flops is {}, params is {}'.format(flops, params))
 
     # 定义优化器

@@ -3,7 +3,7 @@ import datetime
 import os
 from torch.utils.tensorboard import SummaryWriter
 import re
-from data import cifar10, cifar100, cub, tinyimagenet, svhn, dtd
+from data import cifar10, cifar100, cub, tinyimagenet, svhn, dtd, mnist
 import torch
 from thop import profile
 from collections import OrderedDict
@@ -52,9 +52,9 @@ def analysis_sparsity(sparsity):
 
 # 根据args.dataset, 返回对应的数据集
 def dstget(args):
-    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd', 'mnist']
     dldfunlist = [cifar10.load_cifar_data, cifar100.load_cifar_data, cub.load_cub_data, tinyimagenet.load_tinyimagenet_data,
-                  svhn.load_svhn_data, dtd.load_dtd_data]
+                  svhn.load_svhn_data, dtd.load_dtd_data, mnist.load_mnist_data]
     idx = dsetlist.index(args.dataset)
     train_loader, val_loader = dldfunlist[idx](args)
     return train_loader, val_loader
@@ -68,17 +68,21 @@ def supcon_dstget(args):
 
 # 根据args，返回最后一层的神经元数量
 def classes_num(datasetname):
-    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd']
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd', 'mnist']
     # 最后一层全连接层神经元数量
-    clslist = [10, 100, 200, 200, 10, 47]
+    clslist = [10, 100, 200, 200, 10, 47, 10]
     idx = dsetlist.index(datasetname)
     CLASSES = clslist[idx]
     return CLASSES
 
 # 计算模型参数量
-def cal_params(model, device, original_model=None, input_size=32):
-    input_image_size = input_size
-    input_image = torch.randn(1, 3, input_image_size, input_image_size).to(device)
+def cal_params(model, device, original_model=None, input_size=32, dtst=None):
+    if dtst == 'mnist':
+        input_image_size = 28
+        input_image = torch.randn(1, 1, input_image_size, input_image_size).to(device)
+    else:
+        input_image_size = 32
+        input_image = torch.randn(1, 3, input_image_size, input_image_size).to(device)
     flops, params = profile(model, inputs=(input_image,))
     flops_ratio, params_ratio = None, None
     if original_model is not None:
