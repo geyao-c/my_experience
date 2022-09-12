@@ -104,7 +104,7 @@ def main():
     fm_list = args.feature_map_dir.split('/')[2].split('_')
     model_accu= str(fm_list[0])
     dataset = None
-    dst = ['cifar100', 'cifar10', 'tinyimagenet']
+    dst = ['cifar100', 'cifar10', 'tinyimagenet', 'mnist']
     for item in dst:
         if item in fm_list: dataset = item
     print('model accu: {}, args.arch: {}, dataset: {}'.format(model_accu, args.arch, dataset))
