@@ -96,9 +96,10 @@ CLASSES = utils_append.classes_num(args.dataset)
 # Load pretrained model.
 print('Loading Pretrained Model...')
 if 'adapter' in args.arch:
-    model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, adapter_sparsity=[0.]*100).to(device)
+    model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, adapter_sparsity=[0.]*100,
+                            dataset=args.dataset).to(device)
 else:
-    model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES).to(device)
+    model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, dataset=args.dataset).to(device)
 # print(model)
 mapstr = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 print(args.arch)
