@@ -27,7 +27,7 @@ from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v2, adapter_vgg_16_bn_v3, adapter_vgg_16_bn_v4
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from util.focal_loss import FocalLoss
-from data import cifar10, cifar100, cub
+from data import cifar10, cifar100, cub, mnist
 from util.losses import SupConLoss
 import utils
 from thop import profile
