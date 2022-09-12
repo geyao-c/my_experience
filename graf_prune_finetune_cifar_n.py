@@ -152,7 +152,8 @@ def main():
     else:
         input_size = 32
     logger.info('input size is {}'.format(input_size))
-    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model, input_size=input_size)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model, device, original_params_model,
+                                                                       input_size=input_size, dtst=args.finetune_dataset)
     logger.info('model flops is {}, params is {}'.format(flops, params))
     logger.info('model flops reduce ratio is {}, params reduce ratio is {}'.format(flops_ratio, params_ratio))
 
