@@ -226,7 +226,7 @@ class BasicBlock(nn.Module):
 
 class ResNet_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
-                 adapter_out_channel=None, need_adapter=None, need_stage=None):
+                 adapter_out_channel=None, need_adapter=None, need_stage=None, dataset=None):
         super(ResNet_New, self).__init__()
         assert (num_layers - 2) % 6 == 0, 'depth should be 6n+2'
         n = (num_layers - 2) // 6
@@ -234,6 +234,7 @@ class ResNet_New(nn.Module):
         self.num_layer = num_layers
         self.need_adapter = need_adapter
         self.need_stage = [1, 2, 3]
+        self.dataset = dataset
         if need_stage is not None:
             self.need_stage = need_stage
         self.overall_channel, self.mid_channel, self.adapter_channel = adapt_channel(
@@ -241,7 +242,11 @@ class ResNet_New(nn.Module):
 
         self.layer_num = 0
         self.adapter_layer = 0
-        self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1, bias=False)
+        if self.dataset == 'mnist':
+            self.conv1 = nn.Conv2d(1, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1,
+                                   bias=False)
+        else:
+            self.conv1 = nn.Conv2d(3, self.overall_channel[self.layer_num], kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(self.overall_channel[self.layer_num])
         self.relu = nn.ReLU(inplace=True)
         # self.layers = nn.ModuleList()
@@ -506,7 +511,7 @@ def adapter24resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
 def adapter15resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
     return ResNet_New(BasicBlock, 20, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_20_cfg['adapter15'], need_adapter=nd_20_cfg['adapter15'],
-                      need_stage=nd_20_stage['adapter15'])
+                      need_stage=nd_20_stage['adapter15'], dataset=dataset)
 
 # adapter24中间一个stage替换最后一层
 def adapter16resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
