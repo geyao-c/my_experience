@@ -93,12 +93,29 @@ nd_20_stage = {
     'adapter19': [2]
 }
 
+adoch_32_cfg = {
+    # 加的adapter层的通道数量
+    'adapter16': [32 * 8] + [64 * 8]
+}
+
+nd_32_cfg = {
+    # 在第几层添加
+    'adapter16': [4]
+}
+
+nd_32_stage = {
+    # 在哪一个stage上添加
+    'adapter16': [2, 3]
+}
+
 def adapt_channel(sparsity, num_layers, adapter_sparsity, adapter_out_channel):
     print('adapter_sparsity: ', adapter_sparsity)
     if num_layers == 20:
         stage_repeat = [3, 3, 3]
         stage_out_channel = [16] + [16] * 3 + [32] * 3 + [64] * 3
-
+    elif num_layers == 32:
+        stage_repeat = [5, 5, 5]
+        stage_out_channel = [16] + [16] * 5 + [32] * 5 + [64] * 5
     elif num_layers == 56:
         stage_repeat = [9, 9, 9]
         # 每一个stage的输出通道数，第一个stage为16，第二个为32最后一个stage为64
@@ -537,5 +554,8 @@ def adapter19resnet_20(sparsity, num_classes, adapter_sparsity, dataset=None):
                       adapter_out_channel=adoch_20_cfg['adapter19'], need_adapter=nd_20_cfg['adapter19'],
                       need_stage=nd_20_stage['adapter19'])
 
-
+def adapter16resnet_32(sparsity, num_classes, adapter_sparsity, dataset=None):
+    return ResNet_New(BasicBlock, 32, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+                      adapter_out_channel=adoch_32_cfg['adapter16'], need_adapter=nd_32_cfg['adapter16'],
+                      need_stage=nd_32_stage['adapter16'])
 
