@@ -23,4 +23,7 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset svhn --finetune_datas
 --ci_dir ./calculated_ci/96.58_resnet_32_svhn --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/96.58_resnet_32_svhn.pth.tar --sparsity [0.]+[0.3]*2+[0.4]*5+[0.5]*5+[0.6]*5
+
+python calculate_ci_n.py --arch resnet_32 --repeat 5 --num_layers 31 \
+--feature_map_dir ../conv_feature_map/96.58_resnet_32_svhn_repeat5
 """
