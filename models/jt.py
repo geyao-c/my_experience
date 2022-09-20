@@ -1,9 +1,9 @@
 import torch
 
-from resnet_cifar import resnet_56
+from resnet_cifar import resnet_56, resnet_32
 from torchsummary import summary
 from models.adapter_resnet_new_three import adapter23resnet_56, adapter22resnet_56, \
-    adapter24resnet_56
+    adapter24resnet_56, adapter16resnet_32, adapter15resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from models.supcon_adapter_resnet import selfsupcon_adapter15resnet_56
@@ -67,7 +67,6 @@ def fun9():
     print(model)
 
 def fun10():
-
     x = torch.tensor([[1, 2, 3], [3, 5, 6]], dtype=torch.float)
     softx = F.softmax(x, dim=1)
     print('softx: ', softx)
@@ -87,6 +86,18 @@ def fun12():
     model = selfsupcon_supcon_resnet_56([0.]*100, 10)
     print(model)
 
+def fun13():
+    model = resnet_32([0.]*100, 10)
+    print(model)
+
+def fun14():
+    model = adapter16resnet_32([0.]*100, 10, [0.]*100)
+    print(model)
+
+def fun15():
+    model = adapter15resnet_56([0.] * 100, 10, [0.] * 100)
+    print(model)
+
 if __name__ == '__main__':
     # fun1()
     # fun3()
@@ -98,4 +109,7 @@ if __name__ == '__main__':
     # fun9()
     # fun10()
     # fun11()
-    fun12()
+    # fun12()
+    # fun13()
+    # fun14()
+    fun15()

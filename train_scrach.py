@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
 
 import utils_append
-from models.resnet_cifar import resnet_56, resnet_110, resnet_80, resnet_20
+from models.resnet_cifar import resnet_56, resnet_110, resnet_80, resnet_20, resnet_32
 from models.vgg_cifar10 import vgg_16_bn
 from models.adapter_resnet_new import adapter1resnet_56, adapter2resnet_56, \
     adapter3resnet_56, adapter5resnet_56, adapter6resnet_56, adapter7resnet_56
@@ -22,7 +22,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter15resnet_56, adapter17resnet_56, adapter16resnet_56, adapter18resnet_56, \
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56, adapter15resnet_20, adapter16resnet_20, \
-    adapter17resnet_20, adapter18resnet_20, adapter19resnet_20
+    adapter17resnet_20, adapter18resnet_20, adapter19resnet_20, adapter16resnet_32
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v2, adapter_vgg_16_bn_v3, adapter_vgg_16_bn_v4
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56

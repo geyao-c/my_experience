@@ -191,6 +191,10 @@ def resnet_20(sparsity, num_classes, dataset=None):
     # 不同的数据集网络结构可能有细微差别
     return ResNet(BasicBlock, 20, sparsity=sparsity, num_classes=num_classes, dataset=dataset)
 
+def resnet_32(sparsity, num_classes, dataset=None):
+    # 不同的数据集网络结构可能有细微差别
+    return ResNet(BasicBlock, 32, sparsity=sparsity, num_classes=num_classes, dataset=dataset)
+
 def resnet_110(sparsity, num_classes):
     return ResNet(BasicBlock, 110, sparsity=sparsity, num_classes=num_classes)
 
