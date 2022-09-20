@@ -311,6 +311,7 @@ def overall_load_resnet_model(args, model, oristate_dict, layer, logger, name_ba
 def load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     cfg = {
         20: [3, 3, 3],
+        32: [5, 5, 5],
         56: [9, 9, 9],
         80: [13, 13, 13],
         110: [18, 18, 18],
@@ -2690,6 +2691,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         elif args.arch == 'resnet_20':
             logger.info('load_resnet_20_model')
             load_resnet_model(args, model, oristate_dict, 20, logger)
+        elif args.arch == 'resnet_32':
+            logger.info('load_resnet_32_model')
+            load_resnet_model(args, model, oristate_dict, 32, logger)
         elif args.arch == 'resnet_56':
             logger.info('load_resnet_model')
             load_resnet_model(args, model, oristate_dict, 56, logger)
