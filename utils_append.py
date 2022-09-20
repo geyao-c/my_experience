@@ -2718,6 +2718,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         elif args.arch == 'adapter15resnet_20' or args.arch == 'adapter19resnet_20':
             logger.info('load adapter15 resnet 20 model')
             load_resnet_model(args, model, oristate_dict, 20, logger)
+        elif args.arch == 'adapter16resnet_32':
+            logger.info('load adapter16 resnet 32 model')
+            load_resnet_model(args, model, oristate_dict, 32, logger)
         elif 'resnet_56' in args.arch:
             logger.info('load resnet 56 model')
             load_resnet_model(args, model, oristate_dict, 56, logger)
