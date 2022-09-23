@@ -107,6 +107,7 @@ python calculate_feature_maps_n.py --arch adapter_vgg_16_bn --dataset cifar100 -
 
 python calculate_feature_maps_n.py --arch adapter_vgg_16_bn --dataset cifar100 --data_dir \
 ./data --pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar
+
 ```
 
 #### adapter-Vgg-16-v4
@@ -254,6 +255,13 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_da
 --ci_dir ./calculated_ci/93.96_vgg_16_bn_cifar10 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/93.96_vgg_16_bn_cifar10.pth.tar --sparsity [0.30]*7+[0.75]*5
+
+# 73.88裁剪83% 
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn \
+--result_dir ./result/normal_pruned/73.88_cifar100tocifar100_vgg_16_pruned_83 \
+--ci_dir ./calculated_ci/73.88_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
+--graf --pretrain_dir ./pretrained_models/73.88_vgg_16_bn_cifar100.pth.tar --sparsity [0.30]*7+[0.75]*5
 ```
 
 ##### 裁剪87%
@@ -343,11 +351,20 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 ###### 裁剪83%
 
 ```python
+# 
+
 python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar10 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
 --result_dir ./result/normal_pruned/93.99_cifar10tocifar10_vgg_16_pruned_81 \
 --ci_dir ./calculated_ci/93.99_adapter_vgg_16_bn_cifar10 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar --sparsity [0.30]*7+[0.75]*4+[0.755]
+
+# selfsupcon adapter_vgg_16_bn 裁剪83，lr = 0.05
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/normal_pruned/35.02_epoch650_selfsupcon_supcon_adapter_adapter_vgg_16_bn_cifar100tocifar100_pruned_83 \
+--ci_dir ./calculated_ci/35.02_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--graf --pretrain_dir ./pretrained_models/35.02_epoch650_selfsupcon_supcon_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.30]*7+[0.75]*4+[0.755]
 ```
 
 ###### **裁剪87%**
@@ -364,6 +381,13 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 --ci_dir ./calculated_ci/74.09_adapter_vgg_16_bn_cifar100 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/74.09_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
+
+# selfsupcon adapter_vgg_16_bn 裁剪87，lr = 0.05
+python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/normal_pruned/35.02_epoch650_selfsupcon_supcon_adapter_adapter_vgg_16_bn_cifar100tocifar100_pruned_87 \
+--ci_dir ./calculated_ci/35.02_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--graf --pretrain_dir ./pretrained_models/35.02_epoch650_selfsupcon_supcon_adapter_vgg_16_bn_cifar100.pth.tar --sparsity [0.45]*7+[0.78]*5
 ```
 
 ### adapter-Vgg-16-v4
