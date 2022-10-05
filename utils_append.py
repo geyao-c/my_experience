@@ -2736,7 +2736,7 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             if args.finetune_arch == 'resnet_20':
                 logger.info('graf_load_resnet20_model')
                 graf_load_resnet_model(args, model, oristate_dict, 20, logger)
-            if args.finetune_arch == 'resnet_56':
+            elif args.finetune_arch == 'resnet_56':
                 logger.info('graf_load_resnet56_model')
                 graf_load_resnet_model(args, model, oristate_dict, 56, logger)
             elif args.finetune_arch == 'resnet_80':
