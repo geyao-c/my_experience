@@ -480,6 +480,7 @@ def load_resnet_tinyimagenet_56_model(args, model, oristate_dict, layer, logger,
 
 def graf_load_resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     cfg = {
+        20: [3, 3, 3],
         56: [9, 9, 9],
         80: [13, 13, 13],
         110: [18, 18, 18],
@@ -2732,6 +2733,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     # 在不同的模型或者不同的数据集上进行裁剪
     elif graf == True:
         if args.pretrained_arch == args.finetune_arch:
+            if args.finetune_arch == 'resnet_20':
+                logger.info('graf_load_resnet20_model')
+                graf_load_resnet_model(args, model, oristate_dict, 20, logger)
             if args.finetune_arch == 'resnet_56':
                 logger.info('graf_load_resnet56_model')
                 graf_load_resnet_model(args, model, oristate_dict, 56, logger)
