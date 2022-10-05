@@ -5,11 +5,18 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
     # dirpath1 = './calculated_ci/72.64_adapter15resnet_56_cifar100'
     # dirpath2 = './calculated_ci/72.23_resnet_56_cifar100'
-    dirpath1 = './calculated_ci/72.73_adapter15resnet_56_cifar100'
-    dirpath2 = './calculated_ci/72.60_resnet_56_cifar100'
-    # dirpath1 = './calculated_ci/93.46_adapter15resnet_56_cifar10'
+    # dirpath1 = './calculated_ci/72.73_adapter15resnet_56_cifar100'
+    # dirpath2 = './calculated_ci/72.60_resnet_56_cifar100'
+    # dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
+    # dirpath1 = './calculated_ci/93.99_adapter_vgg_16_bn_cifar10'
+    # dirpath1 = './calculated_ci/93.91_adapter_vgg_16_bn_v4_cifar10'
+    # dirpath1 = 'calculated_ci/92.22_adapter15resnet_20_cifar10'
+    dirpath1 = 'calculated_ci/68.72_adapter19resnet_20_cifar100'
     # dirpath1 = './calculated_ci/93.33_adapter22resnet_56_cifar10'
     # dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
+    # dirpath2 = './calculated_ci/93.96_vgg_16_bn_cifar10'
+    # dirpath2 = 'calculated_ci/92.21_resnet_20_cifar10'
+    dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
 
     filelist1 = os.listdir(dirpath1)
     print(filelist1)
@@ -43,6 +50,7 @@ if __name__ == '__main__':
         data1_ratio = np.sum([data1[i] for i in range(0, int(0.4 * len(data1)))])
         data2_ratio = np.sum([data2[i] for i in range(0, int(0.4 * len(data2)))])
         # 0.05，0.09，0.14，0.17,0.21，0.23，0.22，0.21，0.13
+        print(data1_ratio, data2_ratio)
         try:
             data1_ratio = round(data1_ratio / data1_sum, 2)
             data2_ratio = round(data2_ratio / data2_sum, 2)
