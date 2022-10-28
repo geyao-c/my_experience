@@ -316,7 +316,7 @@ class ResNet(nn.Module):
         supcon_x = self.supconhead(x)
         supcon_x = F.normalize(supcon_x, dim=1)
 
-        return selfsupcon_x, supcon_x
+        return selfsupcon_x, supcon_x, x
 
 
 class ResNet_New(nn.Module):
