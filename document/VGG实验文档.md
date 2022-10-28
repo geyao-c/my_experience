@@ -359,7 +359,7 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_da
 --epochs 300 --lr_type cos --learning_rate 0.05 --momentum 0.9 --weight_decay 0.0005 \
 --graf --pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar --sparsity [0.30]*7+[0.75]*4+[0.755]
 
-# selfsupcon adapter_vgg_16_bn 裁剪83，lr = 0.05
+# selfsupcon adapter_vgg_16_bn 裁剪83，lr = 0.1
 python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
 --result_dir ./result/normal_pruned/35.02_epoch650_selfsupcon_supcon_adapter_adapter_vgg_16_bn_cifar100tocifar100_pruned_83 \
 --ci_dir ./calculated_ci/35.02_selfsupcon_supcon_adapter_vgg_16_bn_cifar100 --batch_size 128 \

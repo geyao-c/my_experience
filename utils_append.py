@@ -2808,8 +2808,6 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
                 logger.info('graf_load_adapter23resnet_model')
                 graf_load_adapter23resnet_model(args, model, oristate_dict, 56, logger)
             else:
-                print(args.pretrained_arch)
-                print(args.finetune_arch)
                 raise
         else:
             if args.pretrained_arch == 'resnet_56' and args.finetune_arch == 'resnet_tinyimagenet_56':

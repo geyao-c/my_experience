@@ -1,6 +1,8 @@
 import torch
 
 from resnet_cifar import resnet_56, resnet_32
+from vgg_cifar10 import vgg_16_bn
+from adapter_vgg_cifar10 import adapter_vgg_16_bn
 from torchsummary import summary
 from models.adapter_resnet_new_three import adapter23resnet_56, adapter22resnet_56, \
     adapter24resnet_56, adapter16resnet_32, adapter15resnet_56, adapter15resnet_32
@@ -12,6 +14,8 @@ import torchvision
 import utils_append
 import numpy as np
 import torch.nn.functional as F
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def fun2():
     torchvision.models.resnet50()
@@ -102,6 +106,56 @@ def fun16():
     model = adapter15resnet_32([0.] * 100, 10, [0.] * 100)
     print(model)
 
+def fun17():
+    original_model = resnet_56([0] * 100, 10)
+    str1 = "[0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9"
+    sparsity1 = utils_append.analysis_sparsity(str1)
+    model1 = resnet_56(sparsity1, 100)
+
+    str2 = "[0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9"
+    sparsity2 = utils_append.analysis_sparsity(str2)
+    model2 = resnet_56(sparsity2, 100)
+
+    # flops, params, flops_ratio, params_ratio = utils_append.cal_params(model1, device, original_model)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model2, device, original_model)
+    print(flops, params, flops_ratio, params_ratio)
+
+def fun18():
+    original_model = adapter15resnet_56([0] * 100, 10, [0.] * 100)
+    str1 = "[0.]+[0.15]*2+[0.4]*9+[0.4]*9+[0.4]*9"
+    adastr1 = "[0.4]"
+    sparsity1 = utils_append.analysis_sparsity(str1)
+    adasparsity1 = utils_append.analysis_sparsity(adastr1)
+    model1 = adapter15resnet_56(sparsity1, 10, adasparsity1)
+
+    str2 = "[0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9"
+    adastr2 = "[0.7]"
+    sparsity2 = utils_append.analysis_sparsity(str2)
+    adasparsity2 = utils_append.analysis_sparsity(adastr2)
+    model2 = adapter15resnet_56(sparsity2, 10, adasparsity2)
+
+    # flops, params, flops_ratio, params_ratio = utils_append.cal_params(model1, device, original_model)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model2, device, original_model)
+    print(flops, params, flops_ratio, params_ratio)
+
+def fun19():
+    original_model = vgg_16_bn([0.] * 100, 10)
+    # str1 = "[0.30]*7+[0.75]*5"
+    str1 = "[0.45]*7+[0.78]*5"
+    sparsity1 = utils_append.analysis_sparsity(str1)
+    model1 = vgg_16_bn(sparsity1, 10)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model1, device, original_model)
+    print(flops, params, flops_ratio, params_ratio)
+
+def fun20():
+    original_model = adapter_vgg_16_bn([0.] * 100)
+    str1 = "[0.30]*7+[0.75]*5"
+    # str1 = "[0.45]*7+[0.78]*5"
+    sparsity1 = utils_append.analysis_sparsity(str1)
+    model1 = adapter_vgg_16_bn(sparsity1)
+    flops, params, flops_ratio, params_ratio = utils_append.cal_params(model1, device, original_model)
+    print(flops, params, flops_ratio, params_ratio)
+
 if __name__ == '__main__':
     # fun1()
     # fun3()
@@ -117,4 +171,8 @@ if __name__ == '__main__':
     # fun13()
     # fun14()
     # fun15()
-    fun16()
+    # fun16()
+    # fun17()
+    # fun18()
+    # fun19()
+    fun20()
