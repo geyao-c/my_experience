@@ -69,6 +69,7 @@ nd_stage = {
     'adapter23': [2, 3],
     'adapter24': [2]
 }
+
 adoch_20_cfg = {
     'adapter15': [64 * 8],
     'adapter16': [32 * 8] + [64 * 8],
