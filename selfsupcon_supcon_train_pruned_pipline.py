@@ -378,13 +378,14 @@ def main():
             execute_command([ci_cal_cmd])
             # 压缩迁移微调，从cifar10迁移到svhn
             graf_pruned_60_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', args.arch, now,
-                                                     str(total_loss) + '_' +
-                                                     'cifar10tosvhn' + '_' + 'adapter15resnet_20' + '_' + 'pruned_60')
+                                                     str(total_loss) + '_' + 'cifar10tosvhn' + '_' +
+                                                     'adapter15resnet_20' + '_' + 'pruned_60')
             graf_pruned_60_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
                                  "svhn --finetune_data_dir ./data/svhn --pretrained_arch adapter15resnet_20 --finetune_arch adapter15resnet_20" \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.3]*2+[0.4]*3+[0.5]*3+[0.6]*3" \
                                  "".format(graf_pruned_60_result_dir, ci_save_dir, jieduan_ckpt_path)
+            print("graf_pruned_60_cmd: ", graf_pruned_60_cmd)
 
             # 压缩迁移微调，从cifar10到cifar10
             graf_pruned_60_result_dir_normal = os.path.join('./result/selfsupcon-supcon_graf_pruned_normal', args.arch, now,
@@ -394,7 +395,7 @@ def main():
                                  "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_20 --finetune_arch adapter15resnet_20" \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.01 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.3]*2+[0.4]*3+[0.5]*3+[0.6]*3" \
-                                 "".format(graf_pruned_60_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
+                                        "".format(graf_pruned_60_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
 
             # graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
             #                                          'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
