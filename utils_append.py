@@ -1880,6 +1880,7 @@ def graf_load_adapter14resnet_model(args, model, oristate_dict, layer, logger, n
 
 def graf_load_adapter15resnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     cfg = {
+        20: [3, 3, 3],
         56: [9, 9, 9],
         110: [18, 18, 18],
     }
@@ -2750,6 +2751,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
                 logger.info('graf_load_adapter_vgg_16_bn_model')
                 graf_load_vgg_model(args, model, oristate_dict, logger)
                 # graf_load_resnet_model(args, model, oristate_dict, 80, logger)
+            elif args.finetune_arch == 'adapter15resnet_20':
+                logger.info('graf_load_adapter_vgg_16_bn_model')
+                graf_load_adapter15resnet_model(args, model, oristate_dict, 20, logger)
             elif args.finetune_arch == 'adapter1resnet_56':
                 logger.info('graf_load_adapter1resnet_model')
                 graf_load_adapter1resnet_model(args, model, oristate_dict, 56, logger)

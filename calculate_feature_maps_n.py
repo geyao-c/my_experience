@@ -24,7 +24,8 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
-from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56
+from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56, \
+    selfsupcon_supcon_adapter15resnet_20
 '''
 运行命令
 本地data_dir: /Users/chenjie/dataset/tiny-imagenet-200, 服务器data_dir: /root/autodl-tmp/tiny-imagenet-200
@@ -909,6 +910,43 @@ elif args.arch == 'selfsupcon_supcon_adapter15resnet_56':
             inference()
             handler.remove()
             cnt+=1
+
+            # cov_layer = block[j].adapter.relu1
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+            #
+            # cov_layer = block[j].adapter.relu2
+            # handler = cov_layer.register_forward_hook(get_feature_hook)
+            # inference()
+            # handler.remove()
+            # cnt += 1
+
+            cov_layer = block[j].relu2
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
+
+elif args.arch == 'selfsupcon_supcon_adapter15resnet_20':
+
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt = 1
+    for i in range(3):
+        block = eval('model.layer%d' % (i + 1))
+        # 每一个stage有9层
+        # 其中第8层为adapter结构
+        for j in range(3):
+            cov_layer = block[j].relu1
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+            cnt += 1
 
             # cov_layer = block[j].adapter.relu1
             # handler = cov_layer.register_forward_hook(get_feature_hook)
