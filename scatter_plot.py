@@ -4,7 +4,12 @@ from torchvision import transforms
 from models.resnet_cifar import resnet_56
 from models.adapter_resnet_new_three import adapter15resnet_56, adapter21resnet_56
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56, selfsupcon_adapter15resnet_56
-from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56
+from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, \
+    selfsupcon_supcon_resnet_56, selfsupcon_supcon_adapter15resnet_20
+from models.selfsupcon_supcon_adapter_vgg import selfsupcon_supcon_adapter_vgg_16_bn
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
+from models.adapter_resnet_new_three import adapter15resnet_20
+
 import torch
 from data import cifar10, cifar100
 import argparse
@@ -33,7 +38,18 @@ def get_model(modelpath, args):
         model = selfsupcon_supcon_adapter15resnet_56([0.]*100, num_classes, [0.]*100)
     elif args.arc == 'selfsupcon_supcon_resnet_56':
         model = selfsupcon_supcon_resnet_56([0.]*100, num_classes)
+    elif args.arc == 'selfsupcon_supcon_adapter_vgg_16_bn':
+        model = selfsupcon_supcon_adapter_vgg_16_bn([0.]*100, num_classes=num_classes)
+    elif args.arc == 'adapter_vgg_16_bn':
+        model = adapter_vgg_16_bn([0.] * 100, num_classes=num_classes)
+    elif args.arc == 'adapter15resnet_20':
+        model = adapter15resnet_20([0.] * 100, num_classes=num_classes, adapter_sparsity=[0.]*100)
+    elif args.arc == 'selfsupcon_supcon_adapter15resnet_20':
+        model = selfsupcon_supcon_adapter15resnet_20([0.] * 100, num_classes=num_classes, adapter_sparsity=[0.] * 100)
+    else:
+        raise ('No such arc')
 
+    print(model)
     map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     ckpt = torch.load(modelpath, map_location=map_str)
     model.load_state_dict(ckpt['state_dict'], strict=False)
@@ -46,7 +62,7 @@ def model_val(model, val_loader, args):
     print(tot)
     with torch.no_grad():
         for i, (images, target) in enumerate(val_loader):
-            if i >= 20: break
+            if i >= 50: break
             count += images.shape[0]
             print('{}/ {}'.format(count, tot))
             images = images.to(device)
@@ -68,6 +84,18 @@ def model_val(model, val_loader, args):
             elif args.arc == 'selfsupcon_supcon_resnet_56':
                 print('selfsupcon-supcon logits features')
                 _, _, feature = model(images)
+            elif args.arc == 'selfsupcon_supcon_adapter_vgg_16_bn':
+                print('selfsupcon_supcon_adapter_vgg_16_bn logits features')
+                _, _, feature = model(images)
+            elif args.arc == 'adapter_vgg_16_bn':
+                print('adapter_vgg_16_bn logits features')
+                feature = model(images)
+            elif args.arc == 'adapter15resnet_20':
+                print('adapter15resnet_20 logits features')
+                _, feature = model(images)
+            elif args.arc == 'selfsupcon_supcon_adapter15resnet_20':
+                print('selfsupcon_supcon_adapter15resnet_20 logits features')
+                _, _, feature = model(images)
             feature, target = feature.numpy(), target.numpy()
             if val_features is None:
                 val_features, val_targets = feature, target
@@ -80,16 +108,21 @@ def model_val(model, val_loader, args):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser("CIFAR prune training")
-    parser.add_argument('--batch_size', type=int, default=128, help='batch size')
+    parser.add_argument('--batch_size', type=int, default=200, help='batch size')
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
     # parser.add_argument('--dataset', type=str, default='cifar100', help='dataset')
     # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='selfsupcon_supcon_resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter_vgg_16_bn', help='arcs')
+    # parser.add_argument('--arc', type=str, default='adapter_vgg_16_bn', help='arcs')
+    parser.add_argument('--arc', type=str, default='adapter15resnet_20', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_20', help='arcs')
+
 
     args = parser.parse_args()
 
@@ -119,7 +152,7 @@ if __name__ == '__main__':
     # name = "60.4_epoch600_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "58.04_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "38.52_epoch700_selfsupcon_supcon_adapter15resnet_56_cifar10"
-    name = "38.58_epoch700_selfsupcon_supcon_resnet_56_cifar10"
+    # name = "38.58_epoch700_selfsupcon_supcon_resnet_56_cifar10"
     # name = "37.02_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "7.98_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar10"
     # name = "8.89_epoch450_selfsupcon_supcon_adapter15resnet_56_cifar10"
@@ -136,6 +169,12 @@ if __name__ == '__main__':
 
     # name = "93.77_adapter15resnet_56_cifar10"
     # name = "72.73_adapter15resnet_56_cifar100"
+
+    # name = '35.02_epoch650_selfsupcon_supcon_adapter_vgg_16_bn_cifar100'
+    # name = '74.22_adapter_vgg_16_bn_cifar100'
+    # name = '92.22_adapter15resnet_20_cifar10'
+    # name = '38.15_epoch900_selfsupcon_supcon_adapter15resnet_20_cifar10'
+    name = '37.73_epoch1000_selfsupcon_supcon_adapter15resnet_20_cifar10'
 
     model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
@@ -177,6 +216,9 @@ if __name__ == '__main__':
     cs_tg1, cs_tg2 = [], []
     # cs_idx_num = [0 for i in range(class_num)]
     color_idx = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9',
+                 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9',
+                 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9',
+                 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9',
                  'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']
     # cs_num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     # cs_num = [9]
@@ -212,7 +254,7 @@ if __name__ == '__main__':
     # ax = plt.scatter(cs_xtsne2[:, 0], cs_xtsne2[:, 1], c=cs_tg2, label="original", s=1)
     # plt.xlim(-90, 90)
     # plt.ylim(-90, 90)
-    plt.savefig('images/' + name + '.png', dpi=600, pad_inches=0.02, bbox_inches="tight")
+    plt.savefig('images/' + name + '.png', dpi=600)
     plt.show()
 
 
