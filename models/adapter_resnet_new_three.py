@@ -335,9 +335,9 @@ class ResNet_New(nn.Module):
         else:
             x = self.linear(x)
 
-        return x, feature
+        # return x, feature
         # return x, feat
-        # return x
+        return x
 
 class ResNet_New_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
