@@ -60,5 +60,7 @@ if __name__ == '__main__':
         #          '--graf --pretrain_dir ./pretrained_models/92.22_adapter15resnet_20_cifar10.pth.tar --sparsity [0.]*10+[{}]*1+[0.]*1 ' \
         #          '--adapter_sparsity [0.]*1'.format(str(item), str(item))
 
-        utils.execute_command([rcmd, adrcmd, adrcmd])
+        # utils.execute_command([rcmd, adrcmd, adrcmd])
+        utils.execute_command([rcmd, rcmd, adrcmd])
+
 
