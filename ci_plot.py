@@ -7,16 +7,16 @@ if __name__ == '__main__':
     # dirpath2 = './calculated_ci/72.23_resnet_56_cifar100'
     # dirpath1 = './calculated_ci/72.73_adapter15resnet_56_cifar100'
     # dirpath2 = './calculated_ci/72.60_resnet_56_cifar100'
-    # dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
+    dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
     # dirpath1 = './calculated_ci/93.99_adapter_vgg_16_bn_cifar10'
     # dirpath1 = './calculated_ci/93.91_adapter_vgg_16_bn_v4_cifar10'
     # dirpath1 = 'calculated_ci/92.22_adapter15resnet_20_cifar10'
-    dirpath1 = 'calculated_ci/68.72_adapter19resnet_20_cifar100'
+    # dirpath1 = 'calculated_ci/68.72_adapter19resnet_20_cifar100'
     # dirpath1 = './calculated_ci/93.33_adapter22resnet_56_cifar10'
-    # dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
+    dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
     # dirpath2 = './calculated_ci/93.96_vgg_16_bn_cifar10'
     # dirpath2 = 'calculated_ci/92.21_resnet_20_cifar10'
-    dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
+    # dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
 
     filelist1 = os.listdir(dirpath1)
     print(filelist1)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         plt.title('layer{}'.format(i))
         plt.savefig('./image/{}.jpg'.format(i))
         plt.clf()
-        # plt.show()
+        plt.show()
     print('total sum1: {}, total sum2: {}'.format(total_sum1, total_sum2))
 
     # x = [i for i in range(len(ci1))]
