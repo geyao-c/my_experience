@@ -5,18 +5,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 if __name__ == '__main__':
-    # dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
+    dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
     # dirpath1 = './calculated_ci/93.99_adapter_vgg_16_bn_cifar10'
     # dirpath1 = 'calculated_ci/68.72_adapter19resnet_20_cifar100'
-    dirpath1 = 'calculated_ci/92.22_adapter15resnet_20_cifar10'
+    # dirpath1 = 'calculated_ci/92.22_adapter15resnet_20_cifar10'
     # dirpath1 = './calculated_ci/93.91_adapter_vgg_16_bn_v4_cifar10'
-    dirpath2 = 'calculated_ci/92.21_resnet_20_cifar10'
-    # dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
+    # dirpath2 = 'calculated_ci/92.21_resnet_20_cifar10'
+    dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
     # dirpath2 = './calculated_ci/93.96_vgg_16_bn_cifar10'
     # dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
 
-    file = 'ci_conv16.npy'
-    # file = 'ci_conv53.npy'
+    # file = 'ci_conv18.npy'
+    file = 'ci_conv52.npy'
     filepath1 = os.path.join(dirpath1, file)
     filepath2 = os.path.join(dirpath2, file)
 
@@ -40,13 +40,17 @@ if __name__ == '__main__':
     sns.set_theme(style='darkgrid')  # 图形主题
     df = pd.DataFrame()
 
-    df['Pruned ratio'] = x; df['PI'] = y1
-    ax = sns.lineplot(data=df, x='Pruned ratio', y='PI', label='Adapter-ResNet-20-V1', marker='o')
+    df['Filter pruning ratio'] = x; df['PI'] = y1
+    # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-20-V1', marker='o')
+    ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-56', marker='o')
 
-    df['Pruned ratio'] = x; df['PI'] = y2
-    ax = sns.lineplot(data=df, x='Pruned ratio', y='PI', label='ResNet-20', marker='o')
+    df['Filter pruning ratio'] = x; df['PI'] = y2
+    # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='ResNet-20', marker='o')
+    ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='ResNet-56', marker='o')
 
-    plt.legend(loc="best")
-    plt.savefig('calci_plot4.jpg', bbox_inches='tight', pad_inches=0.1)
+    # ax.set_title('Layer18')
+    ax.set_title('Layer52')
+    plt.legend(loc="best", fontsize=12)
+    plt.savefig('calci_plot1.jpg')
     plt.show()
 
