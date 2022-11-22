@@ -33,8 +33,8 @@ if __name__ == '__main__':
 
         rcmd = 'python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 ' \
                '--finetune_data_dir ./data --pretrained_arch resnet_20 --finetune_arch resnet_20 --result_dir ' \
-               './result/normal_pruned/68.70cifar100tocifar100_resnet_20_pruned_{} --ci_dir ./calculated_ci/68.70_resnet_20_cifar100 ' \
-               '--batch_size 128 --epochs 80 --lr_type cos --learning_rate 0.003 --momentum 0.9 --weight_decay 0.0005 ' \
+               './result/normal_pruned/68.70cifar100tocifar100_resnet_20_pruned_{}_2 --ci_dir ./calculated_ci/68.70_resnet_20_cifar100 ' \
+               '--batch_size 128 --epochs 50 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 ' \
                '--graf --pretrain_dir ./pretrained_models/68.70_resnet_20_cifar100.pth.tar --sparsity [0.]*8+[{}]+[0.]*3'.format(
             str(item), str(item))
 
@@ -96,8 +96,8 @@ if __name__ == '__main__':
 
         adrcmd = 'python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_dataset cifar100 ' \
                '--finetune_data_dir ./data --pretrained_arch adapter19resnet_20 --finetune_arch adapter19resnet_20 --result_dir ' \
-               './result/normal_pruned/68.72adapter19_resnet_20_pruned_{} --ci_dir ./calculated_ci/68.72_adapter19resnet_20_cifar100 ' \
-               '--batch_size 128 --epochs 80 --lr_type cos --learning_rate 0.003 --momentum 0.9 --weight_decay 0.0005 ' \
+               './result/normal_pruned/68.72cifar100tocifar100adapter19_resnet_20_pruned_{}_2 --ci_dir ./calculated_ci/68.72_adapter19resnet_20_cifar100 ' \
+               '--batch_size 128 --epochs 50 --lr_type cos --learning_rate 0.01 --momentum 0.9 --weight_decay 0.0005 ' \
                '--graf --pretrain_dir ./pretrained_models/68.72_adapter19resnet_20_cifar100.pth.tar --sparsity [0.]*12 ' \
                '--adapter_sparsity [{}]*1'.format(str(item), str(item))
 
