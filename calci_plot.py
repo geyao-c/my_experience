@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # dirpath2 = './calculated_ci/93.96_vgg_16_bn_cifar10'
     dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
 
-    file = 'ci_conv12.npy'
+    file = 'ci_conv10.npy'
     # file = 'ci_conv52.npy'
     filepath1 = os.path.join(dirpath1, file)
     filepath2 = os.path.join(dirpath2, file)
@@ -36,7 +36,7 @@ if __name__ == '__main__':
         y1.append(data1_ratio); y2.append(data2_ratio)
         start += delta
 
-    y2[9] = 1.0; y2[8] = 0.85
+    # y2[9] = 1.0; y2[8] = 0.85
     print(y1)
     print(y2)
     plt.rcParams['savefig.dpi'] = 600; plt.rcParams['figure.dpi'] = 600
