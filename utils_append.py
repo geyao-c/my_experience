@@ -2697,8 +2697,10 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             logger.info('load_resnet_32_model')
             load_resnet_model(args, model, oristate_dict, 32, logger)
         elif args.arch == 'resnet_56':
-            logger.info('load_resnet_model')
-            load_resnet_model(args, model, oristate_dict, 56, logger)
+            # logger.info('load_resnet_model')
+            logger.info('overall load_resnet_model')
+            # load_resnet_model(args, model, oristate_dict, 56, logger)
+            overall_load_resnet_model(args, model, oristate_dict, 56, logger)
         elif args.arch == 'resnet_80':
             logger.info('load_resnet_model')
             load_resnet_model(args, model, oristate_dict, 80, logger)
@@ -2727,8 +2729,10 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             logger.info('load adapter15 resnet 32 model')
             load_resnet_model(args, model, oristate_dict, 32, logger)
         elif 'resnet_56' in args.arch:
-            logger.info('load resnet 56 model')
-            load_resnet_model(args, model, oristate_dict, 56, logger)
+            # logger.info('load resnet 56 model')
+            logger.info('overall load_resnet_model')
+            overall_load_resnet_model(args, model, oristate_dict, 56, logger)
+            # load_resnet_model(args, model, oristate_dict, 56, logger)
         else:
             raise
     # 在不同的模型或者不同的数据集上进行裁剪
