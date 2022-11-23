@@ -2859,9 +2859,9 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         lr = args.learning_rate * (0.5 ** factor)
 
     elif args.lr_type == 'cos':  # cos without warm-up
-        # lr = args.learning_rate
+        lr = args.learning_rate
         # return
-        lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - 5) / (args.epochs - 5)))
+        # lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - 5) / (args.epochs - 5)))
 
     elif args.lr_type == 'exp':
         step = 1
@@ -2874,8 +2874,8 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         raise NotImplementedError
 
     # Warmup
-    if epoch < 2:
-        lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+    # if epoch < 2:
+    #     lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
