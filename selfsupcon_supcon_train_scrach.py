@@ -308,8 +308,8 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        save_path = os.path.join(args.result_dir, str(epoch))
-        if (epoch + 1) % 10 == 0:
+        if (epoch + 1) % 3 == 0:
+            save_path = os.path.join(args.result_dir, str(epoch + 1) + ".pth.tar")
             utils.save_jieduan_checkpoint({
                 'epoch': epoch,
                 'state_dict': model.state_dict(),
