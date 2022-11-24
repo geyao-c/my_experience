@@ -16,7 +16,7 @@ from models.adapter_resnet_new import adapter1resnet_56, adapter2resnet_56, \
 from models.resnet_tinyimagenet import resnet_tinyimagenet_56
 from models.adapter_resnet_tinyimagenet import adapter3resnet_tinyimagenet_56
 from models.adapter_resnet_new_new import adapter8resnet_56
-from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56
+from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56
 from torch.utils.tensorboard import SummaryWriter
 from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_56, \
     adapter11resnet_56, adapter12resnet_56, adapter13resnet_56, adapter14resnet_56, \

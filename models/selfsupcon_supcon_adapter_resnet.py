@@ -343,8 +343,8 @@ class ResNet(nn.Module):
         supcon_x = self.supconhead(x)
         supcon_x = F.normalize(supcon_x, dim=1)
 
-        return selfsupcon_x, supcon_x, x
-
+        # return selfsupcon_x, supcon_x, x
+        return selfsupcon_x, supcon_x
 
 class ResNet_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,
