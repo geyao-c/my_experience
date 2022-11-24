@@ -308,12 +308,13 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        if (epoch + 1) % 100 == 0:
+        save_path = os.path.join(args.result_dir, epoch)
+        if (epoch + 1) % 10 == 0:
             utils.save_jieduan_checkpoint({
                 'epoch': epoch,
                 'state_dict': model.state_dict(),
                 'optimizer': optimizer.state_dict(),
-            }, epoch, args.result_dir)
+            }, save_path)
         utils.save_checkpoint({
             'epoch': epoch,
             'state_dict': model.state_dict(),
