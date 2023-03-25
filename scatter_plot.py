@@ -112,11 +112,11 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
     # parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
     parser.add_argument('--dataset', type=str, default='cifar100', help='dataset')
-    # parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
+    parser.add_argument('--arc', type=str, default='resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_resnet_56', help='arcs')
-    parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
+    # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='supcon_adapter15resnet_56', help='arcs')
     # parser.add_argument('--arc', type=str, default='selfsupcon_supcon_adapter_vgg_16_bn', help='arcs')
     # parser.add_argument('--arc', type=str, default='adapter_vgg_16_bn', help='arcs')
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # model1 = get_model('./pretrained_models/33.39_supcon-ce_adapter15resnet_56_cifar10.pth.tar')
     # name = "72.68_resnet_56_cifar100"
     # name = "72.23_resnet_56_cifar100"
-    # name = "72.60_resnet_56_cifar100"
+    name = "72.60_resnet_56_cifar100"
     # name = "49.48_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar100"
     # name = "48.77_epoch1000_selfsupcon_supcon_adapter15resnet_56_cifar100"
     # name = "50.07_epoch1000_selfsupcon-supcon_adapter15resnet_56_cifar10"
@@ -182,7 +182,10 @@ if __name__ == '__main__':
     # name = 'epoch1000_1selfsupcon-0supcon_adapter15resnet_56_cifar10'
 
     # name = 'epoch700_1selfsupcon-0supcon_adapter15resnet_56_cifar100'
-    name = 'epoch1000_1selfsupcon-0supcon_adapter15resnet_56_cifar100'
+    # name = 'epoch1000_1selfsupcon-0supcon_adapter15resnet_56_cifar100'
+
+    # name = 'epoch700_1selfsupcon-0supcon_resnet_56_cifar100'
+    # name = 'epoch1000_1selfsupcon-0supcon_resnet_56_cifar100'
 
     model1 = get_model('./pretrained_models/' + name + '.pth.tar', args)
     # model1 = get_model('./pretrained_models/4.30_supcon-ce_adapter15resnet_56_cifar10.pth.tar')

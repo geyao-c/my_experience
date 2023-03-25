@@ -22,7 +22,8 @@ adoch_cfg = {
     'adapter12': [16 * 8] * 3 + [32 * 8] * 3 + [64 * 8] * 3,
     'adapter13': [64 * 8] * 3,
     'adapter14': [64 * 8] * 2,
-    'adapter15': [64 * 8],
+    # 'adapter15': [64 * 8],
+    'adapter15': [64 / 4],
     'adapter16': [64 * 16],
     'adapter17': [64 * 8] * 2,
     'adapter18': [64 * 8] * 3,
@@ -343,8 +344,8 @@ class ResNet(nn.Module):
         supcon_x = self.supconhead(x)
         supcon_x = F.normalize(supcon_x, dim=1)
 
-        # return selfsupcon_x, supcon_x, x
-        return selfsupcon_x, supcon_x
+        return selfsupcon_x, supcon_x, x
+        # return selfsupcon_x, supcon_x
 
 class ResNet_New(nn.Module):
     def __init__(self, block, num_layers, sparsity, num_classes=10, adapter_sparsity=None,

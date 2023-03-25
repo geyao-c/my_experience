@@ -23,6 +23,7 @@ adoch_cfg = {
     'adapter13': [64 * 8] * 3,
     'adapter14': [64 * 8] * 2,
     'adapter15': [64 * 8],
+    # 'adapter15': [64 / 4],
     'adapter16': [64 * 16],
     'adapter17': [64 * 8] * 2,
     'adapter18': [64 * 8] * 3,
