@@ -344,7 +344,7 @@ def main():
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
         # epochlist = [300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
-        epochlist = [1, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
+        epochlist = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
         k = -4
         if (epoch + 1) in epochlist:
             # 保存模型
@@ -400,7 +400,7 @@ def main():
             #                             "".format(graf_pruned_60_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
 
             # 压缩迁移微调，从cifar10到cifar10, 裁剪率70%
-            graf_pruned_70_result_dir_normal = os.path.join('./result/selfsupcon-supcon_graf_pruned_normal', "k=8", args.arch,
+            graf_pruned_70_result_dir_normal = os.path.join('./result/selfsupcon-supcon_graf_pruned_normal', "k={}".format(k), args.arch,
                                                             now,
                                                             str(total_loss) + '_' +
                                                             'cifar10tocifar10' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
@@ -438,7 +438,7 @@ def main():
             #                      "--adapter_sparsity [0.4]".format(graf_pruned_48_result_dir, ci_save_dir,
             #                                                        jieduan_ckpt_path)
 
-            graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', "k=8", args.arch,
+            graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', "k={}".format(k), args.arch,
                                                      now, str(total_loss) + '_' +
                                                      'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
             # graf_pruned_70_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
