@@ -2837,7 +2837,7 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
                 raise
 # 学习率调整
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
-
+    warmup_epoch = 5
     if args.lr_type == 'step':
         for param_group in optimizer.param_groups:
             cur_lr = param_group['lr']
@@ -2859,9 +2859,10 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         lr = args.learning_rate * (0.5 ** factor)
 
     elif args.lr_type == 'cos':  # cos without warm-up
-        lr = args.learning_rate
+        # lr = args.learning_rate
         # return
         # lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - 5) / (args.epochs - 5)))
+        lr = 0.5 * args.learning_rate * (1 + math.cos(math.pi * (epoch - warmup_epoch) / (args.epochs - warmup_epoch)))
 
     elif args.lr_type == 'exp':
         step = 1
@@ -2876,6 +2877,10 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
     # Warmup
     # if epoch < 2:
     #     lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+
+    if epoch < warmup_epoch:
+        # lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+        lr = lr * float(1 + step + epoch * len_iter) / (warmup_epoch * len_iter)
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
