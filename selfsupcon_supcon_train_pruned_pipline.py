@@ -345,7 +345,7 @@ def main():
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
         # epochlist = [300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
         epochlist = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
-        k = -4
+        k = 1
         if (epoch + 1) in epochlist:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_{}_{}.pth.tar'.format(total_loss,
