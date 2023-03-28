@@ -345,7 +345,7 @@ def main():
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
         # epochlist = [300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
         epochlist = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
-        k = 1
+        k = 4
         if (epoch + 1) in epochlist:
             # 保存模型
             jieduan_ckpt_model_name = '{}_epoch{}_{}_{}.pth.tar'.format(total_loss,
@@ -407,7 +407,7 @@ def main():
             graf_pruned_70_cmd_normal = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
                                         "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
                                         "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.05 " \
-                                        "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.67]*9 --adapter_sparsity [0.7]" \
+                                        "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.675]*9 --adapter_sparsity [0.7]" \
                                         "".format(graf_pruned_70_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
 
             # graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
@@ -453,7 +453,7 @@ def main():
             graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
                                  "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
-                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.67]*9 " \
+                                 "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.675]*9 " \
                                  "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir, jieduan_ckpt_path)
             # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
             #                      "cifar100 --finetune_data_dir ./data --pretrained_arch resnet_56 --finetune_arch resnet_56 " \
