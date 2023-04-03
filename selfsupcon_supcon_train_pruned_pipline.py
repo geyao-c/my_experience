@@ -343,7 +343,7 @@ def main():
 
         logger.info('epoch {}, total_loss is {:.2f}, supcon_loss is {:.2f}, selfsupcon_loss is {:.2f}'.
                     format(epoch, total_loss, supcon_loss, selfsupcon_loss))
-        epochlist = [300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
+        epochlist = [1, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000]
         # epochlist = [150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
         k = 8
         if (epoch + 1) in epochlist:
