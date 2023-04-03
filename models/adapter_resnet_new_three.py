@@ -528,7 +528,7 @@ def adapter23resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
 
 # adapter24中间一个stage替换最后一层
 def adapter24resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
-    return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+    return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter24'], need_adapter=nd_cfg['adapter24'],
                       need_stage=nd_stage['adapter24'], dataset=dataset)
 
