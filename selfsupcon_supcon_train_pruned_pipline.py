@@ -10,7 +10,7 @@ import torch.utils.data.distributed
 import utils_append
 from util.losses import SupConLoss
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56, \
-    selfsupcon_supcon_adapter15resnet_20, selfsupcon_supcon_adapter24resnet_56
+    selfsupcon_supcon_adapter15resnet_20, selfsupcon_supcon_adapter24resnet_56, selfsupcon_supcon_adapter25resnet_56
 from data import cifar10, cifar100
 import utils
 import numpy as np
@@ -409,16 +409,24 @@ def main():
                                                             now,
                                                             str(total_loss) + '_' +
                                                             'cifar10tocifar10' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
+
+            graf_pruned_70_cmd_normal = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
+                                        "cifar10 --finetune_data_dir ./data --pretrained_arch adapter25resnet_56 --finetune_arch adapter25resnet_56 " \
+                                        "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --graf --lr_type cos --learning_rate 0.05 " \
+                                        "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 --adapter_sparsity [0.7]" \
+                                        "".format(graf_pruned_70_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
+
             # graf_pruned_70_cmd_normal = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
             #                             "cifar10 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
             #                             "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.05 " \
             #                             "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 --adapter_sparsity [0.75]" \
             #                             "".format(graf_pruned_70_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
-            graf_pruned_70_cmd_normal = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
-                                        "cifar10 --finetune_data_dir ./data --pretrained_arch adapter24resnet_56 --finetune_arch adapter24resnet_56 " \
-                                        "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --graf --lr_type cos --learning_rate 0.05 " \
-                                        "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 --adapter_sparsity [0.65]" \
-                                        "".format(graf_pruned_70_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
+
+            # graf_pruned_70_cmd_normal = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
+            #                             "cifar10 --finetune_data_dir ./data --pretrained_arch adapter24resnet_56 --finetune_arch adapter24resnet_56 " \
+            #                             "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --graf --lr_type cos --learning_rate 0.05 " \
+            #                             "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 --adapter_sparsity [0.65]" \
+            #                             "".format(graf_pruned_70_result_dir_normal, ci_save_dir, jieduan_ckpt_path)
 
             # graf_pruned_48_result_dir = os.path.join('./result/selfsupcon-supcon_graf_pruned', now, str(total_loss) + '_' +
             #                                          'cifar10tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_48')
@@ -464,11 +472,18 @@ def main():
             #                                          'cifar100tocifar100' + '_' + 'adapter15resnet_56' + '_' + 'pruned_70')
 
             graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
-                                 "cifar100 --finetune_data_dir ./data --pretrained_arch adapter24resnet_56 --finetune_arch adapter24resnet_56 " \
+                                 "cifar100 --finetune_data_dir ./data --pretrained_arch adapter25resnet_56 --finetune_arch adapter25resnet_56 " \
                                  "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
                                  "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
-                                 "--adapter_sparsity [0.65]".format(graf_pruned_70_result_dir, ci_save_dir,
+                                 "--adapter_sparsity [0.7]".format(graf_pruned_70_result_dir, ci_save_dir,
                                                                     jieduan_ckpt_path)
+
+            # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
+            #                      "cifar100 --finetune_data_dir ./data --pretrained_arch adapter24resnet_56 --finetune_arch adapter24resnet_56 " \
+            #                      "--result_dir {} --ci_dir {} --batch_size 128 --epochs 300 --lr_type cos --learning_rate 0.1 " \
+            #                      "--momentum 0.9 --weight_decay 0.0005 --pretrain_dir {} --sparsity [0.]+[0.4]*2+[0.5]*9+[0.6]*9+[0.7]*9 " \
+            #                      "--adapter_sparsity [0.65]".format(graf_pruned_70_result_dir, ci_save_dir,
+            #                                                         jieduan_ckpt_path)
 
             # graf_pruned_70_cmd = "python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset " \
             #                      "cifar100 --finetune_data_dir ./data --pretrained_arch adapter15resnet_56 --finetune_arch adapter15resnet_56 " \
