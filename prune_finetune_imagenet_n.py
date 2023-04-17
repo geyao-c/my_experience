@@ -35,6 +35,7 @@ parser.add_argument('--pretrain_dir', type=str, default='', help='pretrain model
 parser.add_argument('--ci_dir', type=str, default='', help='ci path')
 parser.add_argument('--sparsity', type=str, default=None, help='compress rate of each conv')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
+parser.add_argument('--which', type=str, default='A', help='which dataset')
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
@@ -283,6 +284,7 @@ def main():
     # load training data
     print('==> Preparing data..')
 
+    # 加载数据集
     data_tmp = imagenet.Data(args)
     train_loader = data_tmp.train_loader
     val_loader = data_tmp.test_loader
@@ -309,8 +311,8 @@ def main():
     elif args.lr_type=='cos':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer=optimizer, T_max=100, eta_min=0.0004)#'''
     start_epoch = 0
-    best_top1_acc= 0
-    best_top5_acc= 0
+    best_top1_acc = 0
+    best_top5_acc = 0
 
     # load the checkpoint if it exists
     checkpoint_dir = os.path.join(args.result_dir, 'checkpoint.pth.tar')
