@@ -14,8 +14,8 @@ class Data:
 
         scale_size = 224
 
-        traindir = os.path.join(args.data_dir, 'train')
-        valdir = os.path.join(args.data_dir, 'val')
+        traindir = os.path.join(args.data_dir, 'train', args.which)
+        valdir = os.path.join(args.data_dir, 'val', args.which)
         normalize = transforms.Normalize(
             mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
