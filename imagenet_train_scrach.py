@@ -147,8 +147,9 @@ def main():
 
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.cuda()
-    criterion_smooth = utils.CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
-    criterion_smooth = criterion_smooth.cuda()
+    # criterion_smooth = utils.CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
+    # criterion_smooth = utils.CrossEntropyLabelSmooth(CLASSES, args.label_smooth)
+    # criterion_smooth = criterion_smooth.cuda()
 
     # load training data
     print('==> Preparing data..')
@@ -200,8 +201,8 @@ def main():
     scaler = GradScaler()
     epoch = start_epoch
     while epoch < args.epochs:
-
-        train_obj, train_top1_acc,  train_top5_acc = train(epoch,  train_loader, model, criterion_smooth, optimizer, scaler)
+        # train_obj, train_top1_acc,  train_top5_acc = train(epoch,  train_loader, model, criterion_smooth, optimizer, scaler)
+        train_obj, train_top1_acc,  train_top5_acc = train(epoch,  train_loader, model, criterion, optimizer, scaler)
         valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args)
 
         is_best = False
