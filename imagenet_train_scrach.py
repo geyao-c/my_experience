@@ -36,6 +36,7 @@ parser.add_argument('--weight_decay', type=float, default=1e-4, help='weight dec
 parser.add_argument('--sparsity', type=str, default=None, help='compress rate of each conv')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--which', type=str, default='A', help='which dataset')
+parser.add_argument('--resume_dir', type=str, default=None, help='resume model dir')
 
 args = parser.parse_args()
 os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
@@ -196,6 +197,14 @@ def main():
     #     load_resnet_model(model, oristate_dict)
     # else:
     #     raise
+    
+    if args.resume_dir is not None:
+        ckpt_path = os.path.join(args.resume_dir, 'checkpoint.pth.tar')
+        ckpt = torch.load(ckpt_path)
+        model.load_state_dict(ckpt['state_dict'], strict=True)
+        start_epoch = ckpt['epoch']
+        best_top1_acc = ckpt['best_top1_acc']
+        best_top5_acc = ckpt['best_top5_acc']
 
     # train the model
     scaler = GradScaler()
