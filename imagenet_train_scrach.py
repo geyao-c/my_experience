@@ -74,10 +74,10 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter):
 
     if args.lr_type == 'step':
         # factor = epoch // 30
-        if epoch == 60:
+        if epoch >= 60 and epoch < 90:
             # factor = factor + 1
             lr = args.learning_rate * (0.1 ** 1)
-        elif epoch == 90:
+        elif epoch >= 90:
             lr = args.learning_rate * (0.1 ** 2)
         else:
             lr = args.learning_rate
@@ -199,7 +199,7 @@ def main():
     #     raise
     
     if args.resume_dir is not None:
-        ckpt_path = os.path.join(args.resume_dir, 'checkpoint.pth.tar')
+        ckpt_path = os.path.join(args.resume_dir, 'model_best.pth.tar')
         ckpt = torch.load(ckpt_path)
         model.load_state_dict(ckpt['state_dict'], strict=True)
         start_epoch = ckpt['epoch']
