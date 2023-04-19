@@ -199,7 +199,7 @@ def main():
     #     raise
     
     if args.resume_dir is not None:
-        ckpt_path = os.path.join(args.resume_dir, 'model_best.pth.tar')
+        ckpt_path = os.path.join(args.resume_dir, 'checkpoint.pth.tar')
         ckpt = torch.load(ckpt_path)
         model.load_state_dict(ckpt['state_dict'], strict=True)
         start_epoch = ckpt['epoch']
