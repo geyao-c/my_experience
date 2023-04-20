@@ -13,10 +13,11 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 import torch.utils.data.distributed
 from models.resnet_imagenet import resnet_50, resnet_34
+from models.adapter_resnet_imagenet import adapter15resnet_34
 
 from data import imagenet
-import utils
 from torch.cuda.amp import autocast, GradScaler
+import utils_append
 
 parser = argparse.ArgumentParser("ImageNet training")
 
@@ -34,6 +35,7 @@ parser.add_argument('--weight_decay', type=float, default=1e-4, help='weight dec
 # parser.add_argument('--pretrain_dir', type=str, default='', help='pretrain model path')
 # parser.add_argument('--ci_dir', type=str, default='', help='ci path')
 parser.add_argument('--sparsity', type=str, default=None, help='compress rate of each conv')
+parser.add_argument('--adapter_sparsity', type=str, default=None, help='compress rate of each conv')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--which', type=str, default='A', help='which dataset')
 parser.add_argument('--resume_dir', type=str, default=None, help='resume model dir')
@@ -139,11 +141,19 @@ def main():
 
         sparsity = cprate
 
+    if args.adapter_sparsity:
+        adapter_sparsity = utils_append.analysis_sparsity(args.adapter_sparsity)
+
     # load model
     logger.info('sparsity:' + str(sparsity))
+    logger.info('sparsity:' + str(adapter_sparsity))
     logger.info('==> Building model..')
 
-    model = eval(args.arch)(sparsity=sparsity).cuda()
+    model = None
+    if args.arch.find('adapter') != -1:
+        model = eval(args.arch)(sparsity=sparsity, adapter_sparsity=adapter_sparsity).cuda()
+    else:
+        model = eval(args.arch)(sparsity=sparsity).cuda()
     logger.info(model)
 
     criterion = nn.CrossEntropyLoss()
