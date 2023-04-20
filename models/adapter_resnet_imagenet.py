@@ -1,9 +1,22 @@
-
 import torch.nn as nn
+from .adapter import Adapter3
 
 stage_repeat = [3, 4, 6, 3]
 stage_out_channel_50 = [64] + [256] * 3 + [512] * 4 + [1024] * 6 + [2048] * 3
 stage_out_channel_34 = [64] + [64] * 3 + [128] * 4 + [256] * 6 + [512] * 3
+
+adoch_cfg = {
+    'adapter15': [512 * 8]
+}
+
+nd_cfg = {
+    'adapter15': [2]
+}
+
+nd_stage = {
+    # 在第几个stage加, 从0开始
+    'adapter15': [3]
+}
 
 def adapt_channel(sparsity, stage_out_channel):
 
@@ -26,7 +39,7 @@ def adapt_channel(sparsity, stage_out_channel):
 
     return overall_channel, mid_channel
 
-def adapt_channel_34(sparsity):
+def adapt_channel_34(sparsity, adapter_sparsity, adapter_out_channel):
     stage_repeat = [3, 4, 6, 3]
     stage_out_channel = [64] + [64] * 3 + [128] * 4 + [256] * 6 + [512] * 3
     print('stage_out_channel: ', stage_out_channel)
@@ -44,6 +57,7 @@ def adapt_channel_34(sparsity):
     overall_channel = []
     # mid_channel为每一个block的中间层输出通道数
     mid_channel = []
+    adapter_channel = []
     for i in range(len(stage_out_channel)):
         if i == 0 :
             overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
@@ -51,9 +65,14 @@ def adapt_channel_34(sparsity):
             overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
             mid_channel += [int(stage_out_channel[i] * (1-mid_cprate[i-1]))]
 
+    for i in range(len(adapter_out_channel)):
+        adapter_channel += [int((1 - adapter_sparsity[i]) * adapter_out_channel[i])]
+
     print('overall_channel: ', overall_channel)
     print('mid_channel: ', mid_channel)
-    return overall_channel, mid_channel
+    print('adapter_channel: ', adapter_channel)
+
+    return overall_channel, mid_channel, adapter_channel
 
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
@@ -173,17 +192,25 @@ class LambdaLayer(nn.Module):
     def forward(self, x):
         return self.lambd(x)
 
-class ResNet34(nn.Module):
-    def __init__(self, sparsity, num_classes=500):
-        super(ResNet34, self).__init__()
+class Adapter15ResNet34(nn.Module):
+    def __init__(self, sparsity, num_classes=500, adapter_sparsity=None,
+                 adapter_out_channel=None, need_adapter=None, need_stage=None):
+        super(Adapter15ResNet34, self).__init__()
 
-        overall_channel, mid_channel = adapt_channel_34(sparsity)
+        self.need_adapter = need_adapter
+        self.need_stage = [1, 2, 3, 4]
+        if need_stage is not None:
+            self.need_stage = need_stage
+        self.overall_channel, self.mid_channel, self.adapter_channel = adapt_channel_34(
+            sparsity, adapter_sparsity, adapter_out_channel)
+        # overall_channel, mid_channel = adapt_channel_34(sparsity)
         self.num_blocks = stage_repeat
 
         layer_num = 0
-        self.conv1 = nn.Conv2d(3, overall_channel[layer_num], kernel_size=7, stride=2, padding=3,
+        self.adapter_layer = 0
+        self.conv1 = nn.Conv2d(3, self.overall_channel[layer_num], kernel_size=7, stride=2, padding=3,
                                bias=False)
-        self.bn1 = nn.BatchNorm2d(overall_channel[layer_num])
+        self.bn1 = nn.BatchNorm2d(self.overall_channel[layer_num])
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         self.layer1 = nn.ModuleList()
@@ -194,14 +221,18 @@ class ResNet34(nn.Module):
         layer_num += 1
         for i in range(len(stage_repeat)):
             if i == 0:
-                eval('self.layer%d' % (i+1)).append(BasicBlock(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num], stride=1, is_downsample=False))
+                eval('self.layer%d' % (i+1)).append(BasicBlock(self.mid_channel[layer_num-1], self.overall_channel[layer_num-1], self.overall_channel[layer_num], stride=1, is_downsample=False))
                 layer_num += 1
             else:
-                eval('self.layer%d' % (i+1)).append(BasicBlock(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num], stride=2, is_downsample=True))
+                eval('self.layer%d' % (i+1)).append(BasicBlock(self.mid_channel[layer_num-1], self.overall_channel[layer_num-1], self.overall_channel[layer_num], stride=2, is_downsample=True))
                 layer_num += 1
 
             for j in range(1, stage_repeat[i]):
-                eval('self.layer%d' % (i+1)).append(BasicBlock(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num]))
+                if j in self.need_adapter and i in self.need_stage:
+                    eval('self.layer%d' % (i+1)).append(Adapter3(self.overall_channel[layer_num-1], self.adapter_channel[self.adapter_layer]))
+                    self.adapter_layer += 1
+                else:
+                    eval('self.layer%d' % (i+1)).append(BasicBlock(self.mid_channel[layer_num-1], self.overall_channel[layer_num-1], self.overall_channel[layer_num]))
                 layer_num +=1
 
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -228,63 +259,7 @@ class ResNet34(nn.Module):
 
         return x
 
-class ResNet50(nn.Module):
-    def __init__(self, sparsity, num_classes=1000):
-        super(ResNet50, self).__init__()
-
-        overall_channel, mid_channel = adapt_channel(sparsity, stage_out_channel_50)
-        self.num_blocks = stage_repeat
-
-        layer_num = 0
-        self.conv1 = nn.Conv2d(3, overall_channel[layer_num], kernel_size=7, stride=2, padding=3,
-                               bias=False)
-        self.bn1 = nn.BatchNorm2d(overall_channel[layer_num])
-        self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = nn.ModuleList()
-        self.layer2 = nn.ModuleList()
-        self.layer3 = nn.ModuleList()
-        self.layer4 = nn.ModuleList()
-
-        layer_num += 1
-        for i in range(len(stage_repeat)):
-            if i == 0:
-                eval('self.layer%d' % (i+1)).append(Bottleneck(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num], stride=1, is_downsample=True))
-                layer_num += 1
-            else:
-                eval('self.layer%d' % (i+1)).append(Bottleneck(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num], stride=2, is_downsample=True))
-                layer_num += 1
-
-            for j in range(1, stage_repeat[i]):
-                eval('self.layer%d' % (i+1)).append(Bottleneck(mid_channel[layer_num-1], overall_channel[layer_num-1], overall_channel[layer_num]))
-                layer_num += 1
-
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(2048, num_classes)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.bn1(x)
-        x = self.relu(x)
-        x = self.maxpool(x)
-
-        for i, block in enumerate(self.layer1):
-            x = block(x)
-        for i, block in enumerate(self.layer2):
-            x = block(x)
-        for i, block in enumerate(self.layer3):
-            x = block(x)
-        for i, block in enumerate(self.layer4):
-            x = block(x)
-
-        x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        x = self.fc(x)
-
-        return x
-
-def resnet_50(sparsity):
-    return ResNet50(sparsity=sparsity)
-
-def resnet_34(sparsity):
-    return ResNet34(sparsity=sparsity)
+def adapter15resnet_34(sparsity, adapter_sparsity):
+    return Adapter15ResNet34(sparsity=sparsity, num_classes=500, adapter_sparsity=adapter_sparsity,
+                             adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
+                             need_stage=nd_stage['adapter15'])
