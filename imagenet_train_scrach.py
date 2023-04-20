@@ -18,6 +18,7 @@ from models.adapter_resnet_imagenet import adapter15resnet_34
 from data import imagenet
 from torch.cuda.amp import autocast, GradScaler
 import utils_append
+import utils
 
 parser = argparse.ArgumentParser("ImageNet training")
 
