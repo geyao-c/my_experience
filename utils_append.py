@@ -81,7 +81,7 @@ def cal_params(model, device, original_model=None, input_size=32, dtst=None):
         input_image_size = 28
         input_image = torch.randn(1, 1, input_image_size, input_image_size).to(device)
     else:
-        input_image_size = 32
+        input_image_size = input_size
         input_image = torch.randn(1, 3, input_image_size, input_image_size).to(device)
     flops, params = profile(model, inputs=(input_image,))
     flops_ratio, params_ratio = None, None
@@ -297,6 +297,238 @@ def overall_load_resnet_model(args, model, oristate_dict, layer, logger, name_ba
         elif isinstance(module, nn.Linear):
             state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
             state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+        elif isinstance(module, nn.BatchNorm2d):
+            if name not in all_bn_weight:
+                logger.info('name: {}'.format(name))
+                state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+                state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+                state_dict[name_base + name + '.running_mean'] = oristate_dict[name + '.running_mean']
+                state_dict[name_base + name + '.running_var'] = oristate_dict[name + '.running_var']
+                state_dict[name_base + name + '.num_batches_tracked'] = oristate_dict[name + '.num_batches_tracked']
+
+    model.load_state_dict(state_dict)
+
+def overall_load_resnet_34_model(args, model, oristate_dict, layer, logger, name_base=''):
+    cfg = {
+        34: [3, 4, 6, 3]
+    }
+
+    state_dict = model.state_dict()
+
+    current_cfg = cfg[layer]
+    last_select_index = None
+
+    all_conv_weight = []
+    all_bn_weight = []
+
+    prefix = args.ci_dir + '/ci_conv'
+    subfix = ".npy"
+
+    cnt = 1
+    for layer, num in enumerate(current_cfg):
+        layer_name = 'layer' + str(layer + 1) + '.'
+        for k in range(num):
+            for l in range(2):
+
+                cnt += 1
+                cov_id = cnt
+
+                conv_name = layer_name + str(k) + '.conv' + str(l + 1)
+                conv_weight_name = conv_name + '.weight'
+                all_conv_weight.append(conv_weight_name)
+                oriweight = oristate_dict[conv_weight_name]
+                curweight = state_dict[name_base + conv_weight_name]
+                orifilter_num = oriweight.size(0)
+                currentfilter_num = curweight.size(0)
+
+                bn_name = layer_name + str(k) + '.bn' + str(l + 1)
+                bn_weight_name = bn_name + '.weight'
+                bn_bias_name = bn_name + '.bias'
+                bn_runing_mean_name = bn_name + '.running_mean'
+                bn_running_var_name = bn_name + '.running_var'
+                bn_num_batches_tracked_name = bn_name + '.num_batches_tracked'
+                all_bn_weight.extend([bn_name])
+
+                if orifilter_num != currentfilter_num:
+                    logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
+                    ci = np.load(prefix + str(cov_id) + subfix)
+                    select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
+                    select_index.sort()
+
+                    if last_select_index is not None:
+                        for index_i, i in enumerate(select_index):
+                            for index_j, j in enumerate(last_select_index):
+                                state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                    oristate_dict[conv_weight_name][i][j]
+                    else:
+                        for index_i, i in enumerate(select_index):
+                            state_dict[name_base + conv_weight_name][index_i] = \
+                                oristate_dict[conv_weight_name][i]
+
+                    last_select_index = select_index
+
+                    # 加载bn层
+                    for index_i, i in enumerate(select_index):
+                        state_dict[name_base + bn_weight_name][index_i] = oristate_dict[bn_weight_name][i]
+                        state_dict[name_base + bn_bias_name][index_i] = oristate_dict[bn_bias_name][i]
+                        state_dict[name_base + bn_runing_mean_name][index_i] = oristate_dict[bn_runing_mean_name][i]
+                        state_dict[name_base + bn_running_var_name][index_i] = oristate_dict[bn_running_var_name][i]
+                        state_dict[name_base + bn_num_batches_tracked_name] = oristate_dict[bn_num_batches_tracked_name]
+
+
+                elif last_select_index is not None:
+                    for index_i in range(orifilter_num):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                oristate_dict[conv_weight_name][index_i][j]
+                    last_select_index = None
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                    oristate_dict[bn_num_batches_tracked_name]
+                else:
+                    # logger.info('yes yes')
+                    state_dict[name_base + conv_weight_name] = oriweight
+                    last_select_index = None
+
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                        oristate_dict[bn_num_batches_tracked_name]
+
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+
+        if isinstance(module, nn.Conv2d):
+            conv_name = name + '.weight'
+            if 'shortcut' in name:
+                continue
+            if conv_name not in all_conv_weight:
+                state_dict[name_base + conv_name] = oristate_dict[conv_name]
+
+        elif isinstance(module, nn.Linear):
+            state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+            state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+        elif isinstance(module, nn.BatchNorm2d):
+            if name not in all_bn_weight:
+                logger.info('name: {}'.format(name))
+                state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+                state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+                state_dict[name_base + name + '.running_mean'] = oristate_dict[name + '.running_mean']
+                state_dict[name_base + name + '.running_var'] = oristate_dict[name + '.running_var']
+                state_dict[name_base + name + '.num_batches_tracked'] = oristate_dict[name + '.num_batches_tracked']
+
+    model.load_state_dict(state_dict)
+
+def graf_overall_load_resnet_34_model(args, model, oristate_dict, layer, logger, name_base=''):
+    cfg = {
+        34: [3, 4, 6, 3]
+    }
+
+    state_dict = model.state_dict()
+
+    current_cfg = cfg[layer]
+    last_select_index = None
+
+    all_conv_weight = []
+    all_bn_weight = []
+
+    prefix = args.ci_dir + '/ci_conv'
+    subfix = ".npy"
+
+    cnt = 1
+    for layer, num in enumerate(current_cfg):
+        layer_name = 'layer' + str(layer + 1) + '.'
+        for k in range(num):
+            for l in range(2):
+
+                cnt += 1
+                cov_id = cnt
+
+                conv_name = layer_name + str(k) + '.conv' + str(l + 1)
+                conv_weight_name = conv_name + '.weight'
+                all_conv_weight.append(conv_weight_name)
+                oriweight = oristate_dict[conv_weight_name]
+                curweight = state_dict[name_base + conv_weight_name]
+                orifilter_num = oriweight.size(0)
+                currentfilter_num = curweight.size(0)
+
+                bn_name = layer_name + str(k) + '.bn' + str(l + 1)
+                bn_weight_name = bn_name + '.weight'
+                bn_bias_name = bn_name + '.bias'
+                bn_runing_mean_name = bn_name + '.running_mean'
+                bn_running_var_name = bn_name + '.running_var'
+                bn_num_batches_tracked_name = bn_name + '.num_batches_tracked'
+                all_bn_weight.extend([bn_name])
+
+                if orifilter_num != currentfilter_num:
+                    logger.info('loading ci from: ' + prefix + str(cov_id) + subfix)
+                    ci = np.load(prefix + str(cov_id) + subfix)
+                    select_index = np.argsort(ci)[orifilter_num - currentfilter_num:]  # preserved filter id
+                    select_index.sort()
+
+                    if last_select_index is not None:
+                        for index_i, i in enumerate(select_index):
+                            for index_j, j in enumerate(last_select_index):
+                                state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                    oristate_dict[conv_weight_name][i][j]
+                    else:
+                        for index_i, i in enumerate(select_index):
+                            state_dict[name_base + conv_weight_name][index_i] = \
+                                oristate_dict[conv_weight_name][i]
+
+                    last_select_index = select_index
+
+                    # 加载bn层
+                    for index_i, i in enumerate(select_index):
+                        state_dict[name_base + bn_weight_name][index_i] = oristate_dict[bn_weight_name][i]
+                        state_dict[name_base + bn_bias_name][index_i] = oristate_dict[bn_bias_name][i]
+                        state_dict[name_base + bn_runing_mean_name][index_i] = oristate_dict[bn_runing_mean_name][i]
+                        state_dict[name_base + bn_running_var_name][index_i] = oristate_dict[bn_running_var_name][i]
+                        state_dict[name_base + bn_num_batches_tracked_name] = oristate_dict[bn_num_batches_tracked_name]
+
+
+                elif last_select_index is not None:
+                    for index_i in range(orifilter_num):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                oristate_dict[conv_weight_name][index_i][j]
+                    last_select_index = None
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                    oristate_dict[bn_num_batches_tracked_name]
+                else:
+                    # logger.info('yes yes')
+                    state_dict[name_base + conv_weight_name] = oriweight
+                    last_select_index = None
+
+                    # 加载bn层
+                    state_dict[name_base + bn_weight_name] = oristate_dict[bn_weight_name]
+                    state_dict[name_base + bn_bias_name] = oristate_dict[bn_bias_name]
+                    state_dict[name_base + bn_runing_mean_name] = oristate_dict[bn_runing_mean_name]
+                    state_dict[name_base + bn_running_var_name] = oristate_dict[bn_running_var_name]
+                    state_dict[name_base + bn_num_batches_tracked_name] = \
+                        oristate_dict[bn_num_batches_tracked_name]
+
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+
+        if isinstance(module, nn.Conv2d):
+            conv_name = name + '.weight'
+            if 'shortcut' in name:
+                continue
+            if conv_name not in all_conv_weight:
+                state_dict[name_base + conv_name] = oristate_dict[conv_name]
         elif isinstance(module, nn.BatchNorm2d):
             if name not in all_bn_weight:
                 logger.info('name: {}'.format(name))
@@ -2858,6 +3090,8 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         if args.arch == 'vgg_16_bn':
             logger.info('load_vgg_model')
             load_vgg_model(args, model, oristate_dict, logger)
+        if args.arch == 'resnet_34':
+            overall_load_resnet_34_model(args, model, oristate_dict, logger)
         elif args.arch == 'adapter_vgg_16_bn':
             logger.info('load_adapter_vgg_model')
             load_vgg_model(args, model, oristate_dict, logger)
@@ -2921,6 +3155,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             if args.finetune_arch == 'resnet_20':
                 logger.info('graf_load_resnet20_model')
                 graf_load_resnet_model(args, model, oristate_dict, 20, logger)
+            elif args.finetune_arch == 'adapter15renset_34':
+                logger.info('graf_load_adapter15_resnet_34_model')
+                graf_overall_load_resnet_34_model(args, model, oristate_dict, 56, logger)
             elif args.finetune_arch == 'resnet_56':
                 logger.info('graf_load_resnet56_model')
                 graf_load_resnet_model(args, model, oristate_dict, 56, logger)

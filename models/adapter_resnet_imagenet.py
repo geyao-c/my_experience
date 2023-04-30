@@ -259,7 +259,11 @@ class Adapter15ResNet34(nn.Module):
 
         return x
 
-def adapter15resnet_34(sparsity, adapter_sparsity):
+def adapter15resnet_34(sparsity=None, adapter_sparsity=None):
+    if sparsity is None:
+        sparsity = [0.0] * 100
+    if adapter_sparsity is None:
+        adapter_sparsity = [0.0] * 100
     return Adapter15ResNet34(sparsity=sparsity, num_classes=500, adapter_sparsity=adapter_sparsity,
                              adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
                              need_stage=nd_stage['adapter15'])

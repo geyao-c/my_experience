@@ -147,7 +147,8 @@ def main():
 
     # load model
     logger.info('sparsity:' + str(sparsity))
-    logger.info('sparsity:' + str(adapter_sparsity))
+    if args.arch.find('adapter') != -1:
+        logger.info('sparsity:' + str(adapter_sparsity))
     logger.info('==> Building model..')
 
     model = None
