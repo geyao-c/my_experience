@@ -3090,8 +3090,12 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
         if args.arch == 'vgg_16_bn':
             logger.info('load_vgg_model')
             load_vgg_model(args, model, oristate_dict, logger)
-        if args.arch == 'resnet_34':
-            overall_load_resnet_34_model(args, model, oristate_dict, logger)
+        elif args.arch == 'resnet_34':
+            logger.info('resnet_34')
+            overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
+        elif args.arch == 'adapter15resnet_34':
+            logger.info('adapter15resnet_34')
+            overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
         elif args.arch == 'adapter_vgg_16_bn':
             logger.info('load_adapter_vgg_model')
             load_vgg_model(args, model, oristate_dict, logger)
@@ -3155,9 +3159,12 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             if args.finetune_arch == 'resnet_20':
                 logger.info('graf_load_resnet20_model')
                 graf_load_resnet_model(args, model, oristate_dict, 20, logger)
+            elif args.finetune_arch == 'resnet_34':
+                logger.info('graf_load_adapter15_resnet_34_model')
+                graf_overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
             elif args.finetune_arch == 'adapter15renset_34':
                 logger.info('graf_load_adapter15_resnet_34_model')
-                graf_overall_load_resnet_34_model(args, model, oristate_dict, 56, logger)
+                graf_overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
             elif args.finetune_arch == 'resnet_56':
                 logger.info('graf_load_resnet56_model')
                 graf_load_resnet_model(args, model, oristate_dict, 56, logger)
