@@ -438,3 +438,1417 @@ mid_channel:  [64, 64, 64, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 512
 04/19 10:55:09 PM |  * Acc@1 78.016 Acc@5 93.114
 04/19 10:55:10 PM | =>Best accuracy Top1: 78.112, Top5: 93.226
 04/19 10:55:10 PM | total training time = 0.7665290066202481 hours
+04/20 10:01:29 PM | args = Namespace(adapter_sparsity='[0.]*100', arch='adapter15resnet_34', batch_size=256, data_dir='/home/lenovo/dataset/imagenet', epochs=120, gpu='0', learning_rate=0.1, lr_type='step', momentum=0.9, result_dir='./result/adapter15resnet_34/scrach/A/2023-04-20-22:01:29', resume_dir='result/adapter15resnet_34/scrach/A/2023-04-20-11:18:30', sparsity='[0.]*100', weight_decay=0.0001, which='A')
+04/20 10:01:29 PM | sparsity:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+04/20 10:01:29 PM | sparsity:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+04/20 10:01:29 PM | ==> Building model..
+04/20 10:01:36 PM | Adapter15ResNet34(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+  (layer1): ModuleList(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (2): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+  )
+  (layer2): ModuleList(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (2): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (3): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+  )
+  (layer3): ModuleList(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (2): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (3): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (4): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (5): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+  )
+  (layer4): ModuleList(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+    (2): Adapter3(
+      (conv1): Conv2d(512, 4096, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (bn1): BatchNorm2d(4096, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu1): ReLU(inplace=True)
+      (conv2): Conv2d(4096, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu2): ReLU(inplace=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=500, bias=True)
+)
+04/20 10:01:40 PM | Params: 21024052.00
+04/20 10:01:40 PM | Flops: 3645668352.00
+stage_out_channel:  [64, 64, 64, 64, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 512, 512, 512]
+overall_channel:  [64, 64, 64, 64, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 512, 512, 512]
+mid_channel:  [64, 64, 64, 128, 128, 128, 128, 256, 256, 256, 256, 256, 256, 512, 512, 512]
+adapter_channel:  [4096]
+==> Preparing data..
+[INFO] Register count_convNd() for <class 'torch.nn.modules.conv.Conv2d'>.
+[INFO] Register count_bn() for <class 'torch.nn.modules.batchnorm.BatchNorm2d'>.
+[INFO] Register zero_ops() for <class 'torch.nn.modules.activation.ReLU'>.
+[INFO] Register zero_ops() for <class 'torch.nn.modules.pooling.MaxPool2d'>.
+[91m[WARN] Cannot find rule for <class 'models.adapter_resnet_imagenet.BasicBlock'>. Treat it as zero Macs and zero Params.[00m
+[91m[WARN] Cannot find rule for <class 'torch.nn.modules.container.ModuleList'>. Treat it as zero Macs and zero Params.[00m
+[91m[WARN] Cannot find rule for <class 'torch.nn.modules.container.Sequential'>. Treat it as zero Macs and zero Params.[00m
+[91m[WARN] Cannot find rule for <class 'models.adapter.Adapter3'>. Treat it as zero Macs and zero Params.[00m
+[INFO] Register count_adap_avgpool() for <class 'torch.nn.modules.pooling.AdaptiveAvgPool2d'>.
+[INFO] Register count_linear() for <class 'torch.nn.modules.linear.Linear'>.
+[91m[WARN] Cannot find rule for <class 'models.adapter_resnet_imagenet.Adapter15ResNet34'>. Treat it as zero Macs and zero Params.[00m
+04/20 10:01:44 PM | learning_rate: 0.1
+04/20 10:04:03 PM | Epoch[25](249/2495): Loss 1.6838 Prec@1(1,5) 59.59, 82.09
+04/20 10:06:21 PM | Epoch[25](498/2495): Loss 1.7015 Prec@1(1,5) 59.33, 81.80
+04/20 10:08:38 PM | Epoch[25](747/2495): Loss 1.7090 Prec@1(1,5) 59.27, 81.67
+04/20 10:11:00 PM | Epoch[25](996/2495): Loss 1.7114 Prec@1(1,5) 59.28, 81.66
+04/20 10:13:16 PM | Epoch[25](1245/2495): Loss 1.7149 Prec@1(1,5) 59.22, 81.63
+04/20 10:15:36 PM | Epoch[25](1494/2495): Loss 1.7170 Prec@1(1,5) 59.20, 81.60
+04/20 10:17:59 PM | Epoch[25](1743/2495): Loss 1.7180 Prec@1(1,5) 59.17, 81.57
+04/20 10:20:14 PM | Epoch[25](1992/2495): Loss 1.7202 Prec@1(1,5) 59.10, 81.56
+04/20 10:22:30 PM | Epoch[25](2241/2495): Loss 1.7246 Prec@1(1,5) 59.04, 81.48
+04/20 10:24:55 PM | Epoch[25](2490/2495): Loss 1.7278 Prec@1(1,5) 58.96, 81.43
+04/20 10:26:02 PM |  * Acc@1 60.657 Acc@5 83.824
+04/20 10:26:02 PM | =>Best accuracy Top1: 61.202, Top5: 84.329
+04/20 10:26:04 PM | learning_rate: 0.1
+04/20 10:28:25 PM | Epoch[26](249/2495): Loss 1.6835 Prec@1(1,5) 59.65, 82.10
+04/20 10:30:44 PM | Epoch[26](498/2495): Loss 1.6909 Prec@1(1,5) 59.58, 81.99
+04/20 10:33:04 PM | Epoch[26](747/2495): Loss 1.6996 Prec@1(1,5) 59.38, 81.89
+04/20 10:35:28 PM | Epoch[26](996/2495): Loss 1.7035 Prec@1(1,5) 59.30, 81.81
+04/20 10:37:47 PM | Epoch[26](1245/2495): Loss 1.7067 Prec@1(1,5) 59.25, 81.75
+04/20 10:40:07 PM | Epoch[26](1494/2495): Loss 1.7099 Prec@1(1,5) 59.19, 81.69
+04/20 10:42:32 PM | Epoch[26](1743/2495): Loss 1.7160 Prec@1(1,5) 59.06, 81.60
+04/20 10:44:50 PM | Epoch[26](1992/2495): Loss 1.7184 Prec@1(1,5) 59.03, 81.57
+04/20 10:47:07 PM | Epoch[26](2241/2495): Loss 1.7214 Prec@1(1,5) 58.96, 81.52
+04/20 10:49:30 PM | Epoch[26](2490/2495): Loss 1.7233 Prec@1(1,5) 58.94, 81.49
+04/20 10:50:36 PM |  * Acc@1 61.102 Acc@5 83.928
+04/20 10:50:36 PM | =>Best accuracy Top1: 61.202, Top5: 84.329
+04/20 10:50:39 PM | learning_rate: 0.1
+04/20 10:53:05 PM | Epoch[27](249/2495): Loss 1.6797 Prec@1(1,5) 60.03, 82.12
+04/20 10:55:23 PM | Epoch[27](498/2495): Loss 1.6857 Prec@1(1,5) 59.84, 82.03
+04/20 10:57:38 PM | Epoch[27](747/2495): Loss 1.6951 Prec@1(1,5) 59.67, 81.90
+04/20 11:00:02 PM | Epoch[27](996/2495): Loss 1.7033 Prec@1(1,5) 59.54, 81.76
+04/20 11:02:18 PM | Epoch[27](1245/2495): Loss 1.7081 Prec@1(1,5) 59.41, 81.70
+04/20 11:04:37 PM | Epoch[27](1494/2495): Loss 1.7123 Prec@1(1,5) 59.30, 81.66
+04/20 11:07:00 PM | Epoch[27](1743/2495): Loss 1.7139 Prec@1(1,5) 59.25, 81.64
+04/20 11:09:19 PM | Epoch[27](1992/2495): Loss 1.7169 Prec@1(1,5) 59.20, 81.57
+04/20 11:11:41 PM | Epoch[27](2241/2495): Loss 1.7184 Prec@1(1,5) 59.17, 81.55
+04/20 11:14:02 PM | Epoch[27](2490/2495): Loss 1.7193 Prec@1(1,5) 59.14, 81.53
+04/20 11:15:09 PM |  * Acc@1 60.289 Acc@5 83.643
+04/20 11:15:10 PM | =>Best accuracy Top1: 61.202, Top5: 84.329
+04/20 11:15:12 PM | learning_rate: 0.1
+04/20 11:17:34 PM | Epoch[28](249/2495): Loss 1.6650 Prec@1(1,5) 60.26, 82.30
+04/20 11:19:49 PM | Epoch[28](498/2495): Loss 1.6757 Prec@1(1,5) 60.05, 82.08
+04/20 11:22:11 PM | Epoch[28](747/2495): Loss 1.6860 Prec@1(1,5) 59.80, 82.02
+04/20 11:24:31 PM | Epoch[28](996/2495): Loss 1.6920 Prec@1(1,5) 59.67, 81.97
+04/20 11:26:50 PM | Epoch[28](1245/2495): Loss 1.6929 Prec@1(1,5) 59.66, 81.94
+04/20 11:29:12 PM | Epoch[28](1494/2495): Loss 1.7001 Prec@1(1,5) 59.48, 81.81
+04/20 11:31:27 PM | Epoch[28](1743/2495): Loss 1.7044 Prec@1(1,5) 59.38, 81.74
+04/20 11:33:46 PM | Epoch[28](1992/2495): Loss 1.7068 Prec@1(1,5) 59.36, 81.72
+04/20 11:36:12 PM | Epoch[28](2241/2495): Loss 1.7091 Prec@1(1,5) 59.32, 81.68
+04/20 11:38:29 PM | Epoch[28](2490/2495): Loss 1.7122 Prec@1(1,5) 59.29, 81.62
+04/20 11:39:37 PM |  * Acc@1 60.305 Acc@5 83.275
+04/20 11:39:39 PM | =>Best accuracy Top1: 61.202, Top5: 84.329
+04/20 11:39:41 PM | learning_rate: 0.1
+04/20 11:41:57 PM | Epoch[29](249/2495): Loss 1.6631 Prec@1(1,5) 60.15, 82.39
+04/20 11:44:15 PM | Epoch[29](498/2495): Loss 1.6678 Prec@1(1,5) 60.12, 82.34
+04/20 11:46:41 PM | Epoch[29](747/2495): Loss 1.6747 Prec@1(1,5) 59.98, 82.24
+04/20 11:48:58 PM | Epoch[29](996/2495): Loss 1.6828 Prec@1(1,5) 59.85, 82.14
+04/20 11:51:13 PM | Epoch[29](1245/2495): Loss 1.6898 Prec@1(1,5) 59.76, 81.97
+04/20 11:53:35 PM | Epoch[29](1494/2495): Loss 1.6914 Prec@1(1,5) 59.68, 81.95
+04/20 11:55:52 PM | Epoch[29](1743/2495): Loss 1.6966 Prec@1(1,5) 59.57, 81.88
+04/20 11:58:11 PM | Epoch[29](1992/2495): Loss 1.6981 Prec@1(1,5) 59.54, 81.86
+04/21 12:00:36 AM | Epoch[29](2241/2495): Loss 1.7023 Prec@1(1,5) 59.45, 81.78
+04/21 12:02:53 AM | Epoch[29](2490/2495): Loss 1.7042 Prec@1(1,5) 59.41, 81.75
+04/21 12:04:02 AM |  * Acc@1 61.735 Acc@5 84.725
+04/21 12:04:03 AM | =>Best accuracy Top1: 61.735, Top5: 84.725
+04/21 12:04:06 AM | learning_rate: 0.1
+04/21 12:06:24 AM | Epoch[30](249/2495): Loss 1.6592 Prec@1(1,5) 60.35, 82.31
+04/21 12:08:41 AM | Epoch[30](498/2495): Loss 1.6726 Prec@1(1,5) 59.95, 82.15
+04/21 12:11:07 AM | Epoch[30](747/2495): Loss 1.6783 Prec@1(1,5) 59.83, 82.13
+04/21 12:13:23 AM | Epoch[30](996/2495): Loss 1.6794 Prec@1(1,5) 59.83, 82.12
+04/21 12:15:43 AM | Epoch[30](1245/2495): Loss 1.6812 Prec@1(1,5) 59.82, 82.11
+04/21 12:18:05 AM | Epoch[30](1494/2495): Loss 1.6846 Prec@1(1,5) 59.82, 82.02
+04/21 12:20:27 AM | Epoch[30](1743/2495): Loss 1.6903 Prec@1(1,5) 59.73, 81.91
+04/21 12:22:46 AM | Epoch[30](1992/2495): Loss 1.6938 Prec@1(1,5) 59.67, 81.85
+04/21 12:25:05 AM | Epoch[30](2241/2495): Loss 1.6954 Prec@1(1,5) 59.65, 81.83
+04/21 12:27:28 AM | Epoch[30](2490/2495): Loss 1.6980 Prec@1(1,5) 59.60, 81.82
+04/21 12:28:35 AM |  * Acc@1 60.525 Acc@5 84.273
+04/21 12:28:37 AM | =>Best accuracy Top1: 61.735, Top5: 84.725
+04/21 12:28:40 AM | learning_rate: 0.1
+04/21 12:30:59 AM | Epoch[31](249/2495): Loss 1.6645 Prec@1(1,5) 60.18, 82.16
+04/21 12:33:23 AM | Epoch[31](498/2495): Loss 1.6708 Prec@1(1,5) 60.11, 82.18
+04/21 12:35:38 AM | Epoch[31](747/2495): Loss 1.6728 Prec@1(1,5) 60.07, 82.10
+04/21 12:37:54 AM | Epoch[31](996/2495): Loss 1.6758 Prec@1(1,5) 59.98, 82.08
+04/21 12:40:18 AM | Epoch[31](1245/2495): Loss 1.6805 Prec@1(1,5) 59.84, 82.01
+04/21 12:42:36 AM | Epoch[31](1494/2495): Loss 1.6841 Prec@1(1,5) 59.79, 81.96
+04/21 12:44:52 AM | Epoch[31](1743/2495): Loss 1.6884 Prec@1(1,5) 59.74, 81.90
+04/21 12:47:16 AM | Epoch[31](1992/2495): Loss 1.6919 Prec@1(1,5) 59.66, 81.86
+04/21 12:49:33 AM | Epoch[31](2241/2495): Loss 1.6932 Prec@1(1,5) 59.64, 81.85
+04/21 12:51:47 AM | Epoch[31](2490/2495): Loss 1.6959 Prec@1(1,5) 59.60, 81.82
+04/21 12:52:54 AM |  * Acc@1 59.723 Acc@5 83.150
+04/21 12:52:56 AM | =>Best accuracy Top1: 61.735, Top5: 84.725
+04/21 12:52:59 AM | learning_rate: 0.1
+04/21 12:55:12 AM | Epoch[32](249/2495): Loss 1.6617 Prec@1(1,5) 60.38, 82.34
+04/21 12:57:33 AM | Epoch[32](498/2495): Loss 1.6663 Prec@1(1,5) 60.24, 82.25
+04/21 12:59:45 AM | Epoch[32](747/2495): Loss 1.6769 Prec@1(1,5) 60.09, 82.09
+04/21 01:02:08 AM | Epoch[32](996/2495): Loss 1.6822 Prec@1(1,5) 59.93, 82.04
+04/21 01:04:23 AM | Epoch[32](1245/2495): Loss 1.6861 Prec@1(1,5) 59.87, 81.95
+04/21 01:06:41 AM | Epoch[32](1494/2495): Loss 1.6869 Prec@1(1,5) 59.83, 81.94
+04/21 01:09:02 AM | Epoch[32](1743/2495): Loss 1.6869 Prec@1(1,5) 59.85, 81.93
+04/21 01:11:19 AM | Epoch[32](1992/2495): Loss 1.6898 Prec@1(1,5) 59.79, 81.88
+04/21 01:13:35 AM | Epoch[32](2241/2495): Loss 1.6925 Prec@1(1,5) 59.72, 81.85
+04/21 01:15:57 AM | Epoch[32](2490/2495): Loss 1.6935 Prec@1(1,5) 59.71, 81.86
+04/21 01:17:02 AM |  * Acc@1 61.884 Acc@5 84.786
+04/21 01:17:05 AM | =>Best accuracy Top1: 61.884, Top5: 84.786
+04/21 01:17:08 AM | learning_rate: 0.1
+04/21 01:19:23 AM | Epoch[33](249/2495): Loss 1.6351 Prec@1(1,5) 60.74, 82.81
+04/21 01:21:41 AM | Epoch[33](498/2495): Loss 1.6573 Prec@1(1,5) 60.29, 82.51
+04/21 01:24:02 AM | Epoch[33](747/2495): Loss 1.6624 Prec@1(1,5) 60.30, 82.36
+04/21 01:26:19 AM | Epoch[33](996/2495): Loss 1.6734 Prec@1(1,5) 60.11, 82.16
+04/21 01:28:35 AM | Epoch[33](1245/2495): Loss 1.6752 Prec@1(1,5) 60.07, 82.12
+04/21 01:31:00 AM | Epoch[33](1494/2495): Loss 1.6782 Prec@1(1,5) 60.01, 82.07
+04/21 01:32:58 AM | Epoch[33](1743/2495): Loss 1.6819 Prec@1(1,5) 59.94, 82.03
+04/21 01:34:52 AM | Epoch[33](1992/2495): Loss 1.6853 Prec@1(1,5) 59.86, 81.98
+04/21 01:36:46 AM | Epoch[33](2241/2495): Loss 1.6868 Prec@1(1,5) 59.84, 81.95
+04/21 01:38:41 AM | Epoch[33](2490/2495): Loss 1.6899 Prec@1(1,5) 59.76, 81.90
+04/21 01:39:37 AM |  * Acc@1 61.046 Acc@5 84.208
+04/21 01:39:38 AM | =>Best accuracy Top1: 61.884, Top5: 84.786
+04/21 01:39:41 AM | learning_rate: 0.1
+04/21 01:41:31 AM | Epoch[34](249/2495): Loss 1.6394 Prec@1(1,5) 60.60, 82.70
+04/21 01:43:21 AM | Epoch[34](498/2495): Loss 1.6552 Prec@1(1,5) 60.31, 82.52
+04/21 01:45:12 AM | Epoch[34](747/2495): Loss 1.6656 Prec@1(1,5) 60.16, 82.36
+04/21 01:47:02 AM | Epoch[34](996/2495): Loss 1.6698 Prec@1(1,5) 60.12, 82.26
+04/21 01:48:54 AM | Epoch[34](1245/2495): Loss 1.6713 Prec@1(1,5) 60.12, 82.20
+04/21 01:50:45 AM | Epoch[34](1494/2495): Loss 1.6749 Prec@1(1,5) 60.03, 82.15
+04/21 01:52:37 AM | Epoch[34](1743/2495): Loss 1.6767 Prec@1(1,5) 60.00, 82.12
+04/21 01:54:32 AM | Epoch[34](1992/2495): Loss 1.6795 Prec@1(1,5) 59.94, 82.07
+04/21 01:56:25 AM | Epoch[34](2241/2495): Loss 1.6821 Prec@1(1,5) 59.90, 82.03
+04/21 01:58:19 AM | Epoch[34](2490/2495): Loss 1.6847 Prec@1(1,5) 59.84, 81.99
+04/21 01:59:14 AM |  * Acc@1 61.723 Acc@5 84.261
+04/21 01:59:15 AM | =>Best accuracy Top1: 61.884, Top5: 84.786
+04/21 01:59:17 AM | learning_rate: 0.1
+04/21 02:01:07 AM | Epoch[35](249/2495): Loss 1.6488 Prec@1(1,5) 60.62, 82.63
+04/21 02:02:54 AM | Epoch[35](498/2495): Loss 1.6585 Prec@1(1,5) 60.34, 82.43
+04/21 02:04:44 AM | Epoch[35](747/2495): Loss 1.6584 Prec@1(1,5) 60.35, 82.46
+04/21 02:06:34 AM | Epoch[35](996/2495): Loss 1.6679 Prec@1(1,5) 60.26, 82.29
+04/21 02:08:24 AM | Epoch[35](1245/2495): Loss 1.6711 Prec@1(1,5) 60.20, 82.22
+04/21 02:10:14 AM | Epoch[35](1494/2495): Loss 1.6754 Prec@1(1,5) 60.10, 82.19
+04/21 02:12:06 AM | Epoch[35](1743/2495): Loss 1.6765 Prec@1(1,5) 60.09, 82.17
+04/21 02:13:58 AM | Epoch[35](1992/2495): Loss 1.6785 Prec@1(1,5) 60.05, 82.12
+04/21 02:15:52 AM | Epoch[35](2241/2495): Loss 1.6802 Prec@1(1,5) 59.99, 82.09
+04/21 02:17:47 AM | Epoch[35](2490/2495): Loss 1.6823 Prec@1(1,5) 59.94, 82.07
+04/21 02:18:43 AM |  * Acc@1 63.367 Acc@5 85.475
+04/21 02:18:47 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 02:18:49 AM | learning_rate: 0.1
+04/21 02:20:38 AM | Epoch[36](249/2495): Loss 1.6444 Prec@1(1,5) 60.75, 82.53
+04/21 02:22:26 AM | Epoch[36](498/2495): Loss 1.6445 Prec@1(1,5) 60.67, 82.56
+04/21 02:24:17 AM | Epoch[36](747/2495): Loss 1.6506 Prec@1(1,5) 60.51, 82.47
+04/21 02:26:07 AM | Epoch[36](996/2495): Loss 1.6534 Prec@1(1,5) 60.44, 82.46
+04/21 02:27:58 AM | Epoch[36](1245/2495): Loss 1.6627 Prec@1(1,5) 60.32, 82.35
+04/21 02:29:48 AM | Epoch[36](1494/2495): Loss 1.6663 Prec@1(1,5) 60.28, 82.31
+04/21 02:31:40 AM | Epoch[36](1743/2495): Loss 1.6701 Prec@1(1,5) 60.19, 82.28
+04/21 02:33:35 AM | Epoch[36](1992/2495): Loss 1.6724 Prec@1(1,5) 60.13, 82.25
+04/21 02:35:28 AM | Epoch[36](2241/2495): Loss 1.6741 Prec@1(1,5) 60.11, 82.22
+04/21 02:37:21 AM | Epoch[36](2490/2495): Loss 1.6766 Prec@1(1,5) 60.03, 82.18
+04/21 02:38:16 AM |  * Acc@1 61.134 Acc@5 84.120
+04/21 02:38:17 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 02:38:20 AM | learning_rate: 0.1
+04/21 02:40:07 AM | Epoch[37](249/2495): Loss 1.6272 Prec@1(1,5) 61.12, 82.77
+04/21 02:41:57 AM | Epoch[37](498/2495): Loss 1.6428 Prec@1(1,5) 60.74, 82.56
+04/21 02:43:47 AM | Epoch[37](747/2495): Loss 1.6475 Prec@1(1,5) 60.57, 82.55
+04/21 02:45:36 AM | Epoch[37](996/2495): Loss 1.6556 Prec@1(1,5) 60.41, 82.46
+04/21 02:47:26 AM | Epoch[37](1245/2495): Loss 1.6596 Prec@1(1,5) 60.33, 82.36
+04/21 02:49:17 AM | Epoch[37](1494/2495): Loss 1.6663 Prec@1(1,5) 60.20, 82.27
+04/21 02:51:09 AM | Epoch[37](1743/2495): Loss 1.6720 Prec@1(1,5) 60.12, 82.19
+04/21 02:53:02 AM | Epoch[37](1992/2495): Loss 1.6744 Prec@1(1,5) 60.08, 82.16
+04/21 02:54:55 AM | Epoch[37](2241/2495): Loss 1.6758 Prec@1(1,5) 60.03, 82.15
+04/21 02:56:47 AM | Epoch[37](2490/2495): Loss 1.6774 Prec@1(1,5) 60.00, 82.12
+04/21 02:57:42 AM |  * Acc@1 61.852 Acc@5 84.573
+04/21 02:57:43 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 02:57:45 AM | learning_rate: 0.1
+04/21 02:59:34 AM | Epoch[38](249/2495): Loss 1.6428 Prec@1(1,5) 60.56, 82.51
+04/21 03:01:24 AM | Epoch[38](498/2495): Loss 1.6458 Prec@1(1,5) 60.58, 82.54
+04/21 03:03:13 AM | Epoch[38](747/2495): Loss 1.6448 Prec@1(1,5) 60.62, 82.58
+04/21 03:05:03 AM | Epoch[38](996/2495): Loss 1.6542 Prec@1(1,5) 60.53, 82.43
+04/21 03:06:53 AM | Epoch[38](1245/2495): Loss 1.6558 Prec@1(1,5) 60.52, 82.44
+04/21 03:08:43 AM | Epoch[38](1494/2495): Loss 1.6584 Prec@1(1,5) 60.41, 82.42
+04/21 03:10:33 AM | Epoch[38](1743/2495): Loss 1.6603 Prec@1(1,5) 60.37, 82.38
+04/21 03:12:25 AM | Epoch[38](1992/2495): Loss 1.6646 Prec@1(1,5) 60.31, 82.33
+04/21 03:14:19 AM | Epoch[38](2241/2495): Loss 1.6670 Prec@1(1,5) 60.27, 82.32
+04/21 03:16:12 AM | Epoch[38](2490/2495): Loss 1.6678 Prec@1(1,5) 60.23, 82.32
+04/21 03:17:07 AM |  * Acc@1 61.639 Acc@5 84.625
+04/21 03:17:09 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 03:17:11 AM | learning_rate: 0.1
+04/21 03:19:00 AM | Epoch[39](249/2495): Loss 1.6246 Prec@1(1,5) 61.22, 83.02
+04/21 03:20:48 AM | Epoch[39](498/2495): Loss 1.6383 Prec@1(1,5) 60.80, 82.75
+04/21 03:22:37 AM | Epoch[39](747/2495): Loss 1.6436 Prec@1(1,5) 60.64, 82.71
+04/21 03:24:28 AM | Epoch[39](996/2495): Loss 1.6469 Prec@1(1,5) 60.58, 82.64
+04/21 03:26:18 AM | Epoch[39](1245/2495): Loss 1.6517 Prec@1(1,5) 60.51, 82.57
+04/21 03:28:11 AM | Epoch[39](1494/2495): Loss 1.6564 Prec@1(1,5) 60.42, 82.48
+04/21 03:30:03 AM | Epoch[39](1743/2495): Loss 1.6625 Prec@1(1,5) 60.30, 82.39
+04/21 03:31:56 AM | Epoch[39](1992/2495): Loss 1.6632 Prec@1(1,5) 60.27, 82.36
+04/21 03:33:50 AM | Epoch[39](2241/2495): Loss 1.6666 Prec@1(1,5) 60.23, 82.28
+04/21 03:35:46 AM | Epoch[39](2490/2495): Loss 1.6678 Prec@1(1,5) 60.21, 82.25
+04/21 03:36:41 AM |  * Acc@1 60.729 Acc@5 83.856
+04/21 03:36:43 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 03:36:45 AM | learning_rate: 0.1
+04/21 03:38:34 AM | Epoch[40](249/2495): Loss 1.6301 Prec@1(1,5) 61.02, 82.85
+04/21 03:40:23 AM | Epoch[40](498/2495): Loss 1.6502 Prec@1(1,5) 60.62, 82.48
+04/21 03:42:12 AM | Epoch[40](747/2495): Loss 1.6529 Prec@1(1,5) 60.61, 82.43
+04/21 03:44:01 AM | Epoch[40](996/2495): Loss 1.6535 Prec@1(1,5) 60.56, 82.43
+04/21 03:45:51 AM | Epoch[40](1245/2495): Loss 1.6547 Prec@1(1,5) 60.55, 82.43
+04/21 03:47:42 AM | Epoch[40](1494/2495): Loss 1.6554 Prec@1(1,5) 60.49, 82.43
+04/21 03:49:35 AM | Epoch[40](1743/2495): Loss 1.6594 Prec@1(1,5) 60.41, 82.36
+04/21 03:51:29 AM | Epoch[40](1992/2495): Loss 1.6623 Prec@1(1,5) 60.34, 82.32
+04/21 03:53:24 AM | Epoch[40](2241/2495): Loss 1.6640 Prec@1(1,5) 60.31, 82.30
+04/21 03:55:18 AM | Epoch[40](2490/2495): Loss 1.6654 Prec@1(1,5) 60.27, 82.28
+04/21 03:56:14 AM |  * Acc@1 60.489 Acc@5 84.385
+04/21 03:56:15 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 03:56:17 AM | learning_rate: 0.1
+04/21 03:58:05 AM | Epoch[41](249/2495): Loss 1.6276 Prec@1(1,5) 60.95, 83.01
+04/21 03:59:54 AM | Epoch[41](498/2495): Loss 1.6263 Prec@1(1,5) 60.91, 82.97
+04/21 04:01:44 AM | Epoch[41](747/2495): Loss 1.6351 Prec@1(1,5) 60.72, 82.81
+04/21 04:03:34 AM | Epoch[41](996/2495): Loss 1.6373 Prec@1(1,5) 60.75, 82.74
+04/21 04:05:24 AM | Epoch[41](1245/2495): Loss 1.6428 Prec@1(1,5) 60.63, 82.65
+04/21 04:07:16 AM | Epoch[41](1494/2495): Loss 1.6466 Prec@1(1,5) 60.55, 82.60
+04/21 04:09:09 AM | Epoch[41](1743/2495): Loss 1.6516 Prec@1(1,5) 60.47, 82.52
+04/21 04:11:04 AM | Epoch[41](1992/2495): Loss 1.6544 Prec@1(1,5) 60.42, 82.48
+04/21 04:12:56 AM | Epoch[41](2241/2495): Loss 1.6574 Prec@1(1,5) 60.34, 82.44
+04/21 04:14:50 AM | Epoch[41](2490/2495): Loss 1.6609 Prec@1(1,5) 60.29, 82.40
+04/21 04:15:46 AM |  * Acc@1 60.826 Acc@5 84.200
+04/21 04:15:48 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 04:15:50 AM | learning_rate: 0.1
+04/21 04:17:39 AM | Epoch[42](249/2495): Loss 1.6352 Prec@1(1,5) 61.02, 82.74
+04/21 04:19:29 AM | Epoch[42](498/2495): Loss 1.6353 Prec@1(1,5) 60.86, 82.73
+04/21 04:21:17 AM | Epoch[42](747/2495): Loss 1.6415 Prec@1(1,5) 60.78, 82.63
+04/21 04:23:08 AM | Epoch[42](996/2495): Loss 1.6408 Prec@1(1,5) 60.85, 82.62
+04/21 04:24:57 AM | Epoch[42](1245/2495): Loss 1.6454 Prec@1(1,5) 60.72, 82.54
+04/21 04:26:46 AM | Epoch[42](1494/2495): Loss 1.6470 Prec@1(1,5) 60.67, 82.54
+04/21 04:28:38 AM | Epoch[42](1743/2495): Loss 1.6509 Prec@1(1,5) 60.60, 82.47
+04/21 04:30:30 AM | Epoch[42](1992/2495): Loss 1.6532 Prec@1(1,5) 60.55, 82.44
+04/21 04:32:25 AM | Epoch[42](2241/2495): Loss 1.6564 Prec@1(1,5) 60.50, 82.38
+04/21 04:34:19 AM | Epoch[42](2490/2495): Loss 1.6575 Prec@1(1,5) 60.48, 82.37
+04/21 04:35:15 AM |  * Acc@1 61.988 Acc@5 84.645
+04/21 04:35:17 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 04:35:19 AM | learning_rate: 0.1
+04/21 04:37:08 AM | Epoch[43](249/2495): Loss 1.6040 Prec@1(1,5) 61.54, 83.14
+04/21 04:38:58 AM | Epoch[43](498/2495): Loss 1.6209 Prec@1(1,5) 61.15, 82.94
+04/21 04:40:47 AM | Epoch[43](747/2495): Loss 1.6309 Prec@1(1,5) 60.88, 82.76
+04/21 04:42:37 AM | Epoch[43](996/2495): Loss 1.6392 Prec@1(1,5) 60.74, 82.66
+04/21 04:44:28 AM | Epoch[43](1245/2495): Loss 1.6432 Prec@1(1,5) 60.62, 82.61
+04/21 04:46:18 AM | Epoch[43](1494/2495): Loss 1.6458 Prec@1(1,5) 60.57, 82.58
+04/21 04:48:09 AM | Epoch[43](1743/2495): Loss 1.6469 Prec@1(1,5) 60.52, 82.56
+04/21 04:50:04 AM | Epoch[43](1992/2495): Loss 1.6495 Prec@1(1,5) 60.52, 82.51
+04/21 04:51:58 AM | Epoch[43](2241/2495): Loss 1.6515 Prec@1(1,5) 60.48, 82.49
+04/21 04:53:52 AM | Epoch[43](2490/2495): Loss 1.6529 Prec@1(1,5) 60.47, 82.47
+04/21 04:54:47 AM |  * Acc@1 61.042 Acc@5 84.244
+04/21 04:54:49 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 04:54:51 AM | learning_rate: 0.1
+04/21 04:56:40 AM | Epoch[44](249/2495): Loss 1.6145 Prec@1(1,5) 61.37, 83.09
+04/21 04:58:28 AM | Epoch[44](498/2495): Loss 1.6245 Prec@1(1,5) 61.11, 82.96
+04/21 05:00:17 AM | Epoch[44](747/2495): Loss 1.6363 Prec@1(1,5) 60.85, 82.83
+04/21 05:02:07 AM | Epoch[44](996/2495): Loss 1.6363 Prec@1(1,5) 60.88, 82.82
+04/21 05:03:57 AM | Epoch[44](1245/2495): Loss 1.6415 Prec@1(1,5) 60.77, 82.75
+04/21 05:05:48 AM | Epoch[44](1494/2495): Loss 1.6439 Prec@1(1,5) 60.71, 82.69
+04/21 05:07:40 AM | Epoch[44](1743/2495): Loss 1.6447 Prec@1(1,5) 60.70, 82.68
+04/21 05:09:34 AM | Epoch[44](1992/2495): Loss 1.6504 Prec@1(1,5) 60.60, 82.60
+04/21 05:11:28 AM | Epoch[44](2241/2495): Loss 1.6524 Prec@1(1,5) 60.57, 82.56
+04/21 05:13:22 AM | Epoch[44](2490/2495): Loss 1.6526 Prec@1(1,5) 60.57, 82.56
+04/21 05:14:18 AM |  * Acc@1 62.293 Acc@5 85.030
+04/21 05:14:19 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 05:14:22 AM | learning_rate: 0.1
+04/21 05:16:10 AM | Epoch[45](249/2495): Loss 1.6054 Prec@1(1,5) 61.61, 83.16
+04/21 05:17:59 AM | Epoch[45](498/2495): Loss 1.6201 Prec@1(1,5) 61.14, 82.96
+04/21 05:19:48 AM | Epoch[45](747/2495): Loss 1.6292 Prec@1(1,5) 60.93, 82.80
+04/21 05:21:40 AM | Epoch[45](996/2495): Loss 1.6305 Prec@1(1,5) 60.90, 82.78
+04/21 05:23:31 AM | Epoch[45](1245/2495): Loss 1.6370 Prec@1(1,5) 60.78, 82.70
+04/21 05:25:21 AM | Epoch[45](1494/2495): Loss 1.6397 Prec@1(1,5) 60.70, 82.65
+04/21 05:27:14 AM | Epoch[45](1743/2495): Loss 1.6433 Prec@1(1,5) 60.67, 82.59
+04/21 05:29:07 AM | Epoch[45](1992/2495): Loss 1.6457 Prec@1(1,5) 60.62, 82.56
+04/21 05:31:01 AM | Epoch[45](2241/2495): Loss 1.6496 Prec@1(1,5) 60.55, 82.50
+04/21 05:32:54 AM | Epoch[45](2490/2495): Loss 1.6523 Prec@1(1,5) 60.52, 82.48
+04/21 05:33:50 AM |  * Acc@1 62.721 Acc@5 84.894
+04/21 05:33:51 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 05:33:54 AM | learning_rate: 0.1
+04/21 05:35:42 AM | Epoch[46](249/2495): Loss 1.6217 Prec@1(1,5) 61.05, 82.98
+04/21 05:37:34 AM | Epoch[46](498/2495): Loss 1.6238 Prec@1(1,5) 61.13, 83.00
+04/21 05:39:22 AM | Epoch[46](747/2495): Loss 1.6291 Prec@1(1,5) 61.01, 82.88
+04/21 05:41:14 AM | Epoch[46](996/2495): Loss 1.6321 Prec@1(1,5) 60.90, 82.82
+04/21 05:43:03 AM | Epoch[46](1245/2495): Loss 1.6372 Prec@1(1,5) 60.86, 82.73
+04/21 05:44:53 AM | Epoch[46](1494/2495): Loss 1.6414 Prec@1(1,5) 60.78, 82.66
+04/21 05:46:46 AM | Epoch[46](1743/2495): Loss 1.6431 Prec@1(1,5) 60.72, 82.65
+04/21 05:48:38 AM | Epoch[46](1992/2495): Loss 1.6451 Prec@1(1,5) 60.65, 82.62
+04/21 05:50:32 AM | Epoch[46](2241/2495): Loss 1.6478 Prec@1(1,5) 60.61, 82.57
+04/21 05:52:26 AM | Epoch[46](2490/2495): Loss 1.6493 Prec@1(1,5) 60.58, 82.56
+04/21 05:53:22 AM |  * Acc@1 59.679 Acc@5 83.367
+04/21 05:53:23 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 05:53:26 AM | learning_rate: 0.1
+04/21 05:55:15 AM | Epoch[47](249/2495): Loss 1.6085 Prec@1(1,5) 61.45, 83.05
+04/21 05:57:03 AM | Epoch[47](498/2495): Loss 1.6189 Prec@1(1,5) 61.25, 82.95
+04/21 05:58:51 AM | Epoch[47](747/2495): Loss 1.6238 Prec@1(1,5) 61.17, 82.88
+04/21 06:00:41 AM | Epoch[47](996/2495): Loss 1.6307 Prec@1(1,5) 61.01, 82.76
+04/21 06:02:31 AM | Epoch[47](1245/2495): Loss 1.6368 Prec@1(1,5) 60.88, 82.65
+04/21 06:04:22 AM | Epoch[47](1494/2495): Loss 1.6417 Prec@1(1,5) 60.78, 82.60
+04/21 06:06:14 AM | Epoch[47](1743/2495): Loss 1.6441 Prec@1(1,5) 60.76, 82.55
+04/21 06:08:09 AM | Epoch[47](1992/2495): Loss 1.6456 Prec@1(1,5) 60.73, 82.54
+04/21 06:10:02 AM | Epoch[47](2241/2495): Loss 1.6474 Prec@1(1,5) 60.70, 82.53
+04/21 06:11:55 AM | Epoch[47](2490/2495): Loss 1.6493 Prec@1(1,5) 60.67, 82.50
+04/21 06:12:50 AM |  * Acc@1 63.363 Acc@5 85.291
+04/21 06:12:51 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 06:12:53 AM | learning_rate: 0.1
+04/21 06:14:43 AM | Epoch[48](249/2495): Loss 1.6022 Prec@1(1,5) 61.35, 83.17
+04/21 06:16:43 AM | Epoch[48](498/2495): Loss 1.6157 Prec@1(1,5) 61.17, 83.03
+04/21 06:18:32 AM | Epoch[48](747/2495): Loss 1.6191 Prec@1(1,5) 61.07, 82.98
+04/21 06:20:22 AM | Epoch[48](996/2495): Loss 1.6222 Prec@1(1,5) 61.03, 82.94
+04/21 06:22:12 AM | Epoch[48](1245/2495): Loss 1.6266 Prec@1(1,5) 60.99, 82.90
+04/21 06:24:03 AM | Epoch[48](1494/2495): Loss 1.6286 Prec@1(1,5) 60.94, 82.87
+04/21 06:25:56 AM | Epoch[48](1743/2495): Loss 1.6323 Prec@1(1,5) 60.88, 82.80
+04/21 06:27:50 AM | Epoch[48](1992/2495): Loss 1.6354 Prec@1(1,5) 60.84, 82.76
+04/21 06:29:44 AM | Epoch[48](2241/2495): Loss 1.6394 Prec@1(1,5) 60.76, 82.71
+04/21 06:31:39 AM | Epoch[48](2490/2495): Loss 1.6417 Prec@1(1,5) 60.72, 82.67
+04/21 06:32:35 AM |  * Acc@1 61.547 Acc@5 84.148
+04/21 06:32:36 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 06:32:39 AM | learning_rate: 0.1
+04/21 06:34:28 AM | Epoch[49](249/2495): Loss 1.6004 Prec@1(1,5) 61.50, 83.28
+04/21 06:36:17 AM | Epoch[49](498/2495): Loss 1.6123 Prec@1(1,5) 61.33, 83.18
+04/21 06:38:07 AM | Epoch[49](747/2495): Loss 1.6208 Prec@1(1,5) 61.17, 83.02
+04/21 06:39:55 AM | Epoch[49](996/2495): Loss 1.6221 Prec@1(1,5) 61.10, 83.02
+04/21 06:41:45 AM | Epoch[49](1245/2495): Loss 1.6259 Prec@1(1,5) 61.04, 82.94
+04/21 06:43:36 AM | Epoch[49](1494/2495): Loss 1.6299 Prec@1(1,5) 60.97, 82.87
+04/21 06:45:28 AM | Epoch[49](1743/2495): Loss 1.6326 Prec@1(1,5) 60.92, 82.81
+04/21 06:47:20 AM | Epoch[49](1992/2495): Loss 1.6365 Prec@1(1,5) 60.85, 82.77
+04/21 06:49:14 AM | Epoch[49](2241/2495): Loss 1.6394 Prec@1(1,5) 60.79, 82.71
+04/21 06:51:07 AM | Epoch[49](2490/2495): Loss 1.6416 Prec@1(1,5) 60.79, 82.68
+04/21 06:52:03 AM |  * Acc@1 63.271 Acc@5 85.375
+04/21 06:52:04 AM | =>Best accuracy Top1: 63.367, Top5: 85.475
+04/21 06:52:07 AM | learning_rate: 0.1
+04/21 06:53:56 AM | Epoch[50](249/2495): Loss 1.5983 Prec@1(1,5) 61.51, 83.33
+04/21 06:55:45 AM | Epoch[50](498/2495): Loss 1.6106 Prec@1(1,5) 61.38, 83.07
+04/21 06:57:35 AM | Epoch[50](747/2495): Loss 1.6083 Prec@1(1,5) 61.46, 83.15
+04/21 06:59:26 AM | Epoch[50](996/2495): Loss 1.6159 Prec@1(1,5) 61.29, 83.02
+04/21 07:01:16 AM | Epoch[50](1245/2495): Loss 1.6205 Prec@1(1,5) 61.16, 82.97
+04/21 07:03:08 AM | Epoch[50](1494/2495): Loss 1.6279 Prec@1(1,5) 61.02, 82.87
+04/21 07:05:00 AM | Epoch[50](1743/2495): Loss 1.6305 Prec@1(1,5) 60.97, 82.82
+04/21 07:06:52 AM | Epoch[50](1992/2495): Loss 1.6330 Prec@1(1,5) 60.93, 82.79
+04/21 07:08:45 AM | Epoch[50](2241/2495): Loss 1.6364 Prec@1(1,5) 60.87, 82.73
+04/21 07:10:39 AM | Epoch[50](2490/2495): Loss 1.6391 Prec@1(1,5) 60.82, 82.69
+04/21 07:11:34 AM |  * Acc@1 63.655 Acc@5 85.784
+04/21 07:11:38 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 07:11:40 AM | learning_rate: 0.1
+04/21 07:13:29 AM | Epoch[51](249/2495): Loss 1.5905 Prec@1(1,5) 61.80, 83.21
+04/21 07:15:18 AM | Epoch[51](498/2495): Loss 1.5986 Prec@1(1,5) 61.50, 83.15
+04/21 07:17:09 AM | Epoch[51](747/2495): Loss 1.6104 Prec@1(1,5) 61.39, 83.02
+04/21 07:18:59 AM | Epoch[51](996/2495): Loss 1.6157 Prec@1(1,5) 61.23, 82.96
+04/21 07:20:49 AM | Epoch[51](1245/2495): Loss 1.6230 Prec@1(1,5) 61.09, 82.87
+04/21 07:22:40 AM | Epoch[51](1494/2495): Loss 1.6262 Prec@1(1,5) 61.00, 82.83
+04/21 07:24:32 AM | Epoch[51](1743/2495): Loss 1.6308 Prec@1(1,5) 60.95, 82.76
+04/21 07:26:25 AM | Epoch[51](1992/2495): Loss 1.6339 Prec@1(1,5) 60.91, 82.72
+04/21 07:28:18 AM | Epoch[51](2241/2495): Loss 1.6375 Prec@1(1,5) 60.83, 82.66
+04/21 07:30:11 AM | Epoch[51](2490/2495): Loss 1.6390 Prec@1(1,5) 60.81, 82.64
+04/21 07:31:07 AM |  * Acc@1 62.697 Acc@5 85.142
+04/21 07:31:09 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 07:31:11 AM | learning_rate: 0.1
+04/21 07:33:00 AM | Epoch[52](249/2495): Loss 1.6015 Prec@1(1,5) 61.53, 83.22
+04/21 07:34:50 AM | Epoch[52](498/2495): Loss 1.6127 Prec@1(1,5) 61.26, 83.09
+04/21 07:36:38 AM | Epoch[52](747/2495): Loss 1.6171 Prec@1(1,5) 61.22, 82.99
+04/21 07:38:26 AM | Epoch[52](996/2495): Loss 1.6204 Prec@1(1,5) 61.15, 82.92
+04/21 07:40:15 AM | Epoch[52](1245/2495): Loss 1.6261 Prec@1(1,5) 61.04, 82.85
+04/21 07:42:05 AM | Epoch[52](1494/2495): Loss 1.6272 Prec@1(1,5) 61.03, 82.86
+04/21 07:43:58 AM | Epoch[52](1743/2495): Loss 1.6295 Prec@1(1,5) 61.03, 82.81
+04/21 07:45:51 AM | Epoch[52](1992/2495): Loss 1.6329 Prec@1(1,5) 60.99, 82.74
+04/21 07:47:44 AM | Epoch[52](2241/2495): Loss 1.6335 Prec@1(1,5) 60.98, 82.74
+04/21 07:49:37 AM | Epoch[52](2490/2495): Loss 1.6344 Prec@1(1,5) 60.97, 82.74
+04/21 07:50:33 AM |  * Acc@1 62.176 Acc@5 85.006
+04/21 07:50:35 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 07:50:37 AM | learning_rate: 0.1
+04/21 07:52:26 AM | Epoch[53](249/2495): Loss 1.5996 Prec@1(1,5) 61.64, 83.45
+04/21 07:54:17 AM | Epoch[53](498/2495): Loss 1.6062 Prec@1(1,5) 61.51, 83.26
+04/21 07:56:06 AM | Epoch[53](747/2495): Loss 1.6049 Prec@1(1,5) 61.51, 83.26
+04/21 07:57:56 AM | Epoch[53](996/2495): Loss 1.6148 Prec@1(1,5) 61.27, 83.08
+04/21 07:59:46 AM | Epoch[53](1245/2495): Loss 1.6158 Prec@1(1,5) 61.27, 83.10
+04/21 08:01:37 AM | Epoch[53](1494/2495): Loss 1.6177 Prec@1(1,5) 61.27, 83.04
+04/21 08:03:30 AM | Epoch[53](1743/2495): Loss 1.6230 Prec@1(1,5) 61.20, 82.95
+04/21 08:05:29 AM | Epoch[53](1992/2495): Loss 1.6262 Prec@1(1,5) 61.12, 82.90
+04/21 08:07:23 AM | Epoch[53](2241/2495): Loss 1.6284 Prec@1(1,5) 61.08, 82.86
+04/21 08:09:15 AM | Epoch[53](2490/2495): Loss 1.6325 Prec@1(1,5) 61.02, 82.79
+04/21 08:10:11 AM |  * Acc@1 62.204 Acc@5 85.255
+04/21 08:10:11 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 08:10:14 AM | learning_rate: 0.1
+04/21 08:12:04 AM | Epoch[54](249/2495): Loss 1.5940 Prec@1(1,5) 61.79, 83.25
+04/21 08:13:53 AM | Epoch[54](498/2495): Loss 1.6058 Prec@1(1,5) 61.49, 83.12
+04/21 08:15:43 AM | Epoch[54](747/2495): Loss 1.6055 Prec@1(1,5) 61.46, 83.13
+04/21 08:17:33 AM | Epoch[54](996/2495): Loss 1.6107 Prec@1(1,5) 61.36, 83.08
+04/21 08:19:24 AM | Epoch[54](1245/2495): Loss 1.6146 Prec@1(1,5) 61.28, 83.03
+04/21 08:21:16 AM | Epoch[54](1494/2495): Loss 1.6196 Prec@1(1,5) 61.18, 82.94
+04/21 08:23:09 AM | Epoch[54](1743/2495): Loss 1.6228 Prec@1(1,5) 61.11, 82.89
+04/21 08:25:03 AM | Epoch[54](1992/2495): Loss 1.6244 Prec@1(1,5) 61.09, 82.86
+04/21 08:26:56 AM | Epoch[54](2241/2495): Loss 1.6282 Prec@1(1,5) 61.02, 82.80
+04/21 08:28:54 AM | Epoch[54](2490/2495): Loss 1.6302 Prec@1(1,5) 60.98, 82.77
+04/21 08:29:52 AM |  * Acc@1 62.750 Acc@5 85.198
+04/21 08:29:54 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 08:29:57 AM | learning_rate: 0.1
+04/21 08:31:48 AM | Epoch[55](249/2495): Loss 1.5896 Prec@1(1,5) 61.67, 83.59
+04/21 08:33:44 AM | Epoch[55](498/2495): Loss 1.5989 Prec@1(1,5) 61.60, 83.38
+04/21 08:35:39 AM | Epoch[55](747/2495): Loss 1.6085 Prec@1(1,5) 61.46, 83.21
+04/21 08:37:32 AM | Epoch[55](996/2495): Loss 1.6099 Prec@1(1,5) 61.45, 83.16
+04/21 08:39:26 AM | Epoch[55](1245/2495): Loss 1.6145 Prec@1(1,5) 61.32, 83.09
+04/21 08:41:20 AM | Epoch[55](1494/2495): Loss 1.6185 Prec@1(1,5) 61.24, 83.04
+04/21 08:43:20 AM | Epoch[55](1743/2495): Loss 1.6233 Prec@1(1,5) 61.14, 82.97
+04/21 08:45:17 AM | Epoch[55](1992/2495): Loss 1.6242 Prec@1(1,5) 61.13, 82.94
+04/21 08:47:14 AM | Epoch[55](2241/2495): Loss 1.6258 Prec@1(1,5) 61.12, 82.91
+04/21 08:49:18 AM | Epoch[55](2490/2495): Loss 1.6276 Prec@1(1,5) 61.10, 82.87
+04/21 08:50:22 AM |  * Acc@1 63.070 Acc@5 85.307
+04/21 08:50:23 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 08:50:25 AM | learning_rate: 0.1
+04/21 08:52:43 AM | Epoch[56](249/2495): Loss 1.5946 Prec@1(1,5) 61.74, 83.30
+04/21 08:55:00 AM | Epoch[56](498/2495): Loss 1.6036 Prec@1(1,5) 61.57, 83.19
+04/21 08:57:18 AM | Epoch[56](747/2495): Loss 1.6106 Prec@1(1,5) 61.46, 83.14
+04/21 08:59:35 AM | Epoch[56](996/2495): Loss 1.6120 Prec@1(1,5) 61.41, 83.10
+04/21 09:01:52 AM | Epoch[56](1245/2495): Loss 1.6154 Prec@1(1,5) 61.32, 83.07
+04/21 09:04:10 AM | Epoch[56](1494/2495): Loss 1.6188 Prec@1(1,5) 61.22, 83.02
+04/21 09:06:27 AM | Epoch[56](1743/2495): Loss 1.6214 Prec@1(1,5) 61.16, 82.99
+04/21 09:08:44 AM | Epoch[56](1992/2495): Loss 1.6232 Prec@1(1,5) 61.12, 82.96
+04/21 09:11:01 AM | Epoch[56](2241/2495): Loss 1.6264 Prec@1(1,5) 61.06, 82.91
+04/21 09:13:18 AM | Epoch[56](2490/2495): Loss 1.6279 Prec@1(1,5) 61.03, 82.89
+04/21 09:14:23 AM |  * Acc@1 61.932 Acc@5 84.441
+04/21 09:14:23 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 09:14:26 AM | learning_rate: 0.1
+04/21 09:16:28 AM | Epoch[57](249/2495): Loss 1.5827 Prec@1(1,5) 62.14, 83.55
+04/21 09:18:21 AM | Epoch[57](498/2495): Loss 1.5961 Prec@1(1,5) 61.79, 83.40
+04/21 09:20:13 AM | Epoch[57](747/2495): Loss 1.6051 Prec@1(1,5) 61.60, 83.24
+04/21 09:22:09 AM | Epoch[57](996/2495): Loss 1.6119 Prec@1(1,5) 61.44, 83.13
+04/21 09:24:03 AM | Epoch[57](1245/2495): Loss 1.6147 Prec@1(1,5) 61.38, 83.07
+04/21 09:25:58 AM | Epoch[57](1494/2495): Loss 1.6185 Prec@1(1,5) 61.30, 83.00
+04/21 09:27:55 AM | Epoch[57](1743/2495): Loss 1.6211 Prec@1(1,5) 61.23, 82.96
+04/21 09:29:54 AM | Epoch[57](1992/2495): Loss 1.6231 Prec@1(1,5) 61.18, 82.93
+04/21 09:31:51 AM | Epoch[57](2241/2495): Loss 1.6223 Prec@1(1,5) 61.19, 82.94
+04/21 09:33:47 AM | Epoch[57](2490/2495): Loss 1.6244 Prec@1(1,5) 61.15, 82.91
+04/21 09:34:44 AM |  * Acc@1 61.607 Acc@5 84.814
+04/21 09:34:46 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 09:34:48 AM | learning_rate: 0.1
+04/21 09:36:42 AM | Epoch[58](249/2495): Loss 1.5944 Prec@1(1,5) 61.83, 83.44
+04/21 09:38:35 AM | Epoch[58](498/2495): Loss 1.5965 Prec@1(1,5) 61.73, 83.34
+04/21 09:40:28 AM | Epoch[58](747/2495): Loss 1.6030 Prec@1(1,5) 61.60, 83.23
+04/21 09:42:21 AM | Epoch[58](996/2495): Loss 1.6074 Prec@1(1,5) 61.51, 83.15
+04/21 09:44:17 AM | Epoch[58](1245/2495): Loss 1.6101 Prec@1(1,5) 61.48, 83.10
+04/21 09:46:12 AM | Epoch[58](1494/2495): Loss 1.6144 Prec@1(1,5) 61.39, 83.05
+04/21 09:48:04 AM | Epoch[58](1743/2495): Loss 1.6170 Prec@1(1,5) 61.35, 83.01
+04/21 09:49:58 AM | Epoch[58](1992/2495): Loss 1.6217 Prec@1(1,5) 61.25, 82.92
+04/21 09:51:57 AM | Epoch[58](2241/2495): Loss 1.6234 Prec@1(1,5) 61.22, 82.90
+04/21 09:54:07 AM | Epoch[58](2490/2495): Loss 1.6255 Prec@1(1,5) 61.17, 82.89
+04/21 09:55:12 AM |  * Acc@1 59.772 Acc@5 82.906
+04/21 09:55:12 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 09:55:15 AM | learning_rate: 0.1
+04/21 09:57:21 AM | Epoch[59](249/2495): Loss 1.5898 Prec@1(1,5) 61.63, 83.42
+04/21 09:59:26 AM | Epoch[59](498/2495): Loss 1.5907 Prec@1(1,5) 61.74, 83.46
+04/21 10:01:31 AM | Epoch[59](747/2495): Loss 1.6001 Prec@1(1,5) 61.57, 83.32
+04/21 10:03:36 AM | Epoch[59](996/2495): Loss 1.6053 Prec@1(1,5) 61.52, 83.27
+04/21 10:05:43 AM | Epoch[59](1245/2495): Loss 1.6089 Prec@1(1,5) 61.45, 83.17
+04/21 10:07:50 AM | Epoch[59](1494/2495): Loss 1.6111 Prec@1(1,5) 61.38, 83.12
+04/21 10:09:59 AM | Epoch[59](1743/2495): Loss 1.6137 Prec@1(1,5) 61.32, 83.11
+04/21 10:12:09 AM | Epoch[59](1992/2495): Loss 1.6164 Prec@1(1,5) 61.28, 83.04
+04/21 10:14:18 AM | Epoch[59](2241/2495): Loss 1.6219 Prec@1(1,5) 61.16, 82.96
+04/21 10:16:29 AM | Epoch[59](2490/2495): Loss 1.6231 Prec@1(1,5) 61.15, 82.94
+04/21 10:17:36 AM |  * Acc@1 62.465 Acc@5 84.994
+04/21 10:17:37 AM | =>Best accuracy Top1: 63.655, Top5: 85.784
+04/21 10:17:40 AM | learning_rate: 0.010000000000000002
+04/21 10:19:45 AM | Epoch[60](249/2495): Loss 1.3643 Prec@1(1,5) 67.18, 86.40
+04/21 10:21:50 AM | Epoch[60](498/2495): Loss 1.3098 Prec@1(1,5) 68.37, 87.03
+04/21 10:23:55 AM | Epoch[60](747/2495): Loss 1.2791 Prec@1(1,5) 69.06, 87.44
+04/21 10:26:02 AM | Epoch[60](996/2495): Loss 1.2560 Prec@1(1,5) 69.61, 87.73
+04/21 10:28:09 AM | Epoch[60](1245/2495): Loss 1.2420 Prec@1(1,5) 69.88, 87.88
+04/21 10:30:17 AM | Epoch[60](1494/2495): Loss 1.2297 Prec@1(1,5) 70.16, 88.03
+04/21 10:32:25 AM | Epoch[60](1743/2495): Loss 1.2186 Prec@1(1,5) 70.41, 88.18
+04/21 10:34:30 AM | Epoch[60](1992/2495): Loss 1.2082 Prec@1(1,5) 70.64, 88.30
+04/21 10:36:25 AM | Epoch[60](2241/2495): Loss 1.2014 Prec@1(1,5) 70.78, 88.39
+04/21 10:38:33 AM | Epoch[60](2490/2495): Loss 1.1935 Prec@1(1,5) 70.95, 88.49
+04/21 10:39:42 AM |  * Acc@1 74.950 Acc@5 92.012
+04/21 10:39:44 AM | =>Best accuracy Top1: 74.950, Top5: 92.012
+04/21 10:39:48 AM | learning_rate: 0.010000000000000002
+04/21 10:42:00 AM | Epoch[61](249/2495): Loss 1.0934 Prec@1(1,5) 73.26, 89.75
+04/21 10:44:11 AM | Epoch[61](498/2495): Loss 1.0947 Prec@1(1,5) 73.17, 89.69
+04/21 10:46:23 AM | Epoch[61](747/2495): Loss 1.0966 Prec@1(1,5) 73.08, 89.69
+04/21 10:48:35 AM | Epoch[61](996/2495): Loss 1.0956 Prec@1(1,5) 73.11, 89.71
+04/21 10:50:48 AM | Epoch[61](1245/2495): Loss 1.0942 Prec@1(1,5) 73.15, 89.73
+04/21 10:53:02 AM | Epoch[61](1494/2495): Loss 1.0938 Prec@1(1,5) 73.18, 89.72
+04/21 10:55:20 AM | Epoch[61](1743/2495): Loss 1.0901 Prec@1(1,5) 73.27, 89.75
+04/21 10:57:39 AM | Epoch[61](1992/2495): Loss 1.0875 Prec@1(1,5) 73.30, 89.77
+04/21 10:59:55 AM | Epoch[61](2241/2495): Loss 1.0877 Prec@1(1,5) 73.28, 89.75
+04/21 11:02:11 AM | Epoch[61](2490/2495): Loss 1.0864 Prec@1(1,5) 73.30, 89.77
+04/21 11:03:20 AM |  * Acc@1 75.583 Acc@5 92.228
+04/21 11:03:23 AM | =>Best accuracy Top1: 75.583, Top5: 92.228
+04/21 11:03:25 AM | learning_rate: 0.010000000000000002
+04/21 11:05:25 AM | Epoch[62](249/2495): Loss 1.0498 Prec@1(1,5) 74.45, 90.17
+04/21 11:07:20 AM | Epoch[62](498/2495): Loss 1.0460 Prec@1(1,5) 74.36, 90.19
+04/21 11:09:31 AM | Epoch[62](747/2495): Loss 1.0435 Prec@1(1,5) 74.34, 90.25
+04/21 11:11:42 AM | Epoch[62](996/2495): Loss 1.0426 Prec@1(1,5) 74.29, 90.29
+04/21 11:13:54 AM | Epoch[62](1245/2495): Loss 1.0443 Prec@1(1,5) 74.28, 90.25
+04/21 11:16:07 AM | Epoch[62](1494/2495): Loss 1.0456 Prec@1(1,5) 74.25, 90.23
+04/21 11:18:21 AM | Epoch[62](1743/2495): Loss 1.0465 Prec@1(1,5) 74.23, 90.23
+04/21 11:20:38 AM | Epoch[62](1992/2495): Loss 1.0458 Prec@1(1,5) 74.23, 90.26
+04/21 11:22:54 AM | Epoch[62](2241/2495): Loss 1.0451 Prec@1(1,5) 74.24, 90.27
+04/21 11:25:10 AM | Epoch[62](2490/2495): Loss 1.0447 Prec@1(1,5) 74.24, 90.28
+04/21 11:26:18 AM |  * Acc@1 75.936 Acc@5 92.393
+04/21 11:26:19 AM | =>Best accuracy Top1: 75.936, Top5: 92.393
+04/21 11:26:22 AM | learning_rate: 0.010000000000000002
+04/21 11:28:31 AM | Epoch[63](249/2495): Loss 1.0045 Prec@1(1,5) 75.13, 90.65
+04/21 11:30:42 AM | Epoch[63](498/2495): Loss 1.0065 Prec@1(1,5) 75.05, 90.74
+04/21 11:32:46 AM | Epoch[63](747/2495): Loss 1.0057 Prec@1(1,5) 75.02, 90.73
+04/21 11:34:34 AM | Epoch[63](996/2495): Loss 1.0102 Prec@1(1,5) 74.95, 90.67
+04/21 11:36:25 AM | Epoch[63](1245/2495): Loss 1.0116 Prec@1(1,5) 74.91, 90.68
+04/21 11:38:18 AM | Epoch[63](1494/2495): Loss 1.0112 Prec@1(1,5) 74.90, 90.70
+04/21 11:40:11 AM | Epoch[63](1743/2495): Loss 1.0119 Prec@1(1,5) 74.91, 90.68
+04/21 11:42:06 AM | Epoch[63](1992/2495): Loss 1.0116 Prec@1(1,5) 74.93, 90.70
+04/21 11:44:00 AM | Epoch[63](2241/2495): Loss 1.0121 Prec@1(1,5) 74.94, 90.69
+04/21 11:45:53 AM | Epoch[63](2490/2495): Loss 1.0120 Prec@1(1,5) 74.94, 90.70
+04/21 11:46:48 AM |  * Acc@1 76.248 Acc@5 92.517
+04/21 11:46:50 AM | =>Best accuracy Top1: 76.248, Top5: 92.517
+04/21 11:46:53 AM | learning_rate: 0.010000000000000002
+04/21 11:48:50 AM | Epoch[64](249/2495): Loss 0.9784 Prec@1(1,5) 75.72, 91.14
+04/21 11:50:50 AM | Epoch[64](498/2495): Loss 0.9836 Prec@1(1,5) 75.66, 91.00
+04/21 11:52:50 AM | Epoch[64](747/2495): Loss 0.9831 Prec@1(1,5) 75.67, 91.06
+04/21 11:54:50 AM | Epoch[64](996/2495): Loss 0.9847 Prec@1(1,5) 75.64, 91.03
+04/21 11:56:52 AM | Epoch[64](1245/2495): Loss 0.9852 Prec@1(1,5) 75.56, 91.02
+04/21 11:58:54 AM | Epoch[64](1494/2495): Loss 0.9879 Prec@1(1,5) 75.47, 91.00
+04/21 12:00:58 PM | Epoch[64](1743/2495): Loss 0.9880 Prec@1(1,5) 75.48, 91.00
+04/21 12:03:04 PM | Epoch[64](1992/2495): Loss 0.9881 Prec@1(1,5) 75.49, 90.99
+04/21 12:05:08 PM | Epoch[64](2241/2495): Loss 0.9883 Prec@1(1,5) 75.48, 90.98
+04/21 12:07:13 PM | Epoch[64](2490/2495): Loss 0.9877 Prec@1(1,5) 75.49, 90.99
+04/21 12:08:14 PM |  * Acc@1 76.168 Acc@5 92.617
+04/21 12:08:15 PM | =>Best accuracy Top1: 76.248, Top5: 92.517
+04/21 12:08:18 PM | learning_rate: 0.010000000000000002
+04/21 12:10:17 PM | Epoch[65](249/2495): Loss 0.9690 Prec@1(1,5) 76.03, 91.14
+04/21 12:12:16 PM | Epoch[65](498/2495): Loss 0.9708 Prec@1(1,5) 75.95, 91.15
+04/21 12:14:09 PM | Epoch[65](747/2495): Loss 0.9688 Prec@1(1,5) 75.95, 91.20
+04/21 12:15:59 PM | Epoch[65](996/2495): Loss 0.9703 Prec@1(1,5) 75.94, 91.17
+04/21 12:17:53 PM | Epoch[65](1245/2495): Loss 0.9713 Prec@1(1,5) 75.88, 91.16
+04/21 12:19:49 PM | Epoch[65](1494/2495): Loss 0.9733 Prec@1(1,5) 75.82, 91.14
+04/21 12:21:47 PM | Epoch[65](1743/2495): Loss 0.9725 Prec@1(1,5) 75.84, 91.14
+04/21 12:23:45 PM | Epoch[65](1992/2495): Loss 0.9727 Prec@1(1,5) 75.83, 91.15
+04/21 12:25:42 PM | Epoch[65](2241/2495): Loss 0.9732 Prec@1(1,5) 75.81, 91.15
+04/21 12:27:40 PM | Epoch[65](2490/2495): Loss 0.9733 Prec@1(1,5) 75.80, 91.14
+04/21 12:28:37 PM |  * Acc@1 76.593 Acc@5 92.633
+04/21 12:28:40 PM | =>Best accuracy Top1: 76.593, Top5: 92.633
+04/21 12:28:42 PM | learning_rate: 0.010000000000000002
+04/21 12:30:37 PM | Epoch[66](249/2495): Loss 0.9319 Prec@1(1,5) 76.87, 91.56
+04/21 12:32:33 PM | Epoch[66](498/2495): Loss 0.9400 Prec@1(1,5) 76.61, 91.51
+04/21 12:34:28 PM | Epoch[66](747/2495): Loss 0.9416 Prec@1(1,5) 76.53, 91.52
+04/21 12:36:25 PM | Epoch[66](996/2495): Loss 0.9394 Prec@1(1,5) 76.57, 91.57
+04/21 12:38:22 PM | Epoch[66](1245/2495): Loss 0.9383 Prec@1(1,5) 76.58, 91.59
+04/21 12:40:17 PM | Epoch[66](1494/2495): Loss 0.9405 Prec@1(1,5) 76.55, 91.57
+04/21 12:42:14 PM | Epoch[66](1743/2495): Loss 0.9436 Prec@1(1,5) 76.46, 91.51
+04/21 12:44:12 PM | Epoch[66](1992/2495): Loss 0.9446 Prec@1(1,5) 76.42, 91.51
+04/21 12:46:10 PM | Epoch[66](2241/2495): Loss 0.9474 Prec@1(1,5) 76.38, 91.48
+04/21 12:48:09 PM | Epoch[66](2490/2495): Loss 0.9488 Prec@1(1,5) 76.34, 91.46
+04/21 12:49:06 PM |  * Acc@1 76.481 Acc@5 92.754
+04/21 12:49:08 PM | =>Best accuracy Top1: 76.593, Top5: 92.633
+04/21 12:49:10 PM | learning_rate: 0.010000000000000002
+04/21 12:51:04 PM | Epoch[67](249/2495): Loss 0.9224 Prec@1(1,5) 76.89, 91.77
+04/21 12:52:58 PM | Epoch[67](498/2495): Loss 0.9249 Prec@1(1,5) 76.91, 91.80
+04/21 12:54:54 PM | Epoch[67](747/2495): Loss 0.9257 Prec@1(1,5) 76.90, 91.76
+04/21 12:56:48 PM | Epoch[67](996/2495): Loss 0.9270 Prec@1(1,5) 76.88, 91.70
+04/21 12:58:44 PM | Epoch[67](1245/2495): Loss 0.9278 Prec@1(1,5) 76.88, 91.68
+04/21 01:00:41 PM | Epoch[67](1494/2495): Loss 0.9310 Prec@1(1,5) 76.82, 91.63
+04/21 01:02:38 PM | Epoch[67](1743/2495): Loss 0.9323 Prec@1(1,5) 76.77, 91.63
+04/21 01:04:36 PM | Epoch[67](1992/2495): Loss 0.9360 Prec@1(1,5) 76.67, 91.57
+04/21 01:06:34 PM | Epoch[67](2241/2495): Loss 0.9377 Prec@1(1,5) 76.64, 91.55
+04/21 01:08:31 PM | Epoch[67](2490/2495): Loss 0.9384 Prec@1(1,5) 76.62, 91.54
+04/21 01:09:28 PM |  * Acc@1 76.297 Acc@5 92.729
+04/21 01:09:29 PM | =>Best accuracy Top1: 76.593, Top5: 92.633
+04/21 01:09:31 PM | learning_rate: 0.010000000000000002
+04/21 01:11:25 PM | Epoch[68](249/2495): Loss 0.9093 Prec@1(1,5) 77.41, 91.93
+04/21 01:13:20 PM | Epoch[68](498/2495): Loss 0.9084 Prec@1(1,5) 77.34, 91.97
+04/21 01:15:15 PM | Epoch[68](747/2495): Loss 0.9130 Prec@1(1,5) 77.22, 91.91
+04/21 01:17:10 PM | Epoch[68](996/2495): Loss 0.9152 Prec@1(1,5) 77.15, 91.87
+04/21 01:19:06 PM | Epoch[68](1245/2495): Loss 0.9188 Prec@1(1,5) 77.03, 91.83
+04/21 01:21:03 PM | Epoch[68](1494/2495): Loss 0.9187 Prec@1(1,5) 77.01, 91.83
+04/21 01:22:59 PM | Epoch[68](1743/2495): Loss 0.9188 Prec@1(1,5) 77.00, 91.84
+04/21 01:24:57 PM | Epoch[68](1992/2495): Loss 0.9197 Prec@1(1,5) 77.01, 91.83
+04/21 01:26:55 PM | Epoch[68](2241/2495): Loss 0.9213 Prec@1(1,5) 76.95, 91.83
+04/21 01:28:54 PM | Epoch[68](2490/2495): Loss 0.9229 Prec@1(1,5) 76.93, 91.80
+04/21 01:29:51 PM |  * Acc@1 76.713 Acc@5 92.898
+04/21 01:29:53 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 01:29:55 PM | learning_rate: 0.010000000000000002
+04/21 01:31:50 PM | Epoch[69](249/2495): Loss 0.9040 Prec@1(1,5) 77.43, 92.07
+04/21 01:33:46 PM | Epoch[69](498/2495): Loss 0.9009 Prec@1(1,5) 77.48, 92.13
+04/21 01:35:41 PM | Epoch[69](747/2495): Loss 0.9007 Prec@1(1,5) 77.54, 92.06
+04/21 01:37:39 PM | Epoch[69](996/2495): Loss 0.9029 Prec@1(1,5) 77.48, 92.01
+04/21 01:39:34 PM | Epoch[69](1245/2495): Loss 0.9073 Prec@1(1,5) 77.41, 91.95
+04/21 01:41:33 PM | Epoch[69](1494/2495): Loss 0.9086 Prec@1(1,5) 77.36, 91.91
+04/21 01:43:31 PM | Epoch[69](1743/2495): Loss 0.9100 Prec@1(1,5) 77.31, 91.90
+04/21 01:45:31 PM | Epoch[69](1992/2495): Loss 0.9117 Prec@1(1,5) 77.28, 91.88
+04/21 01:47:29 PM | Epoch[69](2241/2495): Loss 0.9120 Prec@1(1,5) 77.25, 91.89
+04/21 01:49:29 PM | Epoch[69](2490/2495): Loss 0.9135 Prec@1(1,5) 77.22, 91.89
+04/21 01:50:26 PM |  * Acc@1 76.393 Acc@5 92.689
+04/21 01:50:28 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 01:50:30 PM | learning_rate: 0.010000000000000002
+04/21 01:52:25 PM | Epoch[70](249/2495): Loss 0.8822 Prec@1(1,5) 77.89, 92.30
+04/21 01:54:20 PM | Epoch[70](498/2495): Loss 0.8872 Prec@1(1,5) 77.71, 92.21
+04/21 01:56:17 PM | Epoch[70](747/2495): Loss 0.8919 Prec@1(1,5) 77.61, 92.15
+04/21 01:58:13 PM | Epoch[70](996/2495): Loss 0.8921 Prec@1(1,5) 77.59, 92.18
+04/21 02:00:10 PM | Epoch[70](1245/2495): Loss 0.8939 Prec@1(1,5) 77.56, 92.14
+04/21 02:02:10 PM | Epoch[70](1494/2495): Loss 0.8981 Prec@1(1,5) 77.49, 92.08
+04/21 02:04:10 PM | Epoch[70](1743/2495): Loss 0.9020 Prec@1(1,5) 77.39, 92.06
+04/21 02:06:08 PM | Epoch[70](1992/2495): Loss 0.9041 Prec@1(1,5) 77.35, 92.03
+04/21 02:08:06 PM | Epoch[70](2241/2495): Loss 0.9065 Prec@1(1,5) 77.30, 92.00
+04/21 02:10:07 PM | Epoch[70](2490/2495): Loss 0.9072 Prec@1(1,5) 77.28, 92.00
+04/21 02:11:05 PM |  * Acc@1 76.365 Acc@5 92.838
+04/21 02:11:06 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 02:11:08 PM | learning_rate: 0.010000000000000002
+04/21 02:13:03 PM | Epoch[71](249/2495): Loss 0.8789 Prec@1(1,5) 77.97, 92.23
+04/21 02:14:58 PM | Epoch[71](498/2495): Loss 0.8894 Prec@1(1,5) 77.84, 92.15
+04/21 02:16:53 PM | Epoch[71](747/2495): Loss 0.8923 Prec@1(1,5) 77.77, 92.08
+04/21 02:18:48 PM | Epoch[71](996/2495): Loss 0.8937 Prec@1(1,5) 77.68, 92.10
+04/21 02:20:45 PM | Epoch[71](1245/2495): Loss 0.8944 Prec@1(1,5) 77.63, 92.12
+04/21 02:22:43 PM | Epoch[71](1494/2495): Loss 0.8934 Prec@1(1,5) 77.64, 92.14
+04/21 02:24:40 PM | Epoch[71](1743/2495): Loss 0.8945 Prec@1(1,5) 77.59, 92.13
+04/21 02:26:38 PM | Epoch[71](1992/2495): Loss 0.8960 Prec@1(1,5) 77.55, 92.11
+04/21 02:28:36 PM | Epoch[71](2241/2495): Loss 0.8960 Prec@1(1,5) 77.54, 92.10
+04/21 02:30:33 PM | Epoch[71](2490/2495): Loss 0.8974 Prec@1(1,5) 77.52, 92.09
+04/21 02:31:30 PM |  * Acc@1 76.521 Acc@5 92.673
+04/21 02:31:32 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 02:31:34 PM | learning_rate: 0.010000000000000002
+04/21 02:33:28 PM | Epoch[72](249/2495): Loss 0.8689 Prec@1(1,5) 78.27, 92.43
+04/21 02:35:22 PM | Epoch[72](498/2495): Loss 0.8725 Prec@1(1,5) 78.13, 92.38
+04/21 02:37:17 PM | Epoch[72](747/2495): Loss 0.8736 Prec@1(1,5) 78.09, 92.35
+04/21 02:39:11 PM | Epoch[72](996/2495): Loss 0.8719 Prec@1(1,5) 78.09, 92.41
+04/21 02:41:07 PM | Epoch[72](1245/2495): Loss 0.8743 Prec@1(1,5) 78.02, 92.40
+04/21 02:43:04 PM | Epoch[72](1494/2495): Loss 0.8780 Prec@1(1,5) 77.92, 92.35
+04/21 02:45:02 PM | Epoch[72](1743/2495): Loss 0.8803 Prec@1(1,5) 77.87, 92.32
+04/21 02:47:00 PM | Epoch[72](1992/2495): Loss 0.8834 Prec@1(1,5) 77.79, 92.29
+04/21 02:48:57 PM | Epoch[72](2241/2495): Loss 0.8864 Prec@1(1,5) 77.72, 92.26
+04/21 02:50:54 PM | Epoch[72](2490/2495): Loss 0.8896 Prec@1(1,5) 77.64, 92.22
+04/21 02:51:51 PM |  * Acc@1 76.381 Acc@5 92.637
+04/21 02:51:53 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 02:51:55 PM | learning_rate: 0.010000000000000002
+04/21 02:53:49 PM | Epoch[73](249/2495): Loss 0.8698 Prec@1(1,5) 78.09, 92.39
+04/21 02:55:42 PM | Epoch[73](498/2495): Loss 0.8659 Prec@1(1,5) 78.27, 92.47
+04/21 02:57:37 PM | Epoch[73](747/2495): Loss 0.8674 Prec@1(1,5) 78.13, 92.45
+04/21 02:59:32 PM | Epoch[73](996/2495): Loss 0.8725 Prec@1(1,5) 78.02, 92.37
+04/21 03:01:28 PM | Epoch[73](1245/2495): Loss 0.8736 Prec@1(1,5) 78.00, 92.38
+04/21 03:03:26 PM | Epoch[73](1494/2495): Loss 0.8770 Prec@1(1,5) 77.93, 92.35
+04/21 03:05:24 PM | Epoch[73](1743/2495): Loss 0.8773 Prec@1(1,5) 77.93, 92.36
+04/21 03:07:21 PM | Epoch[73](1992/2495): Loss 0.8800 Prec@1(1,5) 77.88, 92.32
+04/21 03:09:18 PM | Epoch[73](2241/2495): Loss 0.8816 Prec@1(1,5) 77.82, 92.31
+04/21 03:11:15 PM | Epoch[73](2490/2495): Loss 0.8836 Prec@1(1,5) 77.80, 92.29
+04/21 03:12:12 PM |  * Acc@1 76.437 Acc@5 92.717
+04/21 03:12:14 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 03:12:16 PM | learning_rate: 0.010000000000000002
+04/21 03:14:10 PM | Epoch[74](249/2495): Loss 0.8539 Prec@1(1,5) 78.45, 92.63
+04/21 03:16:05 PM | Epoch[74](498/2495): Loss 0.8600 Prec@1(1,5) 78.37, 92.55
+04/21 03:17:59 PM | Epoch[74](747/2495): Loss 0.8630 Prec@1(1,5) 78.28, 92.51
+04/21 03:19:55 PM | Epoch[74](996/2495): Loss 0.8629 Prec@1(1,5) 78.30, 92.49
+04/21 03:21:50 PM | Epoch[74](1245/2495): Loss 0.8684 Prec@1(1,5) 78.18, 92.41
+04/21 03:23:47 PM | Epoch[74](1494/2495): Loss 0.8690 Prec@1(1,5) 78.18, 92.42
+04/21 03:25:45 PM | Epoch[74](1743/2495): Loss 0.8718 Prec@1(1,5) 78.10, 92.39
+04/21 03:27:43 PM | Epoch[74](1992/2495): Loss 0.8730 Prec@1(1,5) 78.08, 92.39
+04/21 03:29:41 PM | Epoch[74](2241/2495): Loss 0.8755 Prec@1(1,5) 78.02, 92.37
+04/21 03:31:39 PM | Epoch[74](2490/2495): Loss 0.8777 Prec@1(1,5) 77.97, 92.35
+04/21 03:32:37 PM |  * Acc@1 76.641 Acc@5 92.974
+04/21 03:32:38 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 03:32:40 PM | learning_rate: 0.010000000000000002
+04/21 03:34:34 PM | Epoch[75](249/2495): Loss 0.8488 Prec@1(1,5) 78.73, 92.62
+04/21 03:36:29 PM | Epoch[75](498/2495): Loss 0.8550 Prec@1(1,5) 78.63, 92.60
+04/21 03:38:25 PM | Epoch[75](747/2495): Loss 0.8571 Prec@1(1,5) 78.50, 92.55
+04/21 03:40:21 PM | Epoch[75](996/2495): Loss 0.8598 Prec@1(1,5) 78.43, 92.53
+04/21 03:42:15 PM | Epoch[75](1245/2495): Loss 0.8633 Prec@1(1,5) 78.33, 92.47
+04/21 03:44:13 PM | Epoch[75](1494/2495): Loss 0.8658 Prec@1(1,5) 78.26, 92.46
+04/21 03:46:11 PM | Epoch[75](1743/2495): Loss 0.8676 Prec@1(1,5) 78.19, 92.45
+04/21 03:48:08 PM | Epoch[75](1992/2495): Loss 0.8699 Prec@1(1,5) 78.10, 92.43
+04/21 03:50:05 PM | Epoch[75](2241/2495): Loss 0.8719 Prec@1(1,5) 78.07, 92.41
+04/21 03:52:04 PM | Epoch[75](2490/2495): Loss 0.8723 Prec@1(1,5) 78.04, 92.41
+04/21 03:53:02 PM |  * Acc@1 76.549 Acc@5 92.882
+04/21 03:53:03 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 03:53:05 PM | learning_rate: 0.010000000000000002
+04/21 03:54:59 PM | Epoch[76](249/2495): Loss 0.8449 Prec@1(1,5) 78.88, 92.77
+04/21 03:56:54 PM | Epoch[76](498/2495): Loss 0.8445 Prec@1(1,5) 78.88, 92.72
+04/21 03:58:50 PM | Epoch[76](747/2495): Loss 0.8487 Prec@1(1,5) 78.70, 92.65
+04/21 04:00:46 PM | Epoch[76](996/2495): Loss 0.8534 Prec@1(1,5) 78.57, 92.60
+04/21 04:02:42 PM | Epoch[76](1245/2495): Loss 0.8560 Prec@1(1,5) 78.47, 92.56
+04/21 04:04:39 PM | Epoch[76](1494/2495): Loss 0.8593 Prec@1(1,5) 78.40, 92.53
+04/21 04:06:36 PM | Epoch[76](1743/2495): Loss 0.8614 Prec@1(1,5) 78.36, 92.51
+04/21 04:08:35 PM | Epoch[76](1992/2495): Loss 0.8641 Prec@1(1,5) 78.27, 92.48
+04/21 04:10:33 PM | Epoch[76](2241/2495): Loss 0.8675 Prec@1(1,5) 78.19, 92.45
+04/21 04:12:29 PM | Epoch[76](2490/2495): Loss 0.8681 Prec@1(1,5) 78.17, 92.44
+04/21 04:13:26 PM |  * Acc@1 75.940 Acc@5 92.593
+04/21 04:13:27 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 04:13:30 PM | learning_rate: 0.010000000000000002
+04/21 04:15:24 PM | Epoch[77](249/2495): Loss 0.8378 Prec@1(1,5) 78.87, 92.92
+04/21 04:17:18 PM | Epoch[77](498/2495): Loss 0.8440 Prec@1(1,5) 78.77, 92.83
+04/21 04:19:11 PM | Epoch[77](747/2495): Loss 0.8475 Prec@1(1,5) 78.71, 92.78
+04/21 04:21:05 PM | Epoch[77](996/2495): Loss 0.8525 Prec@1(1,5) 78.58, 92.68
+04/21 04:23:02 PM | Epoch[77](1245/2495): Loss 0.8548 Prec@1(1,5) 78.51, 92.64
+04/21 04:25:01 PM | Epoch[77](1494/2495): Loss 0.8589 Prec@1(1,5) 78.42, 92.60
+04/21 04:26:59 PM | Epoch[77](1743/2495): Loss 0.8619 Prec@1(1,5) 78.35, 92.57
+04/21 04:28:56 PM | Epoch[77](1992/2495): Loss 0.8644 Prec@1(1,5) 78.25, 92.55
+04/21 04:30:53 PM | Epoch[77](2241/2495): Loss 0.8672 Prec@1(1,5) 78.18, 92.51
+04/21 04:32:49 PM | Epoch[77](2490/2495): Loss 0.8675 Prec@1(1,5) 78.15, 92.51
+04/21 04:33:47 PM |  * Acc@1 76.016 Acc@5 92.569
+04/21 04:33:50 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 04:33:52 PM | learning_rate: 0.010000000000000002
+04/21 04:35:46 PM | Epoch[78](249/2495): Loss 0.8334 Prec@1(1,5) 78.98, 92.77
+04/21 04:37:40 PM | Epoch[78](498/2495): Loss 0.8357 Prec@1(1,5) 78.92, 92.79
+04/21 04:39:38 PM | Epoch[78](747/2495): Loss 0.8403 Prec@1(1,5) 78.77, 92.77
+04/21 04:41:52 PM | Epoch[78](996/2495): Loss 0.8441 Prec@1(1,5) 78.64, 92.73
+04/21 04:44:07 PM | Epoch[78](1245/2495): Loss 0.8459 Prec@1(1,5) 78.59, 92.72
+04/21 04:46:24 PM | Epoch[78](1494/2495): Loss 0.8499 Prec@1(1,5) 78.48, 92.66
+04/21 04:48:40 PM | Epoch[78](1743/2495): Loss 0.8532 Prec@1(1,5) 78.42, 92.63
+04/21 04:50:58 PM | Epoch[78](1992/2495): Loss 0.8558 Prec@1(1,5) 78.35, 92.60
+04/21 04:53:16 PM | Epoch[78](2241/2495): Loss 0.8589 Prec@1(1,5) 78.30, 92.57
+04/21 04:55:35 PM | Epoch[78](2490/2495): Loss 0.8604 Prec@1(1,5) 78.26, 92.57
+04/21 04:56:43 PM |  * Acc@1 76.265 Acc@5 92.745
+04/21 04:56:44 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 04:56:47 PM | learning_rate: 0.010000000000000002
+04/21 04:58:59 PM | Epoch[79](249/2495): Loss 0.8237 Prec@1(1,5) 79.20, 92.86
+04/21 05:01:14 PM | Epoch[79](498/2495): Loss 0.8301 Prec@1(1,5) 79.08, 92.83
+04/21 05:03:29 PM | Epoch[79](747/2495): Loss 0.8379 Prec@1(1,5) 78.83, 92.80
+04/21 05:05:44 PM | Epoch[79](996/2495): Loss 0.8430 Prec@1(1,5) 78.70, 92.74
+04/21 05:08:01 PM | Epoch[79](1245/2495): Loss 0.8443 Prec@1(1,5) 78.70, 92.74
+04/21 05:10:19 PM | Epoch[79](1494/2495): Loss 0.8490 Prec@1(1,5) 78.58, 92.69
+04/21 05:12:36 PM | Epoch[79](1743/2495): Loss 0.8522 Prec@1(1,5) 78.51, 92.66
+04/21 05:14:37 PM | Epoch[79](1992/2495): Loss 0.8550 Prec@1(1,5) 78.44, 92.63
+04/21 05:16:34 PM | Epoch[79](2241/2495): Loss 0.8572 Prec@1(1,5) 78.39, 92.61
+04/21 05:18:30 PM | Epoch[79](2490/2495): Loss 0.8613 Prec@1(1,5) 78.29, 92.56
+04/21 05:19:27 PM |  * Acc@1 75.936 Acc@5 92.449
+04/21 05:19:28 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 05:19:30 PM | learning_rate: 0.010000000000000002
+04/21 05:21:25 PM | Epoch[80](249/2495): Loss 0.8298 Prec@1(1,5) 79.18, 92.87
+04/21 05:23:21 PM | Epoch[80](498/2495): Loss 0.8365 Prec@1(1,5) 79.01, 92.76
+04/21 05:25:16 PM | Epoch[80](747/2495): Loss 0.8407 Prec@1(1,5) 78.81, 92.79
+04/21 05:27:11 PM | Epoch[80](996/2495): Loss 0.8418 Prec@1(1,5) 78.79, 92.80
+04/21 05:29:07 PM | Epoch[80](1245/2495): Loss 0.8451 Prec@1(1,5) 78.71, 92.76
+04/21 05:31:04 PM | Epoch[80](1494/2495): Loss 0.8466 Prec@1(1,5) 78.67, 92.76
+04/21 05:33:03 PM | Epoch[80](1743/2495): Loss 0.8496 Prec@1(1,5) 78.56, 92.72
+04/21 05:34:59 PM | Epoch[80](1992/2495): Loss 0.8504 Prec@1(1,5) 78.51, 92.71
+04/21 05:36:57 PM | Epoch[80](2241/2495): Loss 0.8544 Prec@1(1,5) 78.40, 92.67
+04/21 05:38:53 PM | Epoch[80](2490/2495): Loss 0.8573 Prec@1(1,5) 78.33, 92.64
+04/21 05:39:51 PM |  * Acc@1 76.128 Acc@5 92.641
+04/21 05:39:53 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 05:39:55 PM | learning_rate: 0.010000000000000002
+04/21 05:41:52 PM | Epoch[81](249/2495): Loss 0.8301 Prec@1(1,5) 79.06, 92.92
+04/21 05:43:46 PM | Epoch[81](498/2495): Loss 0.8382 Prec@1(1,5) 78.84, 92.83
+04/21 05:45:41 PM | Epoch[81](747/2495): Loss 0.8363 Prec@1(1,5) 78.87, 92.87
+04/21 05:47:36 PM | Epoch[81](996/2495): Loss 0.8380 Prec@1(1,5) 78.81, 92.86
+04/21 05:49:33 PM | Epoch[81](1245/2495): Loss 0.8402 Prec@1(1,5) 78.76, 92.84
+04/21 05:51:34 PM | Epoch[81](1494/2495): Loss 0.8419 Prec@1(1,5) 78.69, 92.82
+04/21 05:53:48 PM | Epoch[81](1743/2495): Loss 0.8449 Prec@1(1,5) 78.62, 92.77
+04/21 05:55:48 PM | Epoch[81](1992/2495): Loss 0.8476 Prec@1(1,5) 78.56, 92.75
+04/21 05:57:46 PM | Epoch[81](2241/2495): Loss 0.8505 Prec@1(1,5) 78.49, 92.71
+04/21 05:59:43 PM | Epoch[81](2490/2495): Loss 0.8544 Prec@1(1,5) 78.40, 92.67
+04/21 06:00:40 PM |  * Acc@1 75.876 Acc@5 92.397
+04/21 06:00:41 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 06:00:44 PM | learning_rate: 0.010000000000000002
+04/21 06:02:38 PM | Epoch[82](249/2495): Loss 0.8228 Prec@1(1,5) 79.08, 93.11
+04/21 06:04:33 PM | Epoch[82](498/2495): Loss 0.8294 Prec@1(1,5) 79.11, 92.97
+04/21 06:06:28 PM | Epoch[82](747/2495): Loss 0.8345 Prec@1(1,5) 78.96, 92.91
+04/21 06:08:23 PM | Epoch[82](996/2495): Loss 0.8346 Prec@1(1,5) 78.88, 92.89
+04/21 06:10:20 PM | Epoch[82](1245/2495): Loss 0.8391 Prec@1(1,5) 78.77, 92.85
+04/21 06:12:19 PM | Epoch[82](1494/2495): Loss 0.8429 Prec@1(1,5) 78.68, 92.79
+04/21 06:14:16 PM | Epoch[82](1743/2495): Loss 0.8456 Prec@1(1,5) 78.63, 92.77
+04/21 06:16:13 PM | Epoch[82](1992/2495): Loss 0.8484 Prec@1(1,5) 78.58, 92.73
+04/21 06:18:11 PM | Epoch[82](2241/2495): Loss 0.8510 Prec@1(1,5) 78.51, 92.71
+04/21 06:20:09 PM | Epoch[82](2490/2495): Loss 0.8535 Prec@1(1,5) 78.46, 92.68
+04/21 06:21:06 PM |  * Acc@1 76.108 Acc@5 92.457
+04/21 06:21:08 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 06:21:10 PM | learning_rate: 0.010000000000000002
+04/21 06:23:04 PM | Epoch[83](249/2495): Loss 0.8318 Prec@1(1,5) 79.34, 92.93
+04/21 06:24:58 PM | Epoch[83](498/2495): Loss 0.8327 Prec@1(1,5) 79.15, 92.89
+04/21 06:26:54 PM | Epoch[83](747/2495): Loss 0.8342 Prec@1(1,5) 79.02, 92.84
+04/21 06:28:49 PM | Epoch[83](996/2495): Loss 0.8371 Prec@1(1,5) 78.92, 92.81
+04/21 06:30:47 PM | Epoch[83](1245/2495): Loss 0.8396 Prec@1(1,5) 78.85, 92.80
+04/21 06:32:44 PM | Epoch[83](1494/2495): Loss 0.8424 Prec@1(1,5) 78.77, 92.77
+04/21 06:34:41 PM | Epoch[83](1743/2495): Loss 0.8461 Prec@1(1,5) 78.68, 92.74
+04/21 06:36:37 PM | Epoch[83](1992/2495): Loss 0.8486 Prec@1(1,5) 78.62, 92.71
+04/21 06:38:35 PM | Epoch[83](2241/2495): Loss 0.8508 Prec@1(1,5) 78.57, 92.69
+04/21 06:40:33 PM | Epoch[83](2490/2495): Loss 0.8542 Prec@1(1,5) 78.48, 92.64
+04/21 06:41:29 PM |  * Acc@1 75.455 Acc@5 92.317
+04/21 06:41:31 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 06:41:33 PM | learning_rate: 0.010000000000000002
+04/21 06:43:26 PM | Epoch[84](249/2495): Loss 0.8225 Prec@1(1,5) 79.20, 93.12
+04/21 06:45:22 PM | Epoch[84](498/2495): Loss 0.8251 Prec@1(1,5) 79.14, 93.06
+04/21 06:47:18 PM | Epoch[84](747/2495): Loss 0.8260 Prec@1(1,5) 79.13, 93.02
+04/21 06:49:14 PM | Epoch[84](996/2495): Loss 0.8326 Prec@1(1,5) 78.96, 92.93
+04/21 06:51:10 PM | Epoch[84](1245/2495): Loss 0.8363 Prec@1(1,5) 78.87, 92.91
+04/21 06:53:06 PM | Epoch[84](1494/2495): Loss 0.8384 Prec@1(1,5) 78.82, 92.88
+04/21 06:55:03 PM | Epoch[84](1743/2495): Loss 0.8411 Prec@1(1,5) 78.76, 92.83
+04/21 06:57:02 PM | Epoch[84](1992/2495): Loss 0.8437 Prec@1(1,5) 78.70, 92.81
+04/21 06:58:59 PM | Epoch[84](2241/2495): Loss 0.8463 Prec@1(1,5) 78.65, 92.79
+04/21 07:00:55 PM | Epoch[84](2490/2495): Loss 0.8489 Prec@1(1,5) 78.57, 92.76
+04/21 07:01:52 PM |  * Acc@1 75.643 Acc@5 92.357
+04/21 07:01:53 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 07:01:56 PM | learning_rate: 0.010000000000000002
+04/21 07:03:50 PM | Epoch[85](249/2495): Loss 0.8151 Prec@1(1,5) 79.44, 93.18
+04/21 07:05:46 PM | Epoch[85](498/2495): Loss 0.8229 Prec@1(1,5) 79.22, 93.09
+04/21 07:07:40 PM | Epoch[85](747/2495): Loss 0.8256 Prec@1(1,5) 79.15, 93.02
+04/21 07:09:37 PM | Epoch[85](996/2495): Loss 0.8287 Prec@1(1,5) 79.04, 92.99
+04/21 07:11:32 PM | Epoch[85](1245/2495): Loss 0.8343 Prec@1(1,5) 78.89, 92.91
+04/21 07:13:29 PM | Epoch[85](1494/2495): Loss 0.8382 Prec@1(1,5) 78.79, 92.86
+04/21 07:15:27 PM | Epoch[85](1743/2495): Loss 0.8426 Prec@1(1,5) 78.68, 92.80
+04/21 07:17:24 PM | Epoch[85](1992/2495): Loss 0.8445 Prec@1(1,5) 78.63, 92.78
+04/21 07:19:22 PM | Epoch[85](2241/2495): Loss 0.8466 Prec@1(1,5) 78.58, 92.75
+04/21 07:21:21 PM | Epoch[85](2490/2495): Loss 0.8499 Prec@1(1,5) 78.49, 92.72
+04/21 07:22:19 PM |  * Acc@1 75.772 Acc@5 92.505
+04/21 07:22:21 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 07:22:23 PM | learning_rate: 0.010000000000000002
+04/21 07:24:18 PM | Epoch[86](249/2495): Loss 0.8096 Prec@1(1,5) 79.61, 93.18
+04/21 07:26:17 PM | Epoch[86](498/2495): Loss 0.8152 Prec@1(1,5) 79.42, 93.10
+04/21 07:28:15 PM | Epoch[86](747/2495): Loss 0.8185 Prec@1(1,5) 79.30, 93.03
+04/21 07:30:15 PM | Epoch[86](996/2495): Loss 0.8250 Prec@1(1,5) 79.19, 92.94
+04/21 07:32:11 PM | Epoch[86](1245/2495): Loss 0.8314 Prec@1(1,5) 79.03, 92.87
+04/21 07:34:08 PM | Epoch[86](1494/2495): Loss 0.8337 Prec@1(1,5) 78.93, 92.86
+04/21 07:36:06 PM | Epoch[86](1743/2495): Loss 0.8361 Prec@1(1,5) 78.84, 92.84
+04/21 07:38:03 PM | Epoch[86](1992/2495): Loss 0.8397 Prec@1(1,5) 78.75, 92.82
+04/21 07:40:01 PM | Epoch[86](2241/2495): Loss 0.8440 Prec@1(1,5) 78.67, 92.75
+04/21 07:41:57 PM | Epoch[86](2490/2495): Loss 0.8463 Prec@1(1,5) 78.61, 92.74
+04/21 07:42:55 PM |  * Acc@1 75.495 Acc@5 92.361
+04/21 07:42:56 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 07:42:59 PM | learning_rate: 0.010000000000000002
+04/21 07:44:53 PM | Epoch[87](249/2495): Loss 0.8160 Prec@1(1,5) 79.43, 93.08
+04/21 07:46:48 PM | Epoch[87](498/2495): Loss 0.8183 Prec@1(1,5) 79.39, 93.06
+04/21 07:48:42 PM | Epoch[87](747/2495): Loss 0.8206 Prec@1(1,5) 79.34, 93.05
+04/21 07:50:36 PM | Epoch[87](996/2495): Loss 0.8243 Prec@1(1,5) 79.23, 93.01
+04/21 07:52:33 PM | Epoch[87](1245/2495): Loss 0.8257 Prec@1(1,5) 79.19, 93.03
+04/21 07:54:31 PM | Epoch[87](1494/2495): Loss 0.8296 Prec@1(1,5) 79.10, 92.97
+04/21 07:56:28 PM | Epoch[87](1743/2495): Loss 0.8331 Prec@1(1,5) 79.00, 92.92
+04/21 07:58:25 PM | Epoch[87](1992/2495): Loss 0.8352 Prec@1(1,5) 78.93, 92.91
+04/21 08:00:23 PM | Epoch[87](2241/2495): Loss 0.8378 Prec@1(1,5) 78.85, 92.88
+04/21 08:02:20 PM | Epoch[87](2490/2495): Loss 0.8418 Prec@1(1,5) 78.75, 92.84
+04/21 08:03:17 PM |  * Acc@1 75.659 Acc@5 92.465
+04/21 08:03:19 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 08:03:22 PM | learning_rate: 0.010000000000000002
+04/21 08:05:15 PM | Epoch[88](249/2495): Loss 0.8116 Prec@1(1,5) 79.52, 93.18
+04/21 08:07:10 PM | Epoch[88](498/2495): Loss 0.8189 Prec@1(1,5) 79.33, 93.07
+04/21 08:09:05 PM | Epoch[88](747/2495): Loss 0.8245 Prec@1(1,5) 79.11, 92.99
+04/21 08:11:00 PM | Epoch[88](996/2495): Loss 0.8245 Prec@1(1,5) 79.07, 93.01
+04/21 08:12:56 PM | Epoch[88](1245/2495): Loss 0.8290 Prec@1(1,5) 78.99, 92.97
+04/21 08:14:53 PM | Epoch[88](1494/2495): Loss 0.8328 Prec@1(1,5) 78.91, 92.93
+04/21 08:16:49 PM | Epoch[88](1743/2495): Loss 0.8349 Prec@1(1,5) 78.85, 92.91
+04/21 08:18:48 PM | Epoch[88](1992/2495): Loss 0.8386 Prec@1(1,5) 78.77, 92.87
+04/21 08:20:46 PM | Epoch[88](2241/2495): Loss 0.8406 Prec@1(1,5) 78.71, 92.85
+04/21 08:22:44 PM | Epoch[88](2490/2495): Loss 0.8433 Prec@1(1,5) 78.64, 92.83
+04/21 08:23:41 PM |  * Acc@1 75.723 Acc@5 92.373
+04/21 08:23:43 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 08:23:45 PM | learning_rate: 0.010000000000000002
+04/21 08:25:39 PM | Epoch[89](249/2495): Loss 0.8179 Prec@1(1,5) 79.35, 93.02
+04/21 08:27:33 PM | Epoch[89](498/2495): Loss 0.8185 Prec@1(1,5) 79.32, 93.00
+04/21 08:29:28 PM | Epoch[89](747/2495): Loss 0.8247 Prec@1(1,5) 79.21, 92.99
+04/21 08:31:24 PM | Epoch[89](996/2495): Loss 0.8257 Prec@1(1,5) 79.16, 93.01
+04/21 08:33:19 PM | Epoch[89](1245/2495): Loss 0.8266 Prec@1(1,5) 79.11, 92.99
+04/21 08:35:16 PM | Epoch[89](1494/2495): Loss 0.8309 Prec@1(1,5) 78.99, 92.95
+04/21 08:37:14 PM | Epoch[89](1743/2495): Loss 0.8351 Prec@1(1,5) 78.91, 92.91
+04/21 08:39:12 PM | Epoch[89](1992/2495): Loss 0.8388 Prec@1(1,5) 78.82, 92.87
+04/21 08:41:09 PM | Epoch[89](2241/2495): Loss 0.8412 Prec@1(1,5) 78.75, 92.84
+04/21 08:43:08 PM | Epoch[89](2490/2495): Loss 0.8427 Prec@1(1,5) 78.70, 92.82
+04/21 08:44:04 PM |  * Acc@1 75.495 Acc@5 92.285
+04/21 08:44:06 PM | =>Best accuracy Top1: 76.713, Top5: 92.898
+04/21 08:44:09 PM | learning_rate: 0.0010000000000000002
+04/21 08:46:04 PM | Epoch[90](249/2495): Loss 0.7691 Prec@1(1,5) 80.72, 93.49
+04/21 08:47:58 PM | Epoch[90](498/2495): Loss 0.7477 Prec@1(1,5) 81.29, 93.73
+04/21 08:49:53 PM | Epoch[90](747/2495): Loss 0.7343 Prec@1(1,5) 81.61, 93.90
+04/21 08:51:48 PM | Epoch[90](996/2495): Loss 0.7240 Prec@1(1,5) 81.87, 93.99
+04/21 08:53:44 PM | Epoch[90](1245/2495): Loss 0.7181 Prec@1(1,5) 82.02, 94.05
+04/21 08:55:41 PM | Epoch[90](1494/2495): Loss 0.7117 Prec@1(1,5) 82.17, 94.10
+04/21 08:57:38 PM | Epoch[90](1743/2495): Loss 0.7077 Prec@1(1,5) 82.26, 94.15
+04/21 08:59:35 PM | Epoch[90](1992/2495): Loss 0.7018 Prec@1(1,5) 82.41, 94.21
+04/21 09:01:33 PM | Epoch[90](2241/2495): Loss 0.6986 Prec@1(1,5) 82.50, 94.23
+04/21 09:03:30 PM | Epoch[90](2490/2495): Loss 0.6962 Prec@1(1,5) 82.56, 94.25
+04/21 09:04:28 PM |  * Acc@1 78.116 Acc@5 93.703
+04/21 09:04:31 PM | =>Best accuracy Top1: 78.116, Top5: 93.703
+04/21 09:04:34 PM | learning_rate: 0.0010000000000000002
+04/21 09:06:29 PM | Epoch[91](249/2495): Loss 0.6639 Prec@1(1,5) 83.42, 94.47
+04/21 09:08:23 PM | Epoch[91](498/2495): Loss 0.6616 Prec@1(1,5) 83.51, 94.51
+04/21 09:10:18 PM | Epoch[91](747/2495): Loss 0.6620 Prec@1(1,5) 83.55, 94.52
+04/21 09:12:15 PM | Epoch[91](996/2495): Loss 0.6599 Prec@1(1,5) 83.56, 94.58
+04/21 09:14:12 PM | Epoch[91](1245/2495): Loss 0.6572 Prec@1(1,5) 83.66, 94.60
+04/21 09:16:09 PM | Epoch[91](1494/2495): Loss 0.6564 Prec@1(1,5) 83.69, 94.62
+04/21 09:18:06 PM | Epoch[91](1743/2495): Loss 0.6565 Prec@1(1,5) 83.68, 94.62
+04/21 09:20:03 PM | Epoch[91](1992/2495): Loss 0.6567 Prec@1(1,5) 83.64, 94.61
+04/21 09:22:01 PM | Epoch[91](2241/2495): Loss 0.6552 Prec@1(1,5) 83.68, 94.64
+04/21 09:23:59 PM | Epoch[91](2490/2495): Loss 0.6547 Prec@1(1,5) 83.70, 94.64
+04/21 09:24:56 PM |  * Acc@1 78.333 Acc@5 93.768
+04/21 09:25:00 PM | =>Best accuracy Top1: 78.333, Top5: 93.768
+04/21 09:25:02 PM | learning_rate: 0.0010000000000000002
+04/21 09:26:56 PM | Epoch[92](249/2495): Loss 0.6323 Prec@1(1,5) 84.14, 94.99
+04/21 09:28:50 PM | Epoch[92](498/2495): Loss 0.6383 Prec@1(1,5) 84.13, 94.88
+04/21 09:30:44 PM | Epoch[92](747/2495): Loss 0.6382 Prec@1(1,5) 84.15, 94.87
+04/21 09:32:40 PM | Epoch[92](996/2495): Loss 0.6400 Prec@1(1,5) 84.09, 94.82
+04/21 09:34:37 PM | Epoch[92](1245/2495): Loss 0.6396 Prec@1(1,5) 84.08, 94.80
+04/21 09:36:34 PM | Epoch[92](1494/2495): Loss 0.6379 Prec@1(1,5) 84.11, 94.81
+04/21 09:38:32 PM | Epoch[92](1743/2495): Loss 0.6366 Prec@1(1,5) 84.15, 94.82
+04/21 09:40:28 PM | Epoch[92](1992/2495): Loss 0.6366 Prec@1(1,5) 84.15, 94.82
+04/21 09:42:25 PM | Epoch[92](2241/2495): Loss 0.6364 Prec@1(1,5) 84.14, 94.83
+04/21 09:44:23 PM | Epoch[92](2490/2495): Loss 0.6370 Prec@1(1,5) 84.14, 94.82
+04/21 09:45:20 PM |  * Acc@1 78.545 Acc@5 93.888
+04/21 09:45:24 PM | =>Best accuracy Top1: 78.545, Top5: 93.888
+04/21 09:45:26 PM | learning_rate: 0.0010000000000000002
+04/21 09:47:19 PM | Epoch[93](249/2495): Loss 0.6239 Prec@1(1,5) 84.35, 94.97
+04/21 09:49:14 PM | Epoch[93](498/2495): Loss 0.6173 Prec@1(1,5) 84.52, 95.02
+04/21 09:51:07 PM | Epoch[93](747/2495): Loss 0.6209 Prec@1(1,5) 84.43, 95.01
+04/21 09:53:03 PM | Epoch[93](996/2495): Loss 0.6211 Prec@1(1,5) 84.44, 94.99
+04/21 09:54:58 PM | Epoch[93](1245/2495): Loss 0.6241 Prec@1(1,5) 84.41, 94.94
+04/21 09:56:55 PM | Epoch[93](1494/2495): Loss 0.6235 Prec@1(1,5) 84.42, 94.96
+04/21 09:58:52 PM | Epoch[93](1743/2495): Loss 0.6244 Prec@1(1,5) 84.42, 94.94
+04/21 10:00:50 PM | Epoch[93](1992/2495): Loss 0.6258 Prec@1(1,5) 84.38, 94.93
+04/21 10:02:47 PM | Epoch[93](2241/2495): Loss 0.6259 Prec@1(1,5) 84.37, 94.93
+04/21 10:04:45 PM | Epoch[93](2490/2495): Loss 0.6255 Prec@1(1,5) 84.39, 94.93
+04/21 10:05:43 PM |  * Acc@1 78.529 Acc@5 93.772
+04/21 10:05:44 PM | =>Best accuracy Top1: 78.545, Top5: 93.888
+04/21 10:05:46 PM | learning_rate: 0.0010000000000000002
+04/21 10:07:42 PM | Epoch[94](249/2495): Loss 0.6159 Prec@1(1,5) 84.65, 95.04
+04/21 10:09:37 PM | Epoch[94](498/2495): Loss 0.6151 Prec@1(1,5) 84.69, 95.08
+04/21 10:11:32 PM | Epoch[94](747/2495): Loss 0.6162 Prec@1(1,5) 84.64, 95.04
+04/21 10:13:28 PM | Epoch[94](996/2495): Loss 0.6156 Prec@1(1,5) 84.67, 95.05
+04/21 10:15:23 PM | Epoch[94](1245/2495): Loss 0.6153 Prec@1(1,5) 84.68, 95.04
+04/21 10:17:20 PM | Epoch[94](1494/2495): Loss 0.6158 Prec@1(1,5) 84.66, 95.03
+04/21 10:19:18 PM | Epoch[94](1743/2495): Loss 0.6157 Prec@1(1,5) 84.68, 95.02
+04/21 10:21:16 PM | Epoch[94](1992/2495): Loss 0.6165 Prec@1(1,5) 84.66, 95.01
+04/21 10:23:14 PM | Epoch[94](2241/2495): Loss 0.6161 Prec@1(1,5) 84.67, 95.02
+04/21 10:25:11 PM | Epoch[94](2490/2495): Loss 0.6158 Prec@1(1,5) 84.67, 95.04
+04/21 10:26:08 PM |  * Acc@1 78.661 Acc@5 93.808
+04/21 10:26:12 PM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/21 10:26:14 PM | learning_rate: 0.0010000000000000002
+04/21 10:28:08 PM | Epoch[95](249/2495): Loss 0.5963 Prec@1(1,5) 85.01, 95.26
+04/21 10:30:04 PM | Epoch[95](498/2495): Loss 0.6015 Prec@1(1,5) 85.01, 95.14
+04/21 10:31:57 PM | Epoch[95](747/2495): Loss 0.6014 Prec@1(1,5) 85.03, 95.14
+04/21 10:33:52 PM | Epoch[95](996/2495): Loss 0.6018 Prec@1(1,5) 85.02, 95.13
+04/21 10:35:50 PM | Epoch[95](1245/2495): Loss 0.6031 Prec@1(1,5) 85.01, 95.11
+04/21 10:37:47 PM | Epoch[95](1494/2495): Loss 0.6051 Prec@1(1,5) 84.97, 95.08
+04/21 10:39:44 PM | Epoch[95](1743/2495): Loss 0.6061 Prec@1(1,5) 84.95, 95.08
+04/21 10:41:41 PM | Epoch[95](1992/2495): Loss 0.6070 Prec@1(1,5) 84.93, 95.08
+04/21 10:43:39 PM | Epoch[95](2241/2495): Loss 0.6066 Prec@1(1,5) 84.91, 95.07
+04/21 10:45:37 PM | Epoch[95](2490/2495): Loss 0.6079 Prec@1(1,5) 84.88, 95.07
+04/21 10:46:34 PM |  * Acc@1 78.601 Acc@5 93.792
+04/21 10:46:35 PM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/21 10:46:38 PM | learning_rate: 0.0010000000000000002
+04/21 10:48:31 PM | Epoch[96](249/2495): Loss 0.5991 Prec@1(1,5) 85.16, 95.15
+04/21 10:50:25 PM | Epoch[96](498/2495): Loss 0.5947 Prec@1(1,5) 85.30, 95.19
+04/21 10:52:21 PM | Epoch[96](747/2495): Loss 0.5975 Prec@1(1,5) 85.22, 95.15
+04/21 10:54:16 PM | Epoch[96](996/2495): Loss 0.5994 Prec@1(1,5) 85.16, 95.14
+04/21 10:56:12 PM | Epoch[96](1245/2495): Loss 0.6007 Prec@1(1,5) 85.13, 95.13
+04/21 10:58:08 PM | Epoch[96](1494/2495): Loss 0.5997 Prec@1(1,5) 85.15, 95.15
+04/21 11:00:05 PM | Epoch[96](1743/2495): Loss 0.5992 Prec@1(1,5) 85.15, 95.18
+04/21 11:02:02 PM | Epoch[96](1992/2495): Loss 0.5996 Prec@1(1,5) 85.12, 95.16
+04/21 11:04:00 PM | Epoch[96](2241/2495): Loss 0.6002 Prec@1(1,5) 85.11, 95.15
+04/21 11:05:57 PM | Epoch[96](2490/2495): Loss 0.6007 Prec@1(1,5) 85.08, 95.15
+04/21 11:06:54 PM |  * Acc@1 78.605 Acc@5 93.928
+04/21 11:06:56 PM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/21 11:06:59 PM | learning_rate: 0.0010000000000000002
+04/21 11:08:52 PM | Epoch[97](249/2495): Loss 0.5943 Prec@1(1,5) 85.13, 95.23
+04/21 11:10:46 PM | Epoch[97](498/2495): Loss 0.5921 Prec@1(1,5) 85.24, 95.26
+04/21 11:12:40 PM | Epoch[97](747/2495): Loss 0.5931 Prec@1(1,5) 85.22, 95.24
+04/21 11:14:37 PM | Epoch[97](996/2495): Loss 0.5960 Prec@1(1,5) 85.19, 95.20
+04/21 11:16:33 PM | Epoch[97](1245/2495): Loss 0.5934 Prec@1(1,5) 85.24, 95.24
+04/21 11:18:29 PM | Epoch[97](1494/2495): Loss 0.5937 Prec@1(1,5) 85.23, 95.23
+04/21 11:20:26 PM | Epoch[97](1743/2495): Loss 0.5950 Prec@1(1,5) 85.22, 95.21
+04/21 11:22:23 PM | Epoch[97](1992/2495): Loss 0.5948 Prec@1(1,5) 85.23, 95.21
+04/21 11:24:21 PM | Epoch[97](2241/2495): Loss 0.5955 Prec@1(1,5) 85.21, 95.20
+04/21 11:26:18 PM | Epoch[97](2490/2495): Loss 0.5966 Prec@1(1,5) 85.17, 95.19
+04/21 11:27:16 PM |  * Acc@1 78.641 Acc@5 93.932
+04/21 11:27:18 PM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/21 11:27:20 PM | learning_rate: 0.0010000000000000002
+04/21 11:29:14 PM | Epoch[98](249/2495): Loss 0.5916 Prec@1(1,5) 85.36, 95.11
+04/21 11:31:08 PM | Epoch[98](498/2495): Loss 0.5939 Prec@1(1,5) 85.31, 95.16
+04/21 11:33:04 PM | Epoch[98](747/2495): Loss 0.5913 Prec@1(1,5) 85.27, 95.21
+04/21 11:35:00 PM | Epoch[98](996/2495): Loss 0.5916 Prec@1(1,5) 85.29, 95.24
+04/21 11:36:56 PM | Epoch[98](1245/2495): Loss 0.5921 Prec@1(1,5) 85.28, 95.24
+04/21 11:38:53 PM | Epoch[98](1494/2495): Loss 0.5939 Prec@1(1,5) 85.25, 95.22
+04/21 11:40:50 PM | Epoch[98](1743/2495): Loss 0.5933 Prec@1(1,5) 85.24, 95.22
+04/21 11:42:47 PM | Epoch[98](1992/2495): Loss 0.5930 Prec@1(1,5) 85.27, 95.23
+04/21 11:44:45 PM | Epoch[98](2241/2495): Loss 0.5933 Prec@1(1,5) 85.26, 95.24
+04/21 11:46:43 PM | Epoch[98](2490/2495): Loss 0.5932 Prec@1(1,5) 85.26, 95.24
+04/21 11:47:41 PM |  * Acc@1 78.601 Acc@5 93.812
+04/21 11:47:42 PM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/21 11:47:44 PM | learning_rate: 0.0010000000000000002
+04/21 11:49:38 PM | Epoch[99](249/2495): Loss 0.5724 Prec@1(1,5) 85.64, 95.48
+04/21 11:51:32 PM | Epoch[99](498/2495): Loss 0.5820 Prec@1(1,5) 85.49, 95.34
+04/21 11:53:27 PM | Epoch[99](747/2495): Loss 0.5827 Prec@1(1,5) 85.47, 95.33
+04/21 11:55:23 PM | Epoch[99](996/2495): Loss 0.5826 Prec@1(1,5) 85.49, 95.36
+04/21 11:57:19 PM | Epoch[99](1245/2495): Loss 0.5839 Prec@1(1,5) 85.44, 95.35
+04/21 11:59:16 PM | Epoch[99](1494/2495): Loss 0.5855 Prec@1(1,5) 85.43, 95.33
+04/22 12:01:14 AM | Epoch[99](1743/2495): Loss 0.5848 Prec@1(1,5) 85.46, 95.33
+04/22 12:03:11 AM | Epoch[99](1992/2495): Loss 0.5850 Prec@1(1,5) 85.45, 95.32
+04/22 12:05:08 AM | Epoch[99](2241/2495): Loss 0.5851 Prec@1(1,5) 85.46, 95.33
+04/22 12:07:05 AM | Epoch[99](2490/2495): Loss 0.5863 Prec@1(1,5) 85.43, 95.32
+04/22 12:08:02 AM |  * Acc@1 78.461 Acc@5 93.832
+04/22 12:08:04 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 12:08:06 AM | learning_rate: 0.0010000000000000002
+04/22 12:10:01 AM | Epoch[100](249/2495): Loss 0.5803 Prec@1(1,5) 85.61, 95.40
+04/22 12:11:54 AM | Epoch[100](498/2495): Loss 0.5785 Prec@1(1,5) 85.63, 95.39
+04/22 12:13:49 AM | Epoch[100](747/2495): Loss 0.5781 Prec@1(1,5) 85.61, 95.40
+04/22 12:15:45 AM | Epoch[100](996/2495): Loss 0.5790 Prec@1(1,5) 85.62, 95.37
+04/22 12:17:40 AM | Epoch[100](1245/2495): Loss 0.5797 Prec@1(1,5) 85.62, 95.36
+04/22 12:19:38 AM | Epoch[100](1494/2495): Loss 0.5796 Prec@1(1,5) 85.62, 95.35
+04/22 12:21:36 AM | Epoch[100](1743/2495): Loss 0.5789 Prec@1(1,5) 85.63, 95.34
+04/22 12:23:32 AM | Epoch[100](1992/2495): Loss 0.5796 Prec@1(1,5) 85.61, 95.34
+04/22 12:25:29 AM | Epoch[100](2241/2495): Loss 0.5817 Prec@1(1,5) 85.55, 95.31
+04/22 12:27:27 AM | Epoch[100](2490/2495): Loss 0.5832 Prec@1(1,5) 85.51, 95.29
+04/22 12:28:25 AM |  * Acc@1 78.557 Acc@5 93.792
+04/22 12:28:26 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 12:28:28 AM | learning_rate: 0.0010000000000000002
+04/22 12:30:22 AM | Epoch[101](249/2495): Loss 0.5700 Prec@1(1,5) 85.99, 95.34
+04/22 12:32:16 AM | Epoch[101](498/2495): Loss 0.5742 Prec@1(1,5) 85.87, 95.32
+04/22 12:34:11 AM | Epoch[101](747/2495): Loss 0.5769 Prec@1(1,5) 85.78, 95.32
+04/22 12:36:07 AM | Epoch[101](996/2495): Loss 0.5748 Prec@1(1,5) 85.81, 95.36
+04/22 12:38:03 AM | Epoch[101](1245/2495): Loss 0.5748 Prec@1(1,5) 85.81, 95.35
+04/22 12:40:01 AM | Epoch[101](1494/2495): Loss 0.5750 Prec@1(1,5) 85.75, 95.38
+04/22 12:41:57 AM | Epoch[101](1743/2495): Loss 0.5759 Prec@1(1,5) 85.73, 95.37
+04/22 12:43:56 AM | Epoch[101](1992/2495): Loss 0.5746 Prec@1(1,5) 85.75, 95.39
+04/22 12:45:53 AM | Epoch[101](2241/2495): Loss 0.5744 Prec@1(1,5) 85.76, 95.40
+04/22 12:47:50 AM | Epoch[101](2490/2495): Loss 0.5758 Prec@1(1,5) 85.73, 95.38
+04/22 12:48:47 AM |  * Acc@1 78.549 Acc@5 93.824
+04/22 12:48:48 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 12:48:50 AM | learning_rate: 0.0010000000000000002
+04/22 12:50:43 AM | Epoch[102](249/2495): Loss 0.5721 Prec@1(1,5) 85.86, 95.36
+04/22 12:52:38 AM | Epoch[102](498/2495): Loss 0.5718 Prec@1(1,5) 85.84, 95.39
+04/22 12:54:34 AM | Epoch[102](747/2495): Loss 0.5728 Prec@1(1,5) 85.86, 95.37
+04/22 12:56:29 AM | Epoch[102](996/2495): Loss 0.5714 Prec@1(1,5) 85.91, 95.37
+04/22 12:58:25 AM | Epoch[102](1245/2495): Loss 0.5722 Prec@1(1,5) 85.85, 95.38
+04/22 01:00:22 AM | Epoch[102](1494/2495): Loss 0.5711 Prec@1(1,5) 85.87, 95.40
+04/22 01:02:19 AM | Epoch[102](1743/2495): Loss 0.5705 Prec@1(1,5) 85.86, 95.41
+04/22 01:04:17 AM | Epoch[102](1992/2495): Loss 0.5716 Prec@1(1,5) 85.81, 95.41
+04/22 01:06:15 AM | Epoch[102](2241/2495): Loss 0.5723 Prec@1(1,5) 85.79, 95.41
+04/22 01:08:12 AM | Epoch[102](2490/2495): Loss 0.5729 Prec@1(1,5) 85.78, 95.40
+04/22 01:09:09 AM |  * Acc@1 78.541 Acc@5 93.792
+04/22 01:09:11 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 01:09:13 AM | learning_rate: 0.0010000000000000002
+04/22 01:11:07 AM | Epoch[103](249/2495): Loss 0.5686 Prec@1(1,5) 85.89, 95.46
+04/22 01:13:03 AM | Epoch[103](498/2495): Loss 0.5652 Prec@1(1,5) 86.07, 95.49
+04/22 01:14:58 AM | Epoch[103](747/2495): Loss 0.5649 Prec@1(1,5) 86.08, 95.50
+04/22 01:16:54 AM | Epoch[103](996/2495): Loss 0.5648 Prec@1(1,5) 86.06, 95.49
+04/22 01:18:50 AM | Epoch[103](1245/2495): Loss 0.5668 Prec@1(1,5) 86.01, 95.47
+04/22 01:20:48 AM | Epoch[103](1494/2495): Loss 0.5667 Prec@1(1,5) 85.98, 95.46
+04/22 01:22:44 AM | Epoch[103](1743/2495): Loss 0.5671 Prec@1(1,5) 85.97, 95.46
+04/22 01:24:41 AM | Epoch[103](1992/2495): Loss 0.5679 Prec@1(1,5) 85.94, 95.44
+04/22 01:26:37 AM | Epoch[103](2241/2495): Loss 0.5674 Prec@1(1,5) 85.95, 95.44
+04/22 01:28:34 AM | Epoch[103](2490/2495): Loss 0.5681 Prec@1(1,5) 85.93, 95.44
+04/22 01:29:32 AM |  * Acc@1 78.477 Acc@5 93.784
+04/22 01:29:34 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 01:29:36 AM | learning_rate: 0.0010000000000000002
+04/22 01:31:30 AM | Epoch[104](249/2495): Loss 0.5566 Prec@1(1,5) 86.23, 95.62
+04/22 01:33:25 AM | Epoch[104](498/2495): Loss 0.5570 Prec@1(1,5) 86.16, 95.57
+04/22 01:35:21 AM | Epoch[104](747/2495): Loss 0.5598 Prec@1(1,5) 86.13, 95.51
+04/22 01:37:16 AM | Epoch[104](996/2495): Loss 0.5630 Prec@1(1,5) 86.02, 95.52
+04/22 01:39:12 AM | Epoch[104](1245/2495): Loss 0.5654 Prec@1(1,5) 85.96, 95.50
+04/22 01:41:10 AM | Epoch[104](1494/2495): Loss 0.5663 Prec@1(1,5) 85.92, 95.49
+04/22 01:43:08 AM | Epoch[104](1743/2495): Loss 0.5671 Prec@1(1,5) 85.91, 95.48
+04/22 01:45:05 AM | Epoch[104](1992/2495): Loss 0.5665 Prec@1(1,5) 85.91, 95.49
+04/22 01:47:02 AM | Epoch[104](2241/2495): Loss 0.5663 Prec@1(1,5) 85.93, 95.49
+04/22 01:48:59 AM | Epoch[104](2490/2495): Loss 0.5672 Prec@1(1,5) 85.91, 95.47
+04/22 01:49:56 AM |  * Acc@1 78.437 Acc@5 93.784
+04/22 01:49:58 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 01:50:00 AM | learning_rate: 0.0010000000000000002
+04/22 01:51:53 AM | Epoch[105](249/2495): Loss 0.5614 Prec@1(1,5) 86.19, 95.52
+04/22 01:53:48 AM | Epoch[105](498/2495): Loss 0.5601 Prec@1(1,5) 86.21, 95.53
+04/22 01:55:42 AM | Epoch[105](747/2495): Loss 0.5612 Prec@1(1,5) 86.14, 95.53
+04/22 01:57:38 AM | Epoch[105](996/2495): Loss 0.5615 Prec@1(1,5) 86.16, 95.52
+04/22 01:59:33 AM | Epoch[105](1245/2495): Loss 0.5614 Prec@1(1,5) 86.14, 95.52
+04/22 02:01:32 AM | Epoch[105](1494/2495): Loss 0.5612 Prec@1(1,5) 86.14, 95.53
+04/22 02:03:28 AM | Epoch[105](1743/2495): Loss 0.5608 Prec@1(1,5) 86.13, 95.53
+04/22 02:05:25 AM | Epoch[105](1992/2495): Loss 0.5616 Prec@1(1,5) 86.10, 95.52
+04/22 02:07:23 AM | Epoch[105](2241/2495): Loss 0.5620 Prec@1(1,5) 86.08, 95.52
+04/22 02:09:20 AM | Epoch[105](2490/2495): Loss 0.5630 Prec@1(1,5) 86.06, 95.51
+04/22 02:10:17 AM |  * Acc@1 78.541 Acc@5 93.667
+04/22 02:10:19 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 02:10:21 AM | learning_rate: 0.0010000000000000002
+04/22 02:12:15 AM | Epoch[106](249/2495): Loss 0.5479 Prec@1(1,5) 86.57, 95.58
+04/22 02:14:10 AM | Epoch[106](498/2495): Loss 0.5502 Prec@1(1,5) 86.46, 95.56
+04/22 02:16:04 AM | Epoch[106](747/2495): Loss 0.5544 Prec@1(1,5) 86.30, 95.54
+04/22 02:17:59 AM | Epoch[106](996/2495): Loss 0.5563 Prec@1(1,5) 86.24, 95.54
+04/22 02:19:57 AM | Epoch[106](1245/2495): Loss 0.5573 Prec@1(1,5) 86.23, 95.53
+04/22 02:21:55 AM | Epoch[106](1494/2495): Loss 0.5572 Prec@1(1,5) 86.22, 95.54
+04/22 02:23:51 AM | Epoch[106](1743/2495): Loss 0.5579 Prec@1(1,5) 86.18, 95.53
+04/22 02:25:49 AM | Epoch[106](1992/2495): Loss 0.5589 Prec@1(1,5) 86.16, 95.51
+04/22 02:27:45 AM | Epoch[106](2241/2495): Loss 0.5589 Prec@1(1,5) 86.16, 95.51
+04/22 02:29:42 AM | Epoch[106](2490/2495): Loss 0.5588 Prec@1(1,5) 86.14, 95.52
+04/22 02:30:40 AM |  * Acc@1 78.521 Acc@5 93.752
+04/22 02:30:41 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 02:30:43 AM | learning_rate: 0.0010000000000000002
+04/22 02:32:37 AM | Epoch[107](249/2495): Loss 0.5513 Prec@1(1,5) 86.33, 95.51
+04/22 02:34:31 AM | Epoch[107](498/2495): Loss 0.5517 Prec@1(1,5) 86.34, 95.53
+04/22 02:36:26 AM | Epoch[107](747/2495): Loss 0.5533 Prec@1(1,5) 86.27, 95.54
+04/22 02:38:22 AM | Epoch[107](996/2495): Loss 0.5526 Prec@1(1,5) 86.29, 95.58
+04/22 02:40:17 AM | Epoch[107](1245/2495): Loss 0.5524 Prec@1(1,5) 86.29, 95.60
+04/22 02:42:13 AM | Epoch[107](1494/2495): Loss 0.5541 Prec@1(1,5) 86.26, 95.59
+04/22 02:44:11 AM | Epoch[107](1743/2495): Loss 0.5543 Prec@1(1,5) 86.25, 95.58
+04/22 02:46:10 AM | Epoch[107](1992/2495): Loss 0.5550 Prec@1(1,5) 86.22, 95.58
+04/22 02:48:07 AM | Epoch[107](2241/2495): Loss 0.5554 Prec@1(1,5) 86.21, 95.57
+04/22 02:50:05 AM | Epoch[107](2490/2495): Loss 0.5548 Prec@1(1,5) 86.22, 95.59
+04/22 02:51:02 AM |  * Acc@1 78.533 Acc@5 93.647
+04/22 02:51:04 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 02:51:06 AM | learning_rate: 0.0010000000000000002
+04/22 02:53:00 AM | Epoch[108](249/2495): Loss 0.5428 Prec@1(1,5) 86.55, 95.73
+04/22 02:54:54 AM | Epoch[108](498/2495): Loss 0.5467 Prec@1(1,5) 86.52, 95.70
+04/22 02:56:48 AM | Epoch[108](747/2495): Loss 0.5473 Prec@1(1,5) 86.51, 95.67
+04/22 02:58:43 AM | Epoch[108](996/2495): Loss 0.5483 Prec@1(1,5) 86.49, 95.66
+04/22 03:00:40 AM | Epoch[108](1245/2495): Loss 0.5492 Prec@1(1,5) 86.47, 95.63
+04/22 03:02:36 AM | Epoch[108](1494/2495): Loss 0.5489 Prec@1(1,5) 86.47, 95.63
+04/22 03:04:34 AM | Epoch[108](1743/2495): Loss 0.5501 Prec@1(1,5) 86.43, 95.61
+04/22 03:06:32 AM | Epoch[108](1992/2495): Loss 0.5512 Prec@1(1,5) 86.39, 95.60
+04/22 03:08:30 AM | Epoch[108](2241/2495): Loss 0.5518 Prec@1(1,5) 86.37, 95.60
+04/22 03:10:27 AM | Epoch[108](2490/2495): Loss 0.5520 Prec@1(1,5) 86.37, 95.60
+04/22 03:11:25 AM |  * Acc@1 78.485 Acc@5 93.711
+04/22 03:11:27 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 03:11:29 AM | learning_rate: 0.0010000000000000002
+04/22 03:13:22 AM | Epoch[109](249/2495): Loss 0.5423 Prec@1(1,5) 86.63, 95.78
+04/22 03:15:18 AM | Epoch[109](498/2495): Loss 0.5482 Prec@1(1,5) 86.52, 95.69
+04/22 03:17:13 AM | Epoch[109](747/2495): Loss 0.5485 Prec@1(1,5) 86.49, 95.70
+04/22 03:19:09 AM | Epoch[109](996/2495): Loss 0.5467 Prec@1(1,5) 86.55, 95.70
+04/22 03:21:06 AM | Epoch[109](1245/2495): Loss 0.5467 Prec@1(1,5) 86.53, 95.70
+04/22 03:23:04 AM | Epoch[109](1494/2495): Loss 0.5474 Prec@1(1,5) 86.50, 95.69
+04/22 03:25:01 AM | Epoch[109](1743/2495): Loss 0.5469 Prec@1(1,5) 86.50, 95.68
+04/22 03:26:58 AM | Epoch[109](1992/2495): Loss 0.5476 Prec@1(1,5) 86.47, 95.68
+04/22 03:28:56 AM | Epoch[109](2241/2495): Loss 0.5478 Prec@1(1,5) 86.46, 95.67
+04/22 03:30:52 AM | Epoch[109](2490/2495): Loss 0.5480 Prec@1(1,5) 86.45, 95.67
+04/22 03:31:50 AM |  * Acc@1 78.397 Acc@5 93.671
+04/22 03:31:51 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 03:31:53 AM | learning_rate: 0.0010000000000000002
+04/22 03:33:48 AM | Epoch[110](249/2495): Loss 0.5384 Prec@1(1,5) 86.71, 95.71
+04/22 03:35:42 AM | Epoch[110](498/2495): Loss 0.5394 Prec@1(1,5) 86.72, 95.70
+04/22 03:37:37 AM | Epoch[110](747/2495): Loss 0.5392 Prec@1(1,5) 86.72, 95.73
+04/22 03:39:31 AM | Epoch[110](996/2495): Loss 0.5406 Prec@1(1,5) 86.68, 95.70
+04/22 03:41:30 AM | Epoch[110](1245/2495): Loss 0.5408 Prec@1(1,5) 86.67, 95.70
+04/22 03:43:28 AM | Epoch[110](1494/2495): Loss 0.5424 Prec@1(1,5) 86.64, 95.69
+04/22 03:45:25 AM | Epoch[110](1743/2495): Loss 0.5437 Prec@1(1,5) 86.61, 95.67
+04/22 03:47:23 AM | Epoch[110](1992/2495): Loss 0.5440 Prec@1(1,5) 86.58, 95.68
+04/22 03:49:21 AM | Epoch[110](2241/2495): Loss 0.5451 Prec@1(1,5) 86.56, 95.67
+04/22 03:51:18 AM | Epoch[110](2490/2495): Loss 0.5457 Prec@1(1,5) 86.52, 95.67
+04/22 03:52:16 AM |  * Acc@1 78.305 Acc@5 93.627
+04/22 03:52:18 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 03:52:21 AM | learning_rate: 0.0010000000000000002
+04/22 03:54:16 AM | Epoch[111](249/2495): Loss 0.5303 Prec@1(1,5) 87.02, 95.81
+04/22 03:56:10 AM | Epoch[111](498/2495): Loss 0.5374 Prec@1(1,5) 86.81, 95.69
+04/22 03:58:05 AM | Epoch[111](747/2495): Loss 0.5387 Prec@1(1,5) 86.78, 95.67
+04/22 04:00:01 AM | Epoch[111](996/2495): Loss 0.5398 Prec@1(1,5) 86.72, 95.70
+04/22 04:01:58 AM | Epoch[111](1245/2495): Loss 0.5408 Prec@1(1,5) 86.65, 95.68
+04/22 04:03:55 AM | Epoch[111](1494/2495): Loss 0.5408 Prec@1(1,5) 86.63, 95.69
+04/22 04:05:51 AM | Epoch[111](1743/2495): Loss 0.5414 Prec@1(1,5) 86.60, 95.69
+04/22 04:07:48 AM | Epoch[111](1992/2495): Loss 0.5418 Prec@1(1,5) 86.60, 95.68
+04/22 04:09:46 AM | Epoch[111](2241/2495): Loss 0.5421 Prec@1(1,5) 86.58, 95.69
+04/22 04:11:43 AM | Epoch[111](2490/2495): Loss 0.5434 Prec@1(1,5) 86.54, 95.69
+04/22 04:12:40 AM |  * Acc@1 78.397 Acc@5 93.639
+04/22 04:12:42 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 04:12:44 AM | learning_rate: 0.0010000000000000002
+04/22 04:14:38 AM | Epoch[112](249/2495): Loss 0.5392 Prec@1(1,5) 86.66, 95.72
+04/22 04:16:32 AM | Epoch[112](498/2495): Loss 0.5392 Prec@1(1,5) 86.65, 95.75
+04/22 04:18:27 AM | Epoch[112](747/2495): Loss 0.5388 Prec@1(1,5) 86.64, 95.75
+04/22 04:20:26 AM | Epoch[112](996/2495): Loss 0.5394 Prec@1(1,5) 86.62, 95.74
+04/22 04:22:22 AM | Epoch[112](1245/2495): Loss 0.5400 Prec@1(1,5) 86.61, 95.73
+04/22 04:24:18 AM | Epoch[112](1494/2495): Loss 0.5416 Prec@1(1,5) 86.58, 95.72
+04/22 04:26:15 AM | Epoch[112](1743/2495): Loss 0.5424 Prec@1(1,5) 86.59, 95.70
+04/22 04:28:12 AM | Epoch[112](1992/2495): Loss 0.5413 Prec@1(1,5) 86.61, 95.71
+04/22 04:30:09 AM | Epoch[112](2241/2495): Loss 0.5411 Prec@1(1,5) 86.60, 95.71
+04/22 04:32:07 AM | Epoch[112](2490/2495): Loss 0.5405 Prec@1(1,5) 86.61, 95.72
+04/22 04:33:04 AM |  * Acc@1 78.409 Acc@5 93.780
+04/22 04:33:06 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 04:33:09 AM | learning_rate: 0.0010000000000000002
+04/22 04:35:02 AM | Epoch[113](249/2495): Loss 0.5335 Prec@1(1,5) 86.93, 95.81
+04/22 04:36:57 AM | Epoch[113](498/2495): Loss 0.5343 Prec@1(1,5) 86.77, 95.78
+04/22 04:38:50 AM | Epoch[113](747/2495): Loss 0.5336 Prec@1(1,5) 86.83, 95.78
+04/22 04:40:45 AM | Epoch[113](996/2495): Loss 0.5349 Prec@1(1,5) 86.79, 95.76
+04/22 04:42:42 AM | Epoch[113](1245/2495): Loss 0.5354 Prec@1(1,5) 86.74, 95.77
+04/22 04:44:39 AM | Epoch[113](1494/2495): Loss 0.5360 Prec@1(1,5) 86.72, 95.77
+04/22 04:46:37 AM | Epoch[113](1743/2495): Loss 0.5366 Prec@1(1,5) 86.72, 95.76
+04/22 04:48:34 AM | Epoch[113](1992/2495): Loss 0.5370 Prec@1(1,5) 86.72, 95.76
+04/22 04:50:31 AM | Epoch[113](2241/2495): Loss 0.5377 Prec@1(1,5) 86.70, 95.74
+04/22 04:52:28 AM | Epoch[113](2490/2495): Loss 0.5389 Prec@1(1,5) 86.68, 95.72
+04/22 04:53:25 AM |  * Acc@1 78.313 Acc@5 93.671
+04/22 04:53:27 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 04:53:30 AM | learning_rate: 0.0010000000000000002
+04/22 04:55:24 AM | Epoch[114](249/2495): Loss 0.5370 Prec@1(1,5) 86.68, 95.71
+04/22 04:57:17 AM | Epoch[114](498/2495): Loss 0.5344 Prec@1(1,5) 86.75, 95.77
+04/22 04:59:12 AM | Epoch[114](747/2495): Loss 0.5326 Prec@1(1,5) 86.81, 95.80
+04/22 05:01:08 AM | Epoch[114](996/2495): Loss 0.5329 Prec@1(1,5) 86.84, 95.79
+04/22 05:03:04 AM | Epoch[114](1245/2495): Loss 0.5343 Prec@1(1,5) 86.77, 95.76
+04/22 05:05:01 AM | Epoch[114](1494/2495): Loss 0.5351 Prec@1(1,5) 86.76, 95.74
+04/22 05:06:56 AM | Epoch[114](1743/2495): Loss 0.5357 Prec@1(1,5) 86.77, 95.74
+04/22 05:08:53 AM | Epoch[114](1992/2495): Loss 0.5357 Prec@1(1,5) 86.77, 95.75
+04/22 05:10:51 AM | Epoch[114](2241/2495): Loss 0.5362 Prec@1(1,5) 86.77, 95.73
+04/22 05:12:47 AM | Epoch[114](2490/2495): Loss 0.5365 Prec@1(1,5) 86.75, 95.72
+04/22 05:13:45 AM |  * Acc@1 78.417 Acc@5 93.691
+04/22 05:13:46 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 05:13:49 AM | learning_rate: 0.0010000000000000002
+04/22 05:15:43 AM | Epoch[115](249/2495): Loss 0.5299 Prec@1(1,5) 87.04, 95.87
+04/22 05:17:37 AM | Epoch[115](498/2495): Loss 0.5280 Prec@1(1,5) 87.07, 95.84
+04/22 05:19:32 AM | Epoch[115](747/2495): Loss 0.5283 Prec@1(1,5) 87.02, 95.84
+04/22 05:21:27 AM | Epoch[115](996/2495): Loss 0.5302 Prec@1(1,5) 86.99, 95.81
+04/22 05:23:23 AM | Epoch[115](1245/2495): Loss 0.5309 Prec@1(1,5) 86.93, 95.79
+04/22 05:25:21 AM | Epoch[115](1494/2495): Loss 0.5314 Prec@1(1,5) 86.89, 95.78
+04/22 05:27:17 AM | Epoch[115](1743/2495): Loss 0.5323 Prec@1(1,5) 86.87, 95.78
+04/22 05:29:15 AM | Epoch[115](1992/2495): Loss 0.5338 Prec@1(1,5) 86.83, 95.76
+04/22 05:31:11 AM | Epoch[115](2241/2495): Loss 0.5334 Prec@1(1,5) 86.84, 95.76
+04/22 05:33:09 AM | Epoch[115](2490/2495): Loss 0.5345 Prec@1(1,5) 86.82, 95.75
+04/22 05:34:06 AM |  * Acc@1 78.477 Acc@5 93.635
+04/22 05:34:08 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 05:34:10 AM | learning_rate: 0.0010000000000000002
+04/22 05:36:05 AM | Epoch[116](249/2495): Loss 0.5271 Prec@1(1,5) 86.85, 95.78
+04/22 05:38:00 AM | Epoch[116](498/2495): Loss 0.5286 Prec@1(1,5) 86.88, 95.78
+04/22 05:39:54 AM | Epoch[116](747/2495): Loss 0.5316 Prec@1(1,5) 86.83, 95.73
+04/22 05:41:49 AM | Epoch[116](996/2495): Loss 0.5309 Prec@1(1,5) 86.84, 95.76
+04/22 05:43:46 AM | Epoch[116](1245/2495): Loss 0.5319 Prec@1(1,5) 86.87, 95.74
+04/22 05:45:44 AM | Epoch[116](1494/2495): Loss 0.5325 Prec@1(1,5) 86.85, 95.73
+04/22 05:47:41 AM | Epoch[116](1743/2495): Loss 0.5328 Prec@1(1,5) 86.84, 95.74
+04/22 05:49:38 AM | Epoch[116](1992/2495): Loss 0.5327 Prec@1(1,5) 86.85, 95.75
+04/22 05:51:36 AM | Epoch[116](2241/2495): Loss 0.5320 Prec@1(1,5) 86.87, 95.76
+04/22 05:53:34 AM | Epoch[116](2490/2495): Loss 0.5324 Prec@1(1,5) 86.85, 95.76
+04/22 05:54:31 AM |  * Acc@1 78.377 Acc@5 93.667
+04/22 05:54:33 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 05:54:35 AM | learning_rate: 0.0010000000000000002
+04/22 05:56:29 AM | Epoch[117](249/2495): Loss 0.5270 Prec@1(1,5) 87.21, 95.78
+04/22 05:58:23 AM | Epoch[117](498/2495): Loss 0.5266 Prec@1(1,5) 87.10, 95.83
+04/22 06:00:17 AM | Epoch[117](747/2495): Loss 0.5264 Prec@1(1,5) 87.11, 95.79
+04/22 06:02:13 AM | Epoch[117](996/2495): Loss 0.5274 Prec@1(1,5) 87.03, 95.80
+04/22 06:04:09 AM | Epoch[117](1245/2495): Loss 0.5274 Prec@1(1,5) 87.02, 95.79
+04/22 06:06:05 AM | Epoch[117](1494/2495): Loss 0.5271 Prec@1(1,5) 87.04, 95.81
+04/22 06:08:03 AM | Epoch[117](1743/2495): Loss 0.5283 Prec@1(1,5) 87.00, 95.79
+04/22 06:09:59 AM | Epoch[117](1992/2495): Loss 0.5280 Prec@1(1,5) 87.00, 95.80
+04/22 06:11:57 AM | Epoch[117](2241/2495): Loss 0.5276 Prec@1(1,5) 87.00, 95.81
+04/22 06:13:55 AM | Epoch[117](2490/2495): Loss 0.5275 Prec@1(1,5) 87.01, 95.81
+04/22 06:14:52 AM |  * Acc@1 78.465 Acc@5 93.731
+04/22 06:14:53 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 06:14:56 AM | learning_rate: 0.0010000000000000002
+04/22 06:16:50 AM | Epoch[118](249/2495): Loss 0.5265 Prec@1(1,5) 87.04, 95.81
+04/22 06:18:45 AM | Epoch[118](498/2495): Loss 0.5239 Prec@1(1,5) 87.15, 95.82
+04/22 06:20:42 AM | Epoch[118](747/2495): Loss 0.5249 Prec@1(1,5) 87.09, 95.83
+04/22 06:22:36 AM | Epoch[118](996/2495): Loss 0.5265 Prec@1(1,5) 87.02, 95.81
+04/22 06:24:33 AM | Epoch[118](1245/2495): Loss 0.5254 Prec@1(1,5) 87.04, 95.84
+04/22 06:26:30 AM | Epoch[118](1494/2495): Loss 0.5241 Prec@1(1,5) 87.08, 95.86
+04/22 06:28:26 AM | Epoch[118](1743/2495): Loss 0.5249 Prec@1(1,5) 87.07, 95.84
+04/22 06:30:24 AM | Epoch[118](1992/2495): Loss 0.5256 Prec@1(1,5) 87.03, 95.85
+04/22 06:32:22 AM | Epoch[118](2241/2495): Loss 0.5266 Prec@1(1,5) 87.00, 95.83
+04/22 06:34:21 AM | Epoch[118](2490/2495): Loss 0.5268 Prec@1(1,5) 87.00, 95.83
+04/22 06:35:18 AM |  * Acc@1 78.645 Acc@5 93.764
+04/22 06:35:21 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 06:35:23 AM | learning_rate: 0.0010000000000000002
+04/22 06:37:18 AM | Epoch[119](249/2495): Loss 0.5107 Prec@1(1,5) 87.40, 96.01
+04/22 06:39:11 AM | Epoch[119](498/2495): Loss 0.5169 Prec@1(1,5) 87.24, 95.92
+04/22 06:41:06 AM | Epoch[119](747/2495): Loss 0.5197 Prec@1(1,5) 87.19, 95.88
+04/22 06:43:01 AM | Epoch[119](996/2495): Loss 0.5219 Prec@1(1,5) 87.11, 95.88
+04/22 06:44:58 AM | Epoch[119](1245/2495): Loss 0.5235 Prec@1(1,5) 87.07, 95.86
+04/22 06:46:55 AM | Epoch[119](1494/2495): Loss 0.5235 Prec@1(1,5) 87.06, 95.85
+04/22 06:48:51 AM | Epoch[119](1743/2495): Loss 0.5229 Prec@1(1,5) 87.09, 95.85
+04/22 06:50:48 AM | Epoch[119](1992/2495): Loss 0.5235 Prec@1(1,5) 87.07, 95.85
+04/22 06:52:44 AM | Epoch[119](2241/2495): Loss 0.5234 Prec@1(1,5) 87.08, 95.85
+04/22 06:54:42 AM | Epoch[119](2490/2495): Loss 0.5235 Prec@1(1,5) 87.08, 95.85
+04/22 06:55:39 AM |  * Acc@1 78.421 Acc@5 93.739
+04/22 06:55:41 AM | =>Best accuracy Top1: 78.661, Top5: 93.808
+04/22 06:55:41 AM | total training time = 3.2903244778845044 hours
