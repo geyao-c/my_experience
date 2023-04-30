@@ -259,7 +259,7 @@ class Adapter15ResNet34(nn.Module):
 
         return x
 
-def adapter15resnet_34(sparsity, adapter_sparsity):
+def adapter15resnet_34(sparsity=None, adapter_sparsity=None):
     if sparsity is None:
         sparsity = [0.0] * 100
     if adapter_sparsity is None:
