@@ -9,6 +9,7 @@ import os
 import utils_append
 import utils
 import time
+import math
 from data import imagenet
 from models.resnet_imagenet import resnet_34
 from models.adapter_resnet_imagenet import adapter15resnet_34
@@ -206,11 +207,14 @@ def main():
         sparsity = utils_append.analysis_sparsity(args.sparsity)
     else:
         raise ValueError('sparsity is None')
-
     logger.info('sparsity:' + str(sparsity))
     # FINETUNE_CLASSES = utils_append.classes_num(args.finetune_dataset)
     # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
     # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
+
+    if args.graf == False:
+        args.arch = args.pretrained_arch
+
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
         model = eval(args.finetune_arch)(sparsity=sparsity, adapter_sparsity=adapter_sparsity).to(device)

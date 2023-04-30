@@ -1,5 +1,6 @@
 import torch.nn as nn
 from .adapter import Adapter3
+import torch.nn.functional as F
 
 stage_repeat = [3, 4, 6, 3]
 stage_out_channel_50 = [64] + [256] * 3 + [512] * 4 + [1024] * 6 + [2048] * 3
@@ -105,15 +106,29 @@ class BasicBlock(nn.Module):
         self.is_downsample = is_downsample
         self.expansion = expansion
 
-        if is_downsample:
-            self.downsample = nn.Sequential(
-                conv1x1(inplanes, planes, stride=stride),
-                norm_layer(planes),
-            )
+        self.shortcut = nn.Sequential()
+        if stride != 1 or inplanes != planes:
+            if stride != 1:
+                self.shortcut = LambdaLayer(
+                    # ::2表示隔一个数字取一个，这样形状大小就减半
+                    lambda x: F.pad(x[:, :, ::2, ::2],
+                                    (
+                                    0, 0, 0, 0, (planes - inplanes) // 2, planes - inplanes - (planes - inplanes) // 2),
+                                    "constant", 0))
+            else:
+                self.shortcut = LambdaLayer(
+                    lambda x: F.pad(x[:, :, :, :],
+                                    (
+                                    0, 0, 0, 0, (planes - inplanes) // 2, planes - inplanes - (planes - inplanes) // 2),
+                                    "constant", 0))
+
+        # if is_downsample:
+        #     self.downsample = nn.Sequential(
+        #         conv1x1(inplanes, planes, stride=stride),
+        #         norm_layer(planes),
+        #     )
 
     def forward(self, x):
-        identity = x
-
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu1(out)
@@ -121,10 +136,10 @@ class BasicBlock(nn.Module):
         out = self.conv2(out)
         out = self.bn2(out)
 
-        if self.is_downsample:
-            identity = self.downsample(x)
+        # if self.is_downsample:
+        #     identity = self.downsample(x)
 
-        out += identity
+        out += self.shortcut(x)
         out = self.relu2(out)
 
         return out
