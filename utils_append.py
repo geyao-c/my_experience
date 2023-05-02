@@ -3086,8 +3086,6 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
     oristate_dict = origin_model.state_dict()
     # 当在同一个模型上进行裁剪时
     if graf == False:
-        logger.info('------------------')
-        logger.info(args.arch)
         # 将原始模型参数载入到压缩模型中
         if args.arch == 'vgg_16_bn':
             logger.info('load_vgg_model')
