@@ -3155,7 +3155,8 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             raise
     # 在不同的模型或者不同的数据集上进行裁剪
     elif graf == True:
-        logger.info(args.arch)
+        logger.info(args.pretrained_arch)
+        logger.info(args.finetune_arch)
         if args.pretrained_arch == args.finetune_arch:
             if args.finetune_arch == 'resnet_20':
                 logger.info('graf_load_resnet20_model')
