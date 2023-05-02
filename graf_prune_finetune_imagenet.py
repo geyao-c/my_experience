@@ -47,7 +47,7 @@ parser.add_argument('--ci_dir', type=str, default='', help='ci path')
 parser.add_argument('--sparsity', type=str, default=None, help='sparsity of each conv layer')
 parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 parser.add_argument('--adapter_sparsity', type=str, default=None, help='sparsity of each adapter layer')
-parser.add_argument('--which', type=str, default='A', help='which dataset')
+parser.add_argument('--which', type=str, default=None, help='which dataset')
 args = parser.parse_args()
 
 print_freq = (256 * 50) // args.batch_size
