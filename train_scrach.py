@@ -27,6 +27,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v2, adapter_vgg_16_bn_v3, adapter_vgg_16_bn_v4
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
+from models.mobilenetv2 import mobilenet_v2, mobilenet_v2_change, mobilenet_v2_change_2
 from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub, mnist
 from util.losses import SupConLoss
@@ -58,19 +59,14 @@ def argsget():
 
 def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
     if args.lr_type == 'step':
-        for param_group in optimizer.param_groups:
-            cur_lr = param_group['lr']
-        # factor = epoch // 125
-        # if epoch >= 80:
-        #     factor = factor + 1
-        # lr = args.learning_rate * (0.1 ** factor)
-
-        # factor = epoch // 125
-        # if epoch in [args.epochs*0.5, args.epochs*0.75]:
-        lr = cur_lr
-        if epoch in [80, 120]:
-            lr = cur_lr / 10
-        # lr = args.learning_rate * (0.1 ** factor)
+        # for param_group in optimizer.param_groups:
+        #     cur_lr = param_group['lr']
+        if epoch >= int(args.epochs * 0.5) and epoch < int(args.epochs * 0.75):
+            lr = args.learning_rate * (0.1 ** 1)
+        elif epoch >= int(args.epochs * 0.75):
+            lr = args.learning_rate * (0.1 ** 2)
+        else:
+            lr = args.learning_rate
 
     elif args.lr_type == 'step_5':
         factor = epoch // 10
@@ -92,8 +88,8 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         raise NotImplementedError
 
     # Warmup
-    if epoch < 5:
-        lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
+    # if epoch < 5:
+    #     lr = lr * float(1 + step + epoch * len_iter) / (5. * len_iter)
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
@@ -117,13 +113,12 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
     logger.info('learning_rate: ' + str(cur_lr))
 
     num_iter = len(train_loader)
-    # adjust_learning_rate(optimizer, epoch, 0, num_iter)
     for i, (images, target) in enumerate(train_loader):
         data_time.update(time.time() - end)
         images = images.to(device)
         target = target.to(device)
 
-        # adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
+        adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
         logits = model(images)
@@ -272,9 +267,9 @@ def main():
     # train the model
     epoch = start_epoch
     while epoch < args.epochs:
-        if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
-            for param_group in optimizer.param_groups:
-                param_group['lr'] *= 0.1
+        # if epoch in [int(args.epochs * 0.5), int(args.epochs * 0.75)]:
+        #     for param_group in optimizer.param_groups:
+        #         param_group['lr'] *= 0.1
         start = time.time()
         train_obj, train_top1_acc, train_top5_acc = train(epoch, train_loader, model, criterion,
                                                           optimizer, args, logger, print_freq)  # , scheduler)
