@@ -87,7 +87,7 @@ class MobileNetV2(nn.Module):
         self.last_channel = make_divisible(last_channel * width_mult) if width_mult > 1.0 else last_channel
         self.features = [conv_bn(3, input_channel, 2)]
         # building inverted residual blocks
-        cnt=1
+        cnt = 1
         for t, c, n, s in interverted_residual_setting:
             output_channel = make_divisible(c * width_mult) if t > 1 else c
             output_channel = int((1 - self.compress_rate[cnt]) * output_channel)
