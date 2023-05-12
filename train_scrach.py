@@ -35,8 +35,6 @@ import utils
 from thop import profile
 import time
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
 def argsget():
     parser = argparse.ArgumentParser("Train scrach")
     parser.add_argument('--data_dir', type=str, default='./data', help='path to dataset')
@@ -53,6 +51,7 @@ def argsget():
     parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
     parser.add_argument('--weight_decay', type=float, default=0.0005, help='weight decay')
     parser.add_argument('--dataset', type=str, default='cifar10', help='dataset used')
+    parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
     # parser.add_argument('--split', type=str, default='1', help='batch size')
     args = parser.parse_args()
     return args
@@ -98,7 +97,7 @@ def adjust_learning_rate(optimizer, epoch, step, len_iter, args, logger):
         logger.info('learning_rate: ' + str(lr))
 
 
-def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq, scheduler=None):
+def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_freq, device, scheduler=None):
     batch_time = utils.AverageMeter('Time', ':6.3f')
     data_time = utils.AverageMeter('Data', ':6.3f')
     losses = utils.AverageMeter('Loss', ':.4e')
@@ -148,12 +147,10 @@ def train(epoch, train_loader, model, criterion, optimizer, args, logger, print_
                     epoch, i, num_iter, loss=losses,
                     top1=top1, top5=top5))
 
-    # scheduler.step()
-
     return losses.avg, top1.avg, top5.avg
 
 
-def validate(epoch, val_loader, model, criterion, args, logger):
+def validate(epoch, val_loader, model, criterion, args, logger, device):
     batch_time = utils.AverageMeter('Time', ':6.3f')
     losses = utils.AverageMeter('Loss', ':.4e')
     top1 = utils.AverageMeter('Acc@1', ':6.2f')
@@ -221,6 +218,10 @@ def main():
     logger, writer = utils_append.lgwt_construct(args)
     logger.info("args = %s", args)
 
+    gpuid = 'cuda:{}'.format(args.gpu)
+    device = torch.device(gpuid if torch.cuda.is_available() else 'cpu')
+    logger.info(device)
+
     print_freq = (256 * 50) // args.batch_size
 
     # 加载数据
@@ -272,8 +273,8 @@ def main():
         #         param_group['lr'] *= 0.1
         start = time.time()
         train_obj, train_top1_acc, train_top5_acc = train(epoch, train_loader, model, criterion,
-                                                          optimizer, args, logger, print_freq)  # , scheduler)
-        valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger)
+                                                          optimizer, args, logger, print_freq, device)  # , scheduler)
+        valid_obj, valid_top1_acc, valid_top5_acc = validate(epoch, val_loader, model, criterion, args, logger, device)
         logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
 
         is_best = False
