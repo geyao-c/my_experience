@@ -1,2 +1,2 @@
 # my_experience
-this is exoerience
+this is experience
