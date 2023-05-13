@@ -55,7 +55,8 @@ def analysis_sparsity(sparsity):
 def dstget(args):
     dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd', 'mnist', 'cifar10224', 'cifar100224']
     dldfunlist = [cifar10.load_cifar_data, cifar100.load_cifar_data, cub.load_cub_data, tinyimagenet.load_tinyimagenet_data,
-                  svhn.load_svhn_data, dtd.load_dtd_data, mnist.load_mnist_data, size224_cifar10, size224_cifar100]
+                  svhn.load_svhn_data, dtd.load_dtd_data, mnist.load_mnist_data, size224_cifar10.load_cifar_data,
+                  size224_cifar100.load_cifar_data]
     idx = dsetlist.index(args.dataset)
     train_loader, val_loader = dldfunlist[idx](args)
     return train_loader, val_loader
