@@ -29,9 +29,8 @@ def _DropPath(x, drop_prob, training):
     if drop_prob > 0 and training:
         keep_prob = 1 - drop_prob
         if x.is_cuda:
-            # mask = Variable(torch.cuda.FloatTensor(x.size(0), 1, 1, 1).bernoulli_(keep_prob))
-            device = torch.device('cuda:3' if torch.cuda.is_available() else 'cpu')
-            mask = Variable(torch.FloatTensor(x.size(0), 1, 1, 1).bernoulli_(keep_prob)).to(device)
+            mask = Variable(torch.cuda.FloatTensor(x.size(0), 1, 1, 1).bernoulli_(keep_prob))
+            # mask = Variable(torch.FloatTensor(x.size(0), 1, 1, 1).bernoulli_(keep_prob)).to(device)
         else:
             mask = Variable(torch.FloatTensor(x.size(0), 1, 1, 1).bernoulli_(keep_prob))
         x.div_(keep_prob)
