@@ -64,15 +64,28 @@ class SqueezeAndExcite(nn.Module):
             raise ValueError('channels must be divisible by 1/ratio')
 
         squeeze_channels = int(squeeze_channels)
-        self.se_reduce = nn.Conv2d(channels, squeeze_channels, 1, 1, 0, bias=True)
-        self.non_linear1 = Swish()
-        self.se_expand = nn.Conv2d(squeeze_channels, channels, 1, 1, 0, bias=True)
-        self.non_linear2 = nn.Sigmoid()
+
+        # self.se_reduce = nn.Conv2d(channels, squeeze_channels, 1, 1, 0, bias=True)
+        # self.non_linear1 = Swish()
+        # self.se_expand = nn.Conv2d(squeeze_channels, channels, 1, 1, 0, bias=True)
+        # self.non_linear2 = nn.Sigmoid()
+
+        self.conv = nn.Sequential(
+            nn.Conv2d(channels, squeeze_channels, 1, 1, 0, bias=True),
+            Swish(),
+            nn.Conv2d(squeeze_channels, channels, 1, 1, 0, bias=True),
+            nn.Sigmoid()
+        )
 
     def forward(self, x):
+        # y = torch.mean(x, (2, 3), keepdim=True)
+        # y = self.non_linear1(self.se_reduce(y))
+        # y = self.non_linear2(self.se_expand(y))
+        # y = x * y
+
         y = torch.mean(x, (2, 3), keepdim=True)
-        y = self.non_linear1(self.se_reduce(y))
-        y = self.non_linear2(self.se_expand(y))
+        y = self.conv[1](self.conv[0](y))
+        y = self.conv[3](self.conv[2](y))
         y = x * y
 
         return y

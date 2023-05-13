@@ -166,3 +166,21 @@ if args.arch=='mobilenet_v2':
             feature_result = torch.tensor(0.)
             total = torch.tensor(0.)
             print('{} has been saved'.format(conv_index))
+
+elif args.arch == 'efficientnet_b0':
+    # 第一层
+    cov_layer = eval('model.stem_conv')
+    handler = cov_layer[2].sigmoid.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+    np.save(filepath, feature_result.numpy())
+    feature_result = torch.tensor(0.)
+    total = torch.tensor(0.)
+    conv_index += 1
+
+    for i in range(0, 17):
+        block = eval('model.blocks[%d].conv' % (i))
+        if i == i:
+            t_list = [(0, 2), ()]
