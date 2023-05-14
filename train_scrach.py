@@ -28,7 +28,8 @@ from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.adapter_vgg_cifar10 import adapter_vgg_16_bn, adapter_vgg_16_bn_v2, adapter_vgg_16_bn_v3, adapter_vgg_16_bn_v4
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from models.mobilenetv2 import mobilenet_v2, mobilenet_v2_change, mobilenet_v2_change_2
-from models.efficientnet import efficientnet_b0, efficientnet_b0_changed
+from models.efficientnet import efficientnet_b0, efficientnet_b0_changed, efficientnet_b0_changed_v2, \
+    efficientnet_b0_changed_v3
 from util.focal_loss import FocalLoss
 from data import cifar10, cifar100, cub, mnist
 from util.losses import SupConLoss
