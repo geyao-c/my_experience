@@ -180,7 +180,36 @@ elif args.arch == 'efficientnet_b0':
     total = torch.tensor(0.)
     conv_index += 1
 
-    for i in range(0, 17):
+    for i in range(0, 16):
         block = eval('model.blocks[%d].conv' % (i))
-        if i == i:
-            t_list = [(0, 2), ()]
+        if i == 0:
+            t_list = [(0, 2), (1, 'conv', 1), (1, 'conv', 3), (2, 1)]
+        else:
+            t_list = [(0, 2), (1, 2), (2, 'conv', 1), (2, 'conv', 3), (3, 1)]
+        for item in t_list:
+            if len(item) == 2:
+                cov_layer = block[item[0]][item[1]]
+            elif len(item) == 3:
+                cov_layer = block[item[0]].item[1][item[2]]
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+
+            filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+            np.save(filepath, feature_result.numpy())
+            conv_index += 1
+            feature_result = torch.tensor(0.)
+            total = torch.tensor(0.)
+            print('{} has been saved'.format(conv_index))
+
+    # 最后一层
+    cov_layer = eval('model.head_conv')
+    handler = cov_layer[2].sigmoid.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+    np.save(filepath, feature_result.numpy())
+    conv_index += 1
+    feature_result = torch.tensor(0.)
+    total = torch.tensor(0.)
