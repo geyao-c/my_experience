@@ -209,7 +209,7 @@ def logstore(writer, train_losses, train_accuracy, test_losses, test_accuracy, e
 
 def main():
     args = argsget()
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+    os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
 
     # 使用cudnn库加速卷积计算
     cudnn.benchmark = True
