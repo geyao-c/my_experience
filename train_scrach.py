@@ -208,11 +208,12 @@ def logstore(writer, train_losses, train_accuracy, test_losses, test_accuracy, e
     writer.add_scalar('accuracy/test accuracy', test_accuracy, epoch)
 
 def main():
+    args = argsget()
+    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
+
     # 使用cudnn库加速卷积计算
     cudnn.benchmark = True
     cudnn.enabled = True
-
-    args = argsget()
 
     # 建立日志
     now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')  # 当前时间
