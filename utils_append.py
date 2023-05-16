@@ -2972,17 +2972,13 @@ def graf_overall_load_efficientnet_model(args, model, oristate_dict, layer, logg
     prefix = args.ci_dir + '/rank_conv'
     subfix = ".npy"
 
-    layer_cnt = 1
     l = 1
-    # cfg = [1, 2, 3, 4, 3, 3, 1, 1]
-    # cfg = [1, 2, 2, 3, 3, 4, 1]
-    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77,
-                       ]
-    for i in range(17):
-        block_name = 'model.blocks.[{}].conv.'.format(i)
+    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77]
+    for i in range(16):
+        block_name = 'blocks.{}.conv.'.format(i)
         if i == 0:
             t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
-        elif i == 17:
+        elif i == 16:
             t_list = []
         else:
             t_list = [(0, 0), (1, 0), (2, 'conv', 0), (2, 'conv', 2), (3, 0)]
@@ -2992,12 +2988,16 @@ def graf_overall_load_efficientnet_model(args, model, oristate_dict, layer, logg
             if len(item) == 2:
                 conv_name = block_name + str(item[0]) + '.' + str(item[1])
                 bn_name = block_name + str(item[0]) + '.' + str(item[1]+1)
+                bias_name = None
             elif len(item) == 3:
                 conv_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2])
+                bias_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2]) + '.bias'
                 bn_name = None
             else:
                 raise('len error')
+
             conv_weight_name = conv_name + '.weight'
+
             all_honey_conv_weight.append(conv_weight_name)
             oriweight = oristate_dict[conv_weight_name]
             curweight = state_dict[name_base + conv_weight_name]
@@ -3015,6 +3015,7 @@ def graf_overall_load_efficientnet_model(args, model, oristate_dict, layer, logg
                         for index_j, j in enumerate(last_select_index):
                             state_dict[name_base + conv_weight_name][index_i][index_j] = \
                                 oristate_dict[conv_weight_name][i][j]
+                        if bn_name is None: continue
                         for bn_part in bn_part_name:
                             state_dict[name_base + bn_name + bn_part][index_i] = \
                                 oristate_dict[bn_name + bn_part][i]
@@ -3022,6 +3023,7 @@ def graf_overall_load_efficientnet_model(args, model, oristate_dict, layer, logg
                     for index_i, i in enumerate(select_index):
                         state_dict[name_base + conv_weight_name][index_i] = \
                             oristate_dict[conv_weight_name][i]
+                        if bn_name is None: continue
                         for bn_part in bn_part_name:
                             state_dict[name_base + bn_name + bn_part][index_i] = \
                                 oristate_dict[bn_name + bn_part][i]
@@ -3032,19 +3034,24 @@ def graf_overall_load_efficientnet_model(args, model, oristate_dict, layer, logg
                     for index_j, j in enumerate(last_select_index):
                         state_dict[name_base + conv_weight_name][index_i][index_j] = \
                             oristate_dict[conv_weight_name][index_i][j]
-                for bn_part in bn_part_name:
-                    state_dict[name_base + bn_name + bn_part] = \
-                        oristate_dict[bn_name + bn_part]
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
                 last_select_index = None
 
             else:
                 state_dict[name_base + conv_weight_name] = oriweight
-                for bn_part in bn_part_name:
-                    state_dict[name_base + bn_name + bn_part] = \
-                        oristate_dict[bn_name + bn_part]
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
                 last_select_index = None
 
-            state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[bn_name + '.num_batches_tracked']
+            if bn_name is not None:
+                state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[bn_name + '.num_batches_tracked']
+            if bias_name is not None:
+                state_dict[bias_name] = oristate_dict[bias_name]
 
     for name, module in model.named_modules():
         name = name.replace('module.', '')
