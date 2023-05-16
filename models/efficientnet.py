@@ -66,7 +66,6 @@ class SqueezeAndExcite(nn.Module):
         #     raise ValueError('channels must be divisible by 1/ratio')
 
         squeeze_channels = int(squeeze_channels)
-        print(squeeze_channels)
 
         # self.se_reduce = nn.Conv2d(channels, squeeze_channels, 1, 1, 0, bias=True)
         # self.non_linear1 = Swish()
