@@ -187,7 +187,7 @@ def main():
 
     # logger.info('random init')
     model.load_state_dict(ckpt['state_dict'], strict=False)
-    # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
+    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
     # logger.info("载入参数2")
