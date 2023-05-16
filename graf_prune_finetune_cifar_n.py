@@ -186,7 +186,7 @@ def main():
         args.arch = args.pretrained_arch
 
     # logger.info('random init')
-    model.load_state_dict(ckpt['state_dict'], strict=False)
+    print(origin_model.state_dict().keys())
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
