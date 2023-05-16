@@ -186,7 +186,7 @@ def main():
         args.arch = args.pretrained_arch
 
     # logger.info('random init')
-    print(origin_model.state_dict().keys())
+    # print(origin_model.state_dict().keys())
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
@@ -218,10 +218,10 @@ def main():
 
     while epoch < args.epochs:
         start = time.time()
-        # train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
-        #                                                                 optimizer, args, logger, print_freq, device)#, scheduler)
+        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
+                                                                        optimizer, args, logger, print_freq, device)#, scheduler)
         valid_obj, valid_top1_acc, valid_top5_acc = utils_append.validate(epoch, val_loader, model, criterion, args, logger, device)
-        # utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
+        utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
 
         is_best = False
         if valid_top1_acc > best_top1_acc:
@@ -234,7 +234,6 @@ def main():
         epoch += 1
         end = time.time()
         logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))#
-        # break
 
 if __name__ == '__main__':
     print('hello world')
