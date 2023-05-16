@@ -20,6 +20,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, adapter23resnet_56, \
     adapter24resnet_56, adapter15resnet_20, adapter19resnet_20, adapter16resnet_32, \
     adapter15resnet_32, adapter25resnet_56
+from models.efficientnet import efficientnet_b0_changed_v2
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
@@ -185,6 +186,7 @@ def main():
         args.arch = args.pretrained_arch
 
     # logger.info('random init')
+    print(origin_model.state_dict().keys())
     utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
@@ -216,10 +218,10 @@ def main():
 
     while epoch < args.epochs:
         start = time.time()
-        train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
-                                                                        optimizer, args, logger, print_freq, device)#, scheduler)
+        # train_obj, train_top1_acc,  train_top5_acc = utils_append.train(epoch,  train_loader, model, criterion,
+        #                                                                 optimizer, args, logger, print_freq, device)#, scheduler)
         valid_obj, valid_top1_acc, valid_top5_acc = utils_append.validate(epoch, val_loader, model, criterion, args, logger, device)
-        utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
+        # utils_append.logstore(writer, train_obj, train_top1_acc, valid_obj, valid_top1_acc, epoch)
 
         is_best = False
         if valid_top1_acc > best_top1_acc:

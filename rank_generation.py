@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 import torchvision
 from torchvision import datasets, transforms
 
-from models.efficientnet import efficientnet_b0
+from models.efficientnet import efficientnet_b0, efficientnet_b0_changed_v2
 from models.mobilenetv2 import mobilenet_v2
 import utils_append
 
@@ -59,7 +59,7 @@ if 'adapter' in args.arch:
                             dataset=args.dataset).to(device)
 else:
     model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, dataset=args.dataset).to(device)
-# print(model)
+print(model)
 mapstr = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 print(args.arch)
 if args.arch=='vgg_16_bn' or args.arch=='resnet_56':
@@ -167,7 +167,7 @@ if args.arch=='mobilenet_v2':
             total = torch.tensor(0.)
             print('{} has been saved'.format(conv_index))
 
-elif args.arch == 'efficientnet_b0':
+elif args.arch == 'efficientnet_b0_changed_v2':
     # 第一层
     cov_layer = eval('model.stem_conv')
     handler = cov_layer[2].sigmoid.register_forward_hook(get_feature_hook)
@@ -190,7 +190,8 @@ elif args.arch == 'efficientnet_b0':
             if len(item) == 2:
                 cov_layer = block[item[0]][item[1]]
             elif len(item) == 3:
-                cov_layer = block[item[0]].item[1][item[2]]
+                cov_layer = eval('model.blocks[%d].conv[%d].conv[%d]' % (i, item[0], item[2]))
+                # cov_layer = block[item[0]].item[1][item[2]]
             handler = cov_layer.register_forward_hook(get_feature_hook)
             inference()
             handler.remove()
