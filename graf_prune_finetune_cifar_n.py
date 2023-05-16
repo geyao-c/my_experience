@@ -186,7 +186,6 @@ def main():
         args.arch = args.pretrained_arch
 
     # logger.info('random init')
-    print(origin_model.state_dict().keys())
     model.load_state_dict(ckpt['state_dict'], strict=False)
     # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 

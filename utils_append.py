@@ -3655,7 +3655,6 @@ def validate(epoch, val_loader, model, criterion, args, logger, device):
     with torch.no_grad():
         end = time.time()
         for i, (images, target) in enumerate(val_loader):
-            print(i)
             images = images.to(device)
             target = target.to(device)
 
