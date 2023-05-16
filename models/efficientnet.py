@@ -59,11 +59,14 @@ class SqueezeAndExcite(nn.Module):
     def __init__(self, channels, squeeze_channels, se_ratio):
         super(SqueezeAndExcite, self).__init__()
 
+
         squeeze_channels = squeeze_channels * se_ratio
-        if not squeeze_channels.is_integer():
-            raise ValueError('channels must be divisible by 1/ratio')
+
+        # if not squeeze_channels.is_integer():
+        #     raise ValueError('channels must be divisible by 1/ratio')
 
         squeeze_channels = int(squeeze_channels)
+        print(squeeze_channels)
 
         # self.se_reduce = nn.Conv2d(channels, squeeze_channels, 1, 1, 0, bias=True)
         # self.non_linear1 = Swish()
@@ -399,7 +402,8 @@ class EfficientNet_CHANGED_V2(nn.Module):
         self.blocks = nn.Sequential(*blocks)
 
         # last several layers
-        self.head_conv = _Conv1x1Bn(self.config[-1][1], feature_size)
+        # self.head_conv = _Conv1x1Bn(self.config[-1][1], feature_size)
+        self.head_conv = _Conv1x1Bn(in_channels, feature_size)
         #self.avgpool = nn.AvgPool2d(input_size//32, stride=1)
         self.dropout = nn.Dropout(param[3])
         self.classifier = nn.Linear(feature_size, num_classes)
