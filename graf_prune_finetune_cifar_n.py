@@ -234,6 +234,7 @@ def main():
         epoch += 1
         end = time.time()
         logger.info("=>Best accuracy {:.3f} cost time is {:.3f}".format(best_top1_acc, (end - start)))#
+        break
 
 if __name__ == '__main__':
     print('hello world')
