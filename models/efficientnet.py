@@ -592,7 +592,8 @@ class EfficientNet_CHANGED_V4(nn.Module):
         self.blocks = nn.Sequential(*blocks)
 
         # last several layers
-        self.head_conv = _Conv1x1Bn(self.config[-1][1], feature_size)
+        # self.head_conv = _Conv1x1Bn(self.config[-1][1], feature_size)
+        self.head_conv = _Conv1x1Bn(in_channels, feature_size)
         #self.avgpool = nn.AvgPool2d(input_size//32, stride=1)
         self.dropout = nn.Dropout(param[3])
         self.classifier = nn.Linear(feature_size, num_classes)
