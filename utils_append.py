@@ -3376,6 +3376,8 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
         elif args.arch == 'efficientnet_b0_changed_v2':
             overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
+        elif args.arch == 'efficientnet_b0_changed_v4':
+            overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
         elif args.arch == 'adapter15resnet_34':
             logger.info('adapter15resnet_34')
             overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
@@ -3447,6 +3449,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
                 graf_overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
             elif args.finetune_arch == 'efficientnet_b0_changed_v2':
                 logger.info('graf_load_efficientnet_b0_changed_v2_model')
+                graf_overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
+            elif args.finetune_arch == 'efficientnet_b0_changed_v4':
+                logger.info('graf_load_efficientnet_b0_changed_v4_model')
                 graf_overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
             elif args.finetune_arch == 'adapter15resnet_34':
                 logger.info('graf_load_adapter15_resnet_34_model')
