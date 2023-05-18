@@ -21,7 +21,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter24resnet_56, adapter15resnet_20, adapter19resnet_20, adapter16resnet_32, \
     adapter15resnet_32, adapter25resnet_56
 from models.efficientnet import efficientnet_b0_changed_v2, efficientnet_b0_changed_v4
-from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v4
+from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v4, adapter_efficientnet_b0_changed_v4_v2
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56

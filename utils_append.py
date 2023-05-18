@@ -3244,6 +3244,292 @@ def graf_overall_load_adapter_efficientnet_model(args, model, oristate_dict, lay
 
     model.load_state_dict(state_dict)
 
+def graf_overall_load_adapter_efficientnet_v2_model(args, model, oristate_dict, layer, logger, name_base=''):
+    state_dict = model.state_dict()
+
+    last_select_index = None
+
+    all_honey_conv_weight = []
+
+    bn_part_name = ['.weight', '.bias', '.running_mean', '.running_var']
+    prefix = args.ci_dir + '/rank_conv_tensor'
+    subfix = ".npy"
+
+    l = 1
+    # group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 71]
+    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67]
+    for ii in range(16):
+        if ii == 0:
+            t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
+        elif ii == 14:
+            t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
+        elif ii == 15:
+            t_list = [(0,), ]
+        else:
+            t_list = [(0, 0), (1, 0), (2, 'conv', 0), (2, 'conv', 2), (3, 0)]
+
+        for item in t_list:
+            l += 1
+            if len(item) == 1:
+                block_name = 'head_conv.'
+                conv_name = block_name + str(item[0])
+                bn_name = block_name + str(item[0] + 1)
+                bias_name = None
+            elif len(item) == 2:
+                block_name = 'blocks.{}.conv.'.format(ii)
+                conv_name = block_name + str(item[0]) + '.' + str(item[1])
+                bn_name = block_name + str(item[0]) + '.' + str(item[1] + 1)
+                bias_name = None
+            elif len(item) == 3:
+                block_name = 'blocks.{}.conv.'.format(ii)
+                conv_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2])
+                bn_name = None
+                bias_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2]) + '.bias'
+            else:
+                raise ('len error')
+
+            conv_weight_name = conv_name + '.weight'
+            all_honey_conv_weight.append(conv_weight_name)
+
+            oriweight = oristate_dict[conv_weight_name]
+            curweight = state_dict[name_base + conv_weight_name]
+            orifilter_num = oriweight.size(0)
+            currentfilter_num = curweight.size(0)
+
+            if orifilter_num != currentfilter_num:
+                rank_path = prefix + '(' + str(l) + ')' + subfix
+                logger.info('loading rank from: ' + rank_path)
+                rank = np.load(rank_path)
+                select_index = np.argsort(rank)[orifilter_num - currentfilter_num:]  # preserved filter id
+                select_index.sort()
+
+                if last_select_index is not None and (l not in group_conv_list):
+                    for index_i, i in enumerate(select_index):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                oristate_dict[conv_weight_name][i][j]
+
+                        if bias_name is not None:
+                            state_dict[name_base + bias_name][index_i] = \
+                                oristate_dict[bias_name][i]
+
+                        if bn_name is not None:
+                            for bn_part in bn_part_name:
+                                state_dict[name_base + bn_name + bn_part][index_i] = \
+                                    oristate_dict[bn_name + bn_part][i]
+
+                else:
+                    for index_i, i in enumerate(select_index):
+                        state_dict[name_base + conv_weight_name][index_i] = \
+                            oristate_dict[conv_weight_name][i]
+
+                        if bias_name is not None:
+                            state_dict[name_base + bias_name][index_i] = \
+                                oristate_dict[bias_name][i]
+
+                        if bn_name is not None:
+                            for bn_part in bn_part_name:
+                                state_dict[name_base + bn_name + bn_part][index_i] = \
+                                    oristate_dict[bn_name + bn_part][i]
+                last_select_index = select_index
+
+            elif last_select_index is not None and (l not in group_conv_list):
+                for index_i in range(orifilter_num):
+                    for index_j, j in enumerate(last_select_index):
+                        state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                            oristate_dict[conv_weight_name][index_i][j]
+
+                if bias_name is not None:
+                    state_dict[name_base + bias_name] = \
+                        oristate_dict[bias_name]
+
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
+                last_select_index = None
+
+            else:
+                state_dict[name_base + conv_weight_name] = oriweight
+
+                if bias_name is not None:
+                    state_dict[name_base + bias_name] = \
+                        oristate_dict[bias_name]
+
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
+                last_select_index = None
+
+            if bn_name is not None:
+                state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[
+                    bn_name + '.num_batches_tracked']
+
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+        if isinstance(module, nn.Conv2d):
+            conv_name = name + '.weight'
+            bn_name = list(name[:])
+            bn_name[-1] = str(int(name[-1]) + 1)
+            bn_name = ''.join(bn_name)
+            if conv_name not in all_honey_conv_weight:
+                state_dict[name_base + conv_name] = oristate_dict[conv_name]
+                for bn_part in bn_part_name:
+                    state_dict[name_base + bn_name + bn_part] = \
+                        oristate_dict[bn_name + bn_part]
+                state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[
+                    bn_name + '.num_batches_tracked']
+
+        # elif isinstance(module, nn.Linear):
+        #     state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+        #     state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+
+    model.load_state_dict(state_dict)
+
+def overall_load_adapter_efficientnet_v2_model(args, model, oristate_dict, layer, logger, name_base=''):
+    state_dict = model.state_dict()
+
+    last_select_index = None
+
+    all_honey_conv_weight = []
+
+    bn_part_name = ['.weight', '.bias', '.running_mean', '.running_var']
+    prefix = args.ci_dir + '/rank_conv_tensor'
+    subfix = ".npy"
+
+    l = 1
+    # group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 71]
+    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67]
+    for ii in range(16):
+        if ii == 0:
+            t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
+        elif ii == 14:
+            t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
+        elif ii == 15:
+            t_list = [(0,), ]
+        else:
+            t_list = [(0, 0), (1, 0), (2, 'conv', 0), (2, 'conv', 2), (3, 0)]
+
+        for item in t_list:
+            l += 1
+            if len(item) == 1:
+                block_name = 'head_conv.'
+                conv_name = block_name + str(item[0])
+                bn_name = block_name + str(item[0] + 1)
+                bias_name = None
+            elif len(item) == 2:
+                block_name = 'blocks.{}.conv.'.format(ii)
+                conv_name = block_name + str(item[0]) + '.' + str(item[1])
+                bn_name = block_name + str(item[0]) + '.' + str(item[1] + 1)
+                bias_name = None
+            elif len(item) == 3:
+                block_name = 'blocks.{}.conv.'.format(ii)
+                conv_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2])
+                bn_name = None
+                bias_name = block_name + str(item[0]) + '.' + str(item[1]) + '.' + str(item[2]) + '.bias'
+            else:
+                raise ('len error')
+
+            conv_weight_name = conv_name + '.weight'
+            all_honey_conv_weight.append(conv_weight_name)
+
+            oriweight = oristate_dict[conv_weight_name]
+            curweight = state_dict[name_base + conv_weight_name]
+            orifilter_num = oriweight.size(0)
+            currentfilter_num = curweight.size(0)
+
+            if orifilter_num != currentfilter_num:
+                rank_path = prefix + '(' + str(l) + ')' + subfix
+                logger.info('loading rank from: ' + rank_path)
+                rank = np.load(rank_path)
+                select_index = np.argsort(rank)[orifilter_num - currentfilter_num:]  # preserved filter id
+                select_index.sort()
+
+                if last_select_index is not None and (l not in group_conv_list):
+                    for index_i, i in enumerate(select_index):
+                        for index_j, j in enumerate(last_select_index):
+                            state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                                oristate_dict[conv_weight_name][i][j]
+
+                        if bias_name is not None:
+                            state_dict[name_base + bias_name][index_i] = \
+                                oristate_dict[bias_name][i]
+
+                        if bn_name is not None:
+                            for bn_part in bn_part_name:
+                                state_dict[name_base + bn_name + bn_part][index_i] = \
+                                    oristate_dict[bn_name + bn_part][i]
+
+                else:
+                    for index_i, i in enumerate(select_index):
+                        state_dict[name_base + conv_weight_name][index_i] = \
+                            oristate_dict[conv_weight_name][i]
+
+                        if bias_name is not None:
+                            state_dict[name_base + bias_name][index_i] = \
+                                oristate_dict[bias_name][i]
+
+                        if bn_name is not None:
+                            for bn_part in bn_part_name:
+                                state_dict[name_base + bn_name + bn_part][index_i] = \
+                                    oristate_dict[bn_name + bn_part][i]
+                last_select_index = select_index
+
+            elif last_select_index is not None and (l not in group_conv_list):
+                for index_i in range(orifilter_num):
+                    for index_j, j in enumerate(last_select_index):
+                        state_dict[name_base + conv_weight_name][index_i][index_j] = \
+                            oristate_dict[conv_weight_name][index_i][j]
+
+                if bias_name is not None:
+                    state_dict[name_base + bias_name] = \
+                        oristate_dict[bias_name]
+
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
+                last_select_index = None
+
+            else:
+                state_dict[name_base + conv_weight_name] = oriweight
+
+                if bias_name is not None:
+                    state_dict[name_base + bias_name] = \
+                        oristate_dict[bias_name]
+
+                if bn_name is not None:
+                    for bn_part in bn_part_name:
+                        state_dict[name_base + bn_name + bn_part] = \
+                            oristate_dict[bn_name + bn_part]
+                last_select_index = None
+
+            if bn_name is not None:
+                state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[
+                    bn_name + '.num_batches_tracked']
+
+    for name, module in model.named_modules():
+        name = name.replace('module.', '')
+        if isinstance(module, nn.Conv2d):
+            conv_name = name + '.weight'
+            bn_name = list(name[:])
+            bn_name[-1] = str(int(name[-1]) + 1)
+            bn_name = ''.join(bn_name)
+            if conv_name not in all_honey_conv_weight:
+                state_dict[name_base + conv_name] = oristate_dict[conv_name]
+                for bn_part in bn_part_name:
+                    state_dict[name_base + bn_name + bn_part] = \
+                        oristate_dict[bn_name + bn_part]
+                state_dict[name_base + bn_name + '.num_batches_tracked'] = oristate_dict[
+                    bn_name + '.num_batches_tracked']
+
+        elif isinstance(module, nn.Linear):
+            state_dict[name_base + name + '.weight'] = oristate_dict[name + '.weight']
+            state_dict[name_base + name + '.bias'] = oristate_dict[name + '.bias']
+
+    model.load_state_dict(state_dict)
+
 def overall_load_efficientnet_model(args, model, oristate_dict, layer, logger, name_base=''):
     state_dict = model.state_dict()
 
@@ -3520,6 +3806,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
         elif args.arch == 'efficientnet_b0_changed_v4':
             overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
+        elif args.finetune_arch == 'adapter_efficientnet_b0_changed_v4_v2':
+            logger.info('load adapter_efficientnet_v2_model')
+            overall_load_adapter_efficientnet_v2_model(args, model, oristate_dict, 81, logger)
         elif args.arch == 'adapter15resnet_34':
             logger.info('adapter15resnet_34')
             overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
@@ -3592,6 +3881,9 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             elif args.finetune_arch == 'adapter_efficientnet_b0_changed_v4':
                 logger.info('graf_load_adapter_efficientnet_b0_changed_v4_model')
                 graf_overall_load_adapter_efficientnet_model(args, model, oristate_dict, 81, logger)
+            elif args.finetune_arch == 'adapter_efficientnet_b0_changed_v4_v2':
+                logger.info('graf_load_adapter_efficientnet_b0_changed_v4_model')
+                graf_overall_load_adapter_efficientnet_v2_model(args, model, oristate_dict, 81, logger)
             elif args.finetune_arch == 'efficientnet_b0_changed_v2':
                 logger.info('graf_load_efficientnet_b0_changed_v2_model')
                 graf_overall_load_efficientnet_model(args, model, oristate_dict, 81, logger)
