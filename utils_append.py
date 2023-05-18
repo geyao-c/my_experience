@@ -3114,7 +3114,7 @@ def graf_overall_load_adapter_efficientnet_model(args, model, oristate_dict, lay
     subfix = ".npy"
 
     l = 1
-    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 72, 77]
+    group_conv_list = [2, 7, 12, 17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 71]
     for ii in range(16):
         if ii == 0:
             t_list = [(0, 0), (1, 'conv', 0), (1, 'conv', 2), (2, 0)]
@@ -3589,8 +3589,8 @@ def load_arch_model(args, model, origin_model, ckpt, logger, graf=False):
             elif args.finetune_arch == 'resnet_34':
                 logger.info('graf_load_adapter15_resnet_34_model')
                 graf_overall_load_resnet_34_model(args, model, oristate_dict, 34, logger)
-            elif args.finetune_arch == 'adapter_efficientnet_b0_changed_v2':
-                logger.info('graf_load_adapter_efficientnet_b0_changed_v2_model')
+            elif args.finetune_arch == 'adapter_efficientnet_b0_changed_v4':
+                logger.info('graf_load_adapter_efficientnet_b0_changed_v4_model')
                 graf_overall_load_adapter_efficientnet_model(args, model, oristate_dict, 81, logger)
             elif args.finetune_arch == 'efficientnet_b0_changed_v2':
                 logger.info('graf_load_efficientnet_b0_changed_v2_model')
