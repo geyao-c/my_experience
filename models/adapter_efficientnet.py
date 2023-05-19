@@ -261,7 +261,7 @@ class Adapter_EfficientNet_CHANGED_V4_V2(nn.Module):
         [40,  80,  3, 1, 6, 0.25, 3],
         [80,  112, 3, 2, 6, 0.25, 3],
         [112, 192, 3, 1, 6, 0.25, 3],
-        [192, 320, 1, 1, 11, 0.25, 1]
+        [192, 320, 1, 1, 16, 0.25, 1]
     ]
 
     def __init__(self, compress_rate, param, num_classes=1000, stem_channels=32, feature_size=1280, drop_connect_rate=0.2):
