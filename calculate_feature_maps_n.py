@@ -149,8 +149,8 @@ def inference():
 
             if 'supcon-ce' in args.pretrain_dir or 'supcon' in args.pretrain_dir:
                 print('new supcon-ce dataset loader')
-                inputs, targets = inputs[0].to(device), targets.to(device)
-                # inputs, targets = inputs.to(device), targets.to(device)
+                # inputs, targets = inputs[0].to(device), targets.to(device)
+                inputs, targets = inputs.to(device), targets.to(device)
             else:
                 inputs, targets = inputs.to(device), targets.to(device)
 
