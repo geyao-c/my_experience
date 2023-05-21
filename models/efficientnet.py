@@ -740,7 +740,6 @@ def efficientnet_b0_changed_v4(sparsity, num_classes=10, dataset=None):
 def efficientnet_b0_changed_v5(sparsity, num_classes=10, dataset=None):
     return EfficientNet_CHANGED_V5(sparsity, (1.0, 1.0, 224, 0.2), num_classes=num_classes)
 
-
 if __name__ == '__main__':
     net_param = {
         # 'efficientnet type': (width_coef, depth_coef, resolution, dropout_rate)
