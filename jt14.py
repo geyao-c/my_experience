@@ -21,7 +21,7 @@ def fun1():
 
 
     adapter_resnet_34_original = adapter15resnet_34([0.] * 100)
-    adapter_resnet_34_pruned = adapter15resnet_34(sparsity)
+    adapter_resnet_34_pruned = adapter15resnet_34(sparsity, [0.4])
     input = torch.randn(1, 3, 224, 224)
     macs3, params3 = profile(adapter_resnet_34_original, inputs=(input,))
     macs4, params4 = profile(adapter_resnet_34_pruned, inputs=(input,))
