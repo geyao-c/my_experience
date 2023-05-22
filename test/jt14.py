@@ -1,6 +1,6 @@
 import argparse
 from thop import profile
-from models.adapter_resnet_imagenet import adapter15resnet_34
+from ..models.adapter_resnet_imagenet import adapter15resnet_34
 import torch
 import utils_append
 from models.resnet_imagenet import resnet_34
