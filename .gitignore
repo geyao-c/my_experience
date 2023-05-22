@@ -2,7 +2,7 @@
 pretrained_models/
 conv_feature_map/
 image/
-test/
+#test/
 result/
 data/cifar-10-batches-py
 data/cifar-100-python
