@@ -10,7 +10,8 @@ import torchvision
 from torchvision import datasets, transforms
 
 from models.efficientnet import efficientnet_b0, efficientnet_b0_changed_v2, efficientnet_b0_changed_v4
-from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v4, adapter_efficientnet_b0_changed_v4_v2
+from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v4, adapter_efficientnet_b0_changed_v4_v2, \
+    adapter_efficientnet_b0_changed_v5
 from models.mobilenetv2 import mobilenet_v2
 import utils_append
 
@@ -20,7 +21,7 @@ from data import imagenet
 parser = argparse.ArgumentParser(description='Rank extraction')
 
 parser.add_argument('--data_dir', type=str, default='./data', help='dataset path')
-parser.add_argument('--dataset', type=str, default='cifar10', choices=('cifar10','imagenet'), help='dataset')
+parser.add_argument('--dataset', type=str, default='cifar10', help='dataset')
 parser.add_argument('--save_dir', type=str, default=None, help='save dir')
 # parser.add_argument('--job_dir', type=str, default='result/tmp', help='The directory where the summaries will be stored.')
 parser.add_argument('--arch', type=str, default='vgg_16_bn', help='The architecture to prune')
@@ -332,6 +333,56 @@ elif args.arch == 'adapter_efficientnet_b0_changed_v4_v2':
         if i == 0:
             t_list = [(0, 2), (1, 'conv', 1), (1, 'conv', 3), (2, 1)]
         elif i == 14:
+            t_list = [(0, 2), (1, 'conv', 1), (1, 'conv', 3), (2, 1)]
+        else:
+            t_list = [(0, 2), (1, 2), (2, 'conv', 1), (2, 'conv', 3), (3, 1)]
+        for item in t_list:
+            if len(item) == 2:
+                cov_layer = block[item[0]][item[1]]
+            elif len(item) == 3:
+                cov_layer = eval('model.blocks[%d].conv[%d].conv[%d]' % (i, item[0], item[2]))
+                # cov_layer = block[item[0]].item[1][item[2]]
+            handler = cov_layer.register_forward_hook(get_feature_hook)
+            inference()
+            handler.remove()
+
+            filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+            np.save(filepath, feature_result.numpy())
+            conv_index += 1
+            feature_result = torch.tensor(0.)
+            total = torch.tensor(0.)
+            print('{} has been saved'.format(conv_index))
+
+    # 最后一层
+    cov_layer = eval('model.head_conv')
+    handler = cov_layer[2].sigmoid.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+    np.save(filepath, feature_result.numpy())
+    conv_index += 1
+    feature_result = torch.tensor(0.)
+    total = torch.tensor(0.)
+
+elif args.arch == 'adapter_efficientnet_b0_changed_v5':
+    # 第一层
+    cov_layer = eval('model.stem_conv')
+    handler = cov_layer[2].sigmoid.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    filepath = os.path.join(dirpath, 'rank_conv_' + str(conv_index) + '.npy')
+    np.save(filepath, feature_result.numpy())
+    feature_result = torch.tensor(0.)
+    total = torch.tensor(0.)
+    conv_index += 1
+
+    for i in range(0, 14):
+        block = eval('model.blocks[%d].conv' % (i))
+        if i == 0:
+            t_list = [(0, 2), (1, 'conv', 1), (1, 'conv', 3), (2, 1)]
+        elif i == 12:
             t_list = [(0, 2), (1, 'conv', 1), (1, 'conv', 3), (2, 1)]
         else:
             t_list = [(0, 2), (1, 2), (2, 'conv', 1), (2, 'conv', 3), (3, 1)]

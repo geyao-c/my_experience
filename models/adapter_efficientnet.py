@@ -158,8 +158,8 @@ class Adapter_EfficientNet_CHANGED_V4(nn.Module):
         [24,  40,  3, 2, 6, 0.25, 2],
         [40,  80,  3, 1, 6, 0.25, 3],
         [80,  112, 3, 2, 6, 0.25, 3],
-        [112, 192, 3, 1, 6, 0.25, 1],
-        [192, 192, 1, 1, 18, 0.25, 1],
+        [112, 192, 3, 1, 6, 0.25, 2],
+        [192, 192, 1, 1, 12, 0.25, 1],
         [192, 320, 3, 1, 6, 0.25, 1]
     ]
 
@@ -353,11 +353,116 @@ class Adapter_EfficientNet_CHANGED_V4_V2(nn.Module):
                 m.weight.data.normal_(0, 0.01)
                 m.bias.data.zero_()
 
+class Adapter_EfficientNet_CHANGED_V5(nn.Module):
+    config = [
+        #(in_channels, out_channels, kernel_size, stride, expand_ratio, se_ratio, repeats)
+        [32,  16,  3, 1, 1, 0.25, 1],
+        [16,  24,  3, 1, 6, 0.25, 2],
+        [24,  40,  3, 2, 6, 0.25, 2],
+        [40,  80,  3, 1, 6, 0.25, 3],
+        [80,  112, 3, 2, 6, 0.25, 3],
+        [112, 192, 3, 1, 6, 0.25, 1],
+        [192, 192, 1, 1, 18, 0.25, 1],
+        [192, 320, 3, 1, 6, 0.25, 1]
+    ]
+
+    def __init__(self, compress_rate, param, num_classes=1000, stem_channels=32, feature_size=1280, drop_connect_rate=0.2):
+        super(Adapter_EfficientNet_CHANGED_V5, self).__init__()
+
+        # 压缩率
+        self.compress_rate = compress_rate[:]
+
+        # scaling width
+        width_coefficient = param[0]
+        if width_coefficient != 1.0:
+            stem_channels = _RoundChannels(stem_channels*width_coefficient)
+            for conf in self.config:
+                conf[0] = _RoundChannels(conf[0]*width_coefficient)
+                conf[1] = _RoundChannels(conf[1]*width_coefficient)
+
+        # scaling depth
+        depth_coefficient = param[1]
+        if depth_coefficient != 1.0:
+            for conf in self.config:
+                conf[6] = _RoundRepeats(conf[6]*depth_coefficient)
+
+        # scaling resolution
+        input_size = param[2]
+
+        # stem convolution, 第一层卷积层
+        self.stem_conv = _Conv3x3Bn(3, stem_channels, 1)
+
+        # total #blocks, block总数
+        total_blocks = 0
+        for conf in self.config:
+            total_blocks += conf[6]
+
+        # mobile inverted bottleneck
+        blocks = []
+        cnt = 1
+        in_channels = stem_channels
+        for ii, (_, out_channels, kernel_size, stride, expand_ratio, se_ratio, repeats) in enumerate(self.config):
+            out_channels = int((1 - self.compress_rate[cnt]) * out_channels)
+            if ii == 6:
+                drop_rate = drop_connect_rate * (len(blocks) / total_blocks)
+                blocks.append(Adapter_MBConvBlock(in_channels, out_channels, kernel_size, stride, expand_ratio, se_ratio, drop_rate))
+                in_channels = out_channels
+            else:
+                for i in range(repeats):
+                    # drop connect rate based on block index
+                    drop_rate = drop_connect_rate * (len(blocks) / total_blocks)
+                    if i == 0:
+                        blocks.append(MBConvBlock(in_channels, out_channels, kernel_size, stride, expand_ratio, se_ratio, drop_rate))
+                    else:
+                        blocks.append(MBConvBlock(out_channels, out_channels, kernel_size, 1, expand_ratio, se_ratio, drop_rate))
+                    in_channels = out_channels
+            cnt += 1
+        self.blocks = nn.Sequential(*blocks)
+
+        # last several layers
+        # self.head_conv = _Conv1x1Bn(self.config[-1][1], feature_size)
+        self.head_conv = _Conv1x1Bn(in_channels, feature_size)
+        #self.avgpool = nn.AvgPool2d(input_size//32, stride=1)
+        self.dropout = nn.Dropout(param[3])
+        self.classifier = nn.Linear(feature_size, num_classes)
+
+        # self._initialize_weights()
+
+    def forward(self, x):
+        x = self.stem_conv(x)
+        x = self.blocks(x)
+        x = self.head_conv(x)
+        #x = self.avgpool(x)
+        #x = x.view(x.size(0), -1)
+        x = torch.mean(x, (2, 3))
+        x = self.dropout(x)
+        x = self.classifier(x)
+
+        return x
+
+    def c(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2.0 / n))
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.BatchNorm2d):
+                m.weight.data.fill_(1)
+                m.bias.data.zero_()
+            elif isinstance(m, nn.Linear):
+                n = m.weight.size(1)
+                m.weight.data.normal_(0, 0.01)
+                m.bias.data.zero_()
+
 def adapter_efficientnet_b0_changed_v4(sparsity, num_classes, adapter_sparsity, dataset=None):
     return Adapter_EfficientNet_CHANGED_V4(sparsity, (1.0, 1.0, 224, 0.2), num_classes=num_classes)
 
 def adapter_efficientnet_b0_changed_v4_v2(sparsity, num_classes, adapter_sparsity, dataset=None):
     return Adapter_EfficientNet_CHANGED_V4_V2(sparsity, (1.0, 1.0, 224, 0.2), num_classes=num_classes)
+
+def adapter_efficientnet_b0_changed_v5(sparsity, num_classes, adapter_sparsity, dataset=None):
+    return Adapter_EfficientNet_CHANGED_V5(sparsity, (1.0, 1.0, 224, 0.2), num_classes=num_classes)
 
 if __name__ == '__main__':
     net_param = {
