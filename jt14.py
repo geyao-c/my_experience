@@ -54,10 +54,10 @@ def fun2():
 
     print('macs1: {}, params1: {}'.format(macs1, params1))
     print('macs2: {}, params2: {}'.format(macs2, params2))
-    print('macs2/macs1: {}, params2/params1: {}'.format(macs2 / macs1, params2 / params1))
+    print('macs2/macs1: {}, params2/params1: {}'.format(1 - macs2 / macs1, 1 - params2 / params1))
     print('macs3: {}, params3: {}'.format(macs3, params3))
     print('macs4: {}, params4: {}'.format(macs4, params4))
-    print('macs4/macs3: {}, params4/params3: {}'.format(macs4 / macs3, params4 / params3))
+    print('macs4/macs3: {}, params4/params3: {}'.format(1 - macs4 / macs3, 1 - params4 / params3))
 
 if __name__ == '__main__':
     # fun1()
