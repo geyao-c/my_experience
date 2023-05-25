@@ -45,7 +45,7 @@ def fun2():
     macs1, params1 = profile(model1, inputs=(input,))
     macs2, params2 = profile(model2, inputs=(input,))
 
-    sparsity2 = '[0.]+[0.25]+[0.3]*3+0.3+0.3+0.3+0.3'
+    sparsity2 = '[0.]+[0.25]+[0.3]*3+0.32+0.315+0.315+0.3'
     sparsity2 = utils_append.analysis_sparsity(sparsity2)
     model3 = adapter_efficientnet_b0_changed_v5([0.]*100, 10, [0.]*100)
     model4 = adapter_efficientnet_b0_changed_v5(sparsity2, 10, [0.]*100)
