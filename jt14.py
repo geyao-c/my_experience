@@ -4,6 +4,8 @@ from models.adapter_resnet_imagenet import adapter15resnet_34
 import torch
 import utils_append
 from models.resnet_imagenet import resnet_34
+from models.efficientnet import efficientnet_b0_changed_v4
+from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v5
 
 parser = argparse.ArgumentParser("ImageNet training")
 parser.add_argument('--data_dir', type=str, default='../data', help='path to dataset')
@@ -33,8 +35,33 @@ def fun1():
     print('macs4: {}, params4: {}'.format(macs4, params4))
     print('macs4/macs3: {}, params4/params3: {}'.format(macs4 / macs3, params4 / params3))
 
+def fun2():
+    input = torch.randn(1, 3, 32, 32)
+
+    sparsity1 = '[0.]+[0.25]+[0.3]*3+0.32+0.315+0.3'
+    sparsity1 = utils_append.analysis_sparsity(sparsity1)
+    model1 = efficientnet_b0_changed_v4([0.]*100)
+    model2 = efficientnet_b0_changed_v4(sparsity1)
+    macs1, params1 = profile(model1, inputs=(input,))
+    macs2, params2 = profile(model2, inputs=(input,))
+
+    sparsity2 = '[0.]+[0.25]+[0.3]*3+0.3+0.3+0.3+0.3'
+    sparsity2 = utils_append.analysis_sparsity(sparsity2)
+    model3 = adapter_efficientnet_b0_changed_v5([0.]*100, 10, [0.]*100)
+    model4 = adapter_efficientnet_b0_changed_v5(sparsity2, 10, [0.]*100)
+    macs3, params3 = profile(model3, inputs=(input,))
+    macs4, params4 = profile(model4, inputs=(input,))
+
+    print('macs1: {}, params1: {}'.format(macs1, params1))
+    print('macs2: {}, params2: {}'.format(macs2, params2))
+    print('macs2/macs1: {}, params2/params1: {}'.format(macs2 / macs1, params2 / params1))
+    print('macs3: {}, params3: {}'.format(macs3, params3))
+    print('macs4: {}, params4: {}'.format(macs4, params4))
+    print('macs4/macs3: {}, params4/params3: {}'.format(macs4 / macs3, params4 / params3))
+
 if __name__ == '__main__':
-    fun1()
+    # fun1()
+    fun2()
 
 # 278405196.0 3893206.0
 # 280051836.0 3918982.0

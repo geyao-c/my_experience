@@ -608,7 +608,7 @@ class EfficientNet_CHANGED_V4(nn.Module):
         #x = x.view(x.size(0), -1)
         x = torch.mean(x, (2, 3))
         x = self.dropout(x)
-        x = self.classifier(x)
+        # x = self.classifier(x)
 
         return x
 
