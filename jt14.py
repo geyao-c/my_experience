@@ -60,8 +60,8 @@ def fun2():
     print('macs4/macs3: {}, params4/params3: {}'.format(1 - macs4 / macs3, 1 - params4 / params3))
 
 if __name__ == '__main__':
-    # fun1()
-    fun2()
+    fun1()
+    # fun2()
 
 # 278405196.0 3893206.0
 # 280051836.0 3918982.0
