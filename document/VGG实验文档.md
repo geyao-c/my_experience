@@ -496,6 +496,12 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_da
 --ci_dir ./calculated_ci/93.99_adapter_vgg_16_bn_cifar10 --batch_size 128 \
 --epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
 --pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar --sparsity [0.30]*7+[0.75]*5
+
+nohup python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch adapter_vgg_16_bn --finetune_arch adapter_vgg_16_bn \
+--result_dir ./result/graf_pruned/93.99_cifar10tocifar100_adapter_vgg_16_bn_pruned_81 \
+--ci_dir ./calculated_ci/93.99_adapter_vgg_16_bn_cifar10 --batch_size 128 \
+--epochs 300 --lr_type cos --learning_rate 0.1 --momentum 0.9 --weight_decay 0.0005 \
+--pretrain_dir ./pretrained_models/93.99_adapter_vgg_16_bn_cifar10.pth.tar --sparsity [0.30]*7+[0.75]*5 >> log.txt &
 ```
 
 ###### 裁剪87%

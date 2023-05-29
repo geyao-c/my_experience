@@ -49,7 +49,7 @@ class VGG(nn.Module):
 
         x = nn.AvgPool2d(2)(x)
         x = x.view(x.size(0), -1)
-        # x = self.classifier(x)
+        x = self.classifier(x)
         return x
 
 def vgg_16_bn(sparsity, num_classes=10, dataset=None):
