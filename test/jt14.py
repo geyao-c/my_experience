@@ -1,9 +1,10 @@
 import argparse
 from thop import profile
-from ..models.adapter_resnet_imagenet import adapter15resnet_34
+from models.adapter_resnet_imagenet import adapter15resnet_34
 import torch
 import utils_append
 from models.resnet_imagenet import resnet_34
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
 
 parser = argparse.ArgumentParser("ImageNet training")
 parser.add_argument('--data_dir', type=str, default='../data', help='path to dataset')
@@ -33,8 +34,13 @@ def fun1():
     print('macs4: {}, params4: {}'.format(macs4, params4))
     print('macs4/macs3: {}, params4/params3: {}'.format(macs4 / macs3, params4 / params3))
 
+def fun2():
+    model = adapter_vgg_16_bn([0.]*100)
+    print(model)
+
 if __name__ == '__main__':
-    fun1()
+    # fun1()
+    fun2()
 
 # 278405196.0 3893206.0
 # 280051836.0 3918982.0
