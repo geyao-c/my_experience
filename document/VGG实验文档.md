@@ -449,6 +449,7 @@ python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar100 --finetune_d
 ##### CIFAR-10 to CIFAR-100
 
 ```python
+# 裁剪81%
 python graf_prune_finetune_cifar_n.py --pretrained_dataset cifar10 --finetune_dataset cifar100 --finetune_data_dir ./data --pretrained_arch vgg_16_bn --finetune_arch vgg_16_bn \
 --result_dir ./result/graf_pruned/93.96_cifar10tocifar100_vgg_16_bn_pruned_83 \
 --ci_dir ./calculated_ci/93.96_vgg_16_bn_cifar10 --batch_size 128 \
