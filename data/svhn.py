@@ -9,6 +9,7 @@ import torchvision
 import torch
 from torchvision import datasets, transforms
 import argparse
+import os
 
 def load_svhn_data(args):
     # imagenet mean and std
@@ -32,12 +33,12 @@ def load_svhn_data(args):
         normalize,
     ])
     # this is a
-    trainset = torchvision.datasets.SVHN(root=args.data_dir, split='train', download=True, transform=transform_train)
+    trainset = torchvision.datasets.SVHN(root=os.path.join(args.data_dir, 'svhn'), split='train', download=True, transform=transform_train)
     # trainset = torchvision.datasets.CIFAR10(root=args.data_dir, train=True, download=True, transform=transform_train)
-    train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=1)
-    testset = torchvision.datasets.SVHN(root=args.data_dir, split='test', download=True, transform=transform_test)
+    train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=8)
+    testset = torchvision.datasets.SVHN(root=os.path.join(args.data_dir, 'svhn'), split='test', download=True, transform=transform_test)
     # testset = torchvision.datasets.CIFAR10(root=args.data_dir, train=False, download=True, transform=transform_test)
-    val_loader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, shuffle=False, num_workers=1)
+    val_loader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, shuffle=False, num_workers=8)
 
     return train_loader, val_loader
 
