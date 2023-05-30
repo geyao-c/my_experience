@@ -93,8 +93,9 @@ def train(epoch, train_loader1, train_loader2, model, criterion, optimizer, args
     logger.info('learning_rate: ' + str(cur_lr))
 
     num_iter = len(train_loader1)
+    train_loader2 = iter(train_loader2)
     for i, (images1, target1) in enumerate(train_loader1):
-        images2, target2 = next(iter(train_loader2))
+        images2, target2 = next(train_loader2)
 
         data_time.update(time.time() - end)
         images1 = images1.to(device); target1 = target1.to(device)
@@ -144,10 +145,11 @@ def validate(epoch, val_loader1, val_loader2, model, criterion, args, logger, de
 
     # switch to evaluation mode
     model.eval()
+    val_loader2 = iter(val_loader2)
     with torch.no_grad():
         end = time.time()
         for i, (images1, target1) in enumerate(val_loader1):
-            images2, target2 = next(iter(val_loader2))
+            images2, target2 = next(val_loader2)
 
             images1 = images1.to(device); target1 = target1.to(device)
             images2 = images2.to(device); target2 = target2.to(device)
