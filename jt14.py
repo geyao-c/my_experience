@@ -6,6 +6,8 @@ import utils_append
 from models.resnet_imagenet import resnet_34
 from models.efficientnet import efficientnet_b0_changed_v4
 from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v5
+from models.vgg_cifar10 import vgg_16_bn
+from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
 
 parser = argparse.ArgumentParser("ImageNet training")
 parser.add_argument('--data_dir', type=str, default='../data', help='path to dataset')
@@ -51,6 +53,28 @@ def fun2():
     model4 = adapter_efficientnet_b0_changed_v5(sparsity2, 10, [0.]*100)
     macs3, params3 = profile(model3, inputs=(input,))
     macs4, params4 = profile(model4, inputs=(input,))
+
+    print('macs1: {}, params1: {}'.format(macs1, params1))
+    print('macs2: {}, params2: {}'.format(macs2, params2))
+    print('macs2/macs1: {}, params2/params1: {}'.format(1 - macs2 / macs1, 1 - params2 / params1))
+    print('macs3: {}, params3: {}'.format(macs3, params3))
+    print('macs4: {}, params4: {}'.format(macs4, params4))
+    print('macs4/macs3: {}, params4/params3: {}'.format(1 - macs4 / macs3, 1 - params4 / params3))
+
+def fun3():
+    sparsity = '[0.30]*7+[0.75]*5'
+    sparsity = utils_append.analysis_sparsity(sparsity)
+    vgg_16_original = vgg_16_bn([0.] * 100)
+    vgg_16 = vgg_16_bn(sparsity)
+    input = torch.randn(1, 3, 32, 32)
+    macs1, params1 = profile(vgg_16_original, inputs=(input,))
+    macs2, params2 = profile(vgg_16, inputs=(input,))
+
+    adapter_vgg_16_original = adapter_vgg_16_bn([0.] * 100)
+    adapter_vgg_16 = adapter_vgg_16_bn(sparsity)
+    input = torch.randn(1, 3, 32, 32)
+    macs3, params3 = profile(adapter_vgg_16_original, inputs=(input,))
+    macs4, params4 = profile(adapter_vgg_16, inputs=(input,))
 
     print('macs1: {}, params1: {}'.format(macs1, params1))
     print('macs2: {}, params2: {}'.format(macs2, params2))
