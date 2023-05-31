@@ -4,6 +4,7 @@ from models.adapter_resnet_imagenet import adapter15resnet_34
 import torch
 import utils_append
 from models.resnet_imagenet import resnet_34
+from models.vgg_cifar10 import vgg_16_bn
 from models.adapter_vgg_cifar10 import adapter_vgg_16_bn
 
 parser = argparse.ArgumentParser("ImageNet training")
@@ -38,9 +39,32 @@ def fun2():
     model = adapter_vgg_16_bn([0.]*100)
     print(model)
 
+def fun3():
+    sparsity = '[0.30]*7+[0.75]*5'
+    sparsity = utils_append.analysis_sparsity(sparsity)
+    vgg_16_original = vgg_16_bn([0.] * 100)
+    vgg_16 = vgg_16_bn(sparsity)
+    input = torch.randn(1, 3, 32, 32)
+    macs1, params1 = profile(vgg_16_original, inputs=(input,))
+    macs2, params2 = profile(vgg_16, inputs=(input,))
+
+    adapter_vgg_16_original = adapter_vgg_16_bn([0.] * 100)
+    adapter_vgg_16 = adapter_vgg_16_bn(sparsity)
+    input = torch.randn(1, 3, 32, 32)
+    macs3, params3 = profile(adapter_vgg_16_original, inputs=(input,))
+    macs4, params4 = profile(adapter_vgg_16, inputs=(input,))
+
+    print('macs1: {}, params1: {}'.format(macs1, params1))
+    print('macs2: {}, params2: {}'.format(macs2, params2))
+    print('macs2/macs1: {}, params2/params1: {}'.format(1 - macs2 / macs1, 1 - params2 / params1))
+    print('macs3: {}, params3: {}'.format(macs3, params3))
+    print('macs4: {}, params4: {}'.format(macs4, params4))
+    print('macs4/macs3: {}, params4/params3: {}'.format(1 - macs4 / macs3, 1 - params4 / params3))
+
 if __name__ == '__main__':
     # fun1()
-    fun2()
+    # fun2()
+    fun3()
 
 # 278405196.0 3893206.0
 # 280051836.0 3918982.0
