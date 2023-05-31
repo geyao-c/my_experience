@@ -104,6 +104,7 @@ def train(epoch, train_loader1, train_loader2, model, criterion, optimizer, args
         images = torch.cat([images1, images2], 0)
         target = torch.cat([target1, target2], 0)
         target = target.add(10)
+        print(images.shape)
         adjust_learning_rate(optimizer, epoch, i, num_iter, args, logger)
 
         # compute outputy
