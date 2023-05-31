@@ -122,7 +122,8 @@ def main():
 
     logger.info('sparsity:' + str(sparsity))
     FINETUNE_CLASSES = utils_append.classes_num(args.finetune_dataset)
-    PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
+    # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
+    PRETRAINED_CLASSES = 20
     # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
