@@ -88,7 +88,8 @@ def main():
     model.load_state_dict(ckpt['state_dict'], strict=False)
 
     # 计算L1-norm分数
-    if args.arch == 'resnet_34':
+    ci = None
+    if args.arch == 'resnet_34' or args.arch == 'adapter15resnet_34':
         ci = cal_ci(model)
     elif args.arch == 'resnet_56' or args.arch == 'adapter15resnet_56':
         ci = cal_resnet_56_ci(model)
