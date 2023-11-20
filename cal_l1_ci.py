@@ -5,6 +5,8 @@ import argparse
 import time
 from models.resnet_imagenet import resnet_34
 from models.adapter_resnet_imagenet import adapter15resnet_34
+from models.resnet_cifar import resnet_56
+from models.adapter_resnet_new_three import adapter15resnet_56
 
 def getparse():
     parser = argparse.ArgumentParser("cal L1 norm")
@@ -42,17 +44,54 @@ def cal_ci(model):
 
     return layer_ci
 
+def cal_resnet_56_ci(model):
+    layer_ci = []
+    # 第一层卷积
+    x = cal_l1(model.conv1.weight.data)
+    layer_ci.append(x)
+
+    print(len(model.layer1))
+    for i in range(len(model.layer1)):
+        x = cal_l1(model.layer1[i].conv1.weight.data);
+        layer_ci.append(x)
+        x = cal_l1(model.layer1[i].conv2.weight.data);
+        layer_ci.append(x)
+
+    for i in range(len(model.layer2)):
+        x = cal_l1(model.layer2[i].conv1.weight.data);
+        layer_ci.append(x)
+        x = cal_l1(model.layer2[i].conv2.weight.data);
+        layer_ci.append(x)
+
+    for i in range(len(model.layer3)):
+        x = cal_l1(model.layer3[i].conv1.weight.data);
+        layer_ci.append(x)
+        x = cal_l1(model.layer3[i].conv2.weight.data);
+        layer_ci.append(x)
+
+    # for i in range(len(model.layer4)):
+    #     x = cal_l1(model.layer4[i].conv1.weight.data);
+    #     layer_ci.append(x)
+    #     x = cal_l1(model.layer4[i].conv2.weight.data);
+    #     layer_ci.append(x)
+
+    return layer_ci
+
 def main():
     # 首先获取参数
     args = getparse()
 
     # 加载模型
     model = eval(args.arch)()
+    print(model)
     ckpt = torch.load(args.model_path, map_location=torch.device('cpu'))
     model.load_state_dict(ckpt['state_dict'], strict=False)
 
     # 计算L1-norm分数
-    ci = cal_ci(model)
+    if args.arch == 'resnet_34':
+        ci = cal_ci(model)
+    elif args.arch == 'resnet_56' or args.arch == 'adapter15resnet_56':
+        ci = cal_resnet_56_ci(model)
 
     for i in range(args.num_layers):
         print(i)

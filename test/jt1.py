@@ -15,6 +15,8 @@ from models import resnet_tinyimagenet
 from models.selfsupcon_supcon_adapter_vgg import selfsupcon_supcon_adapter_vgg_16_bn
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_20
 import numpy as np
+import torch.nn.functional as F
+import torchvision.datasets as datasets
 
 def fun1():
     sparsity = '[0.0]*9+[0.2]*9+[0.2]*9'
@@ -121,6 +123,109 @@ def fun10():
     model = selfsupcon_supcon_adapter15resnet_20([0.] * 100, 10, [0.] * 100)
     print(model)
 
+def fun11():
+    sparsity = '[0.]*100'
+    sparsity = utils_append.analysis_sparsity(sparsity)
+    weight = torch.load('../pretrained_models/94.78_resnet_56_cifar10.pth.tar', map_location='cpu')
+    print(type(weight))
+    print(weight.keys())
+
+    model = resnet_cifar.resnet_56(sparsity, 10)
+    model.load_state_dict(weight['state_dict'])
+    print(type(model.conv1))
+    print(model.conv1.weight)
+
+def cal_l1(convl):
+    x = torch.sum(torch.abs(convl.view(convl.size(0), -1)), dim=1)
+    return x
+
+def fun12():
+    x = np.array([[[0.5, 0.1, 0.4], [-0.1, 0.6, 0.1], [0.2, -0.6, 0.5]],
+                  [[0.7, 0.1, 0.8], [0.6, -0.7, 0.0], [0.5, 0.9, -0.2]]])
+    x = torch.Tensor(x)
+    print(x)
+    print(x.shape)
+    x = cal_l1(x)
+    print(x)
+
+def fun13():
+    x = np.array([[[0.5]], [[0.1]], [[0.4]], [[-0.1]], [[0.6]], [[0.1]], [[0.2]], [[-0.6]], [[0.5]],
+                  [[0.7]], [[0.1]], [[0.8]], [[0.6]], [[-0.7]], [[0.0]], [[0.5]], [[0.9]], [[-0.2]]
+                  ])
+    x = torch.Tensor(x)
+    print(x.shape)
+    x = cal_l1(x)
+    print(x)
+
+def reduced_1_row_norm(input, row_index, data_index):
+    # input shape is (H, C, H * W)
+    # 把这一行赋值为0
+    input[data_index, row_index, :] = torch.zeros(input.shape[-1])
+    # 求矩阵的核范数
+    m = torch.norm(input[data_index, :, :], p = 'nuc').item()
+    return m
+
+def ci_score(path_conv):
+    # 保留4位小数
+    # conv_output = torch.tensor(np.round(np.load(path_conv), 4))
+    conv_output = path_conv
+    # print(conv_output)
+    print(conv_output.shape)
+    # 参数的意义分别为: batch, channel, height, width
+    # conv_reshape shape is (N, C, H * W)
+    conv_reshape = conv_output.reshape(conv_output.shape[0], conv_output.shape[1], -1)
+
+    r1_norm = torch.zeros([conv_reshape.shape[0], conv_reshape.shape[1]])
+    for i in range(conv_reshape.shape[0]):
+        for j in range(conv_reshape.shape[1]):
+            r1_norm[i, j] = reduced_1_row_norm(conv_reshape.clone(), j, data_index = i)
+
+    ci = np.zeros_like(r1_norm)
+
+    for i in range(r1_norm.shape[0]):
+        original_norm = torch.norm(torch.tensor(conv_reshape[i, :, :]), p='nuc').item()
+        ci[i] = original_norm - r1_norm[i]
+
+    # return shape: [batch_size, filter_number]
+    return ci
+
+def fun14():
+    conv1 = np.array([[[[0.5, 0.1, 0.4], [-0.1, 0.6, 0.1], [0.2, -0.6, 0.5]]],
+                  [[[0.7, 0.1, 0.8], [0.6, -0.7, 0.0], [0.5, 0.9, -0.2]]]])
+    conv1 = torch.Tensor(conv1)
+    print(conv1.shape)
+
+    conv2 = np.array([[[[0.5]]], [[[0.1]]], [[[0.4]]], [[[-0.1]]], [[[0.6]]], [[[0.1]]],
+                      [[[0.2]]], [[[-0.6]]], [[[0.5]]], [[[0.7]]], [[[0.1]]], [[[0.8]]],
+                      [[[0.6]]], [[[-0.7]]], [[[0.0]]], [[[0.5]]], [[[0.9]]], [[[-0.2]]]
+                      ])
+    conv2 = torch.Tensor(conv2)
+    print(conv2.shape)
+
+    x = torch.rand(5, 1, 5, 5)
+    print(x.shape)
+
+    output1 = F.conv2d(input=x, weight=conv1, stride=(1, 1), padding=1)
+    print(output1.shape)
+
+    output2 = F.conv2d(input=x, weight=conv2, stride=(1, 1))
+    print(output2.shape)
+
+    s1 = ci_score(output1)
+    print(s1)
+    s1 = np.mean(s1, axis=0)
+    print(s1)
+
+    s2 = ci_score(output2)
+    print(s2)
+    s2 = np.mean(s2, axis=0)
+    print(s2)
+
+def fun15():
+    testset = datasets.ImageFolder('./imagedataset')
+    print(testset)
+    print(testset.classes)
+
 if __name__ == '__main__':
     # fun1()
     # fun2()
@@ -131,4 +236,9 @@ if __name__ == '__main__':
     # fun7()
     # fun8()
     # fun9()
-    fun10()
+    # fun10()
+    # fun11()
+    # fun12()
+    # fun13()
+    # fun14()
+    fun15()

@@ -479,7 +479,13 @@ def adapter14resnet_56(sparsity, num_classes, adapter_sparsity):
                       adapter_out_channel=adoch_cfg['adapter14'], need_adapter=nd_cfg['adapter14'],
                       need_stage=nd_stage['adapter14'])
 
-def adapter15resnet_56(sparsity, num_classes, adapter_sparsity, dataset=None):
+def adapter15resnet_56(sparsity=None, num_classes=None, adapter_sparsity=None, dataset=None):
+    if sparsity is None:
+        sparsity = [0.0] * 100
+    if adapter_sparsity is None:
+        adapter_sparsity = [0.0] * 100
+    if num_classes is None:
+        num_classes = 10
     return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
                       need_stage=nd_stage['adapter15'])

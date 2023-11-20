@@ -184,7 +184,11 @@ class ResNet(nn.Module):
         # return x, feature
         return x
 
-def resnet_56(sparsity, num_classes, dataset=None):
+def resnet_56(sparsity=None, num_classes=None, dataset=None):
+    if sparsity is None:
+        sparsity = [0.0] * 100
+    if num_classes is None:
+        num_classes = 10
     # 不同的数据集网络结构可能有细微差别
     return ResNet(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, dataset=dataset)
 

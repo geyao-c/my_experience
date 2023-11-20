@@ -32,6 +32,9 @@ def reduced_1_row_norm(input, row_index, data_index):
 def ci_score(path_conv):
     # 保留4位小数
     conv_output = torch.tensor(np.round(np.load(path_conv), 4))
+    print(conv_output)
+    print(conv_output.shape)
+    # 参数的意义分别为: batch, channel, height, width
     # conv_reshape shape is (N, C, H * W)
     conv_reshape = conv_output.reshape(conv_output.shape[0], conv_output.shape[1], -1)
 

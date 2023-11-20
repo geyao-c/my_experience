@@ -268,11 +268,12 @@ class Adapter15ResNet34(nn.Module):
         for i, block in enumerate(self.layer4):
             x = block(x)
 
+        feature = x
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        # x = self.fc(x)
+        x = self.fc(x)
 
-        return x
+        return feature, x
 
 def adapter15resnet_34(sparsity=None, adapter_sparsity=None):
     if sparsity is None:

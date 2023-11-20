@@ -233,11 +233,12 @@ class ResNet34(nn.Module):
         for i, block in enumerate(self.layer4):
             x = block(x)
 
+        feature = x
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        # x = self.fc(x)
+        x = self.fc(x)
 
-        return x
+        return feature, x
 
 class ResNet50(nn.Module):
     def __init__(self, sparsity, num_classes=1000):
