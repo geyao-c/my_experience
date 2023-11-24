@@ -296,6 +296,8 @@ class ResNet50(nn.Module):
         return x
 
 def resnet_50(sparsity):
+    if sparsity is None:
+        sparsity = [0.0] * 100
     return ResNet50(sparsity=sparsity)
 
 def resnet_34(sparsity=None):
