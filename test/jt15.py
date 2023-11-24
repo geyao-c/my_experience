@@ -305,4 +305,5 @@ def resnet_34(sparsity=None):
 
 
 model = resnet_50([0.] * 100)
-torch.save(model, '../pretrained_models/1.0_resnet_50_imagenet.pth.tar')
+print(model)
+# torch.save(model, '../pretrained_models/1.0_resnet_50_imagenet.pth.tar')

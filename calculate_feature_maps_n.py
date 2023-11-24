@@ -23,6 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter22resnet_56, adapter23resnet_56, adapter24resnet_56, adapter15resnet_20, adapter19resnet_20, \
     adapter16resnet_32, adapter15resnet_32, adapter25resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
+from models.resnet_imagenet import resnet_50
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56, \
@@ -102,6 +103,8 @@ CLASSES = utils_append.classes_num(args.dataset)
 print('Loading Pretrained Model...')
 if args.arch == 'adapter15resnet_34':
     model = eval(args.arch)(sparsity=[0.] * 100, adapter_sparsity=[0.] * 100).to(device)
+elif args.arch == 'resnet_50':
+    model = eval(args.arch)(sparsity=[0.] * 100).to(device)
 elif 'adapter' in args.arch:
     model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, adapter_sparsity=[0.]*100,
                             dataset=args.dataset).to(device)
@@ -860,6 +863,101 @@ elif args.arch == 'adapter15resnet_32' :
             inference()
             handler.remove()
             cnt += 1
+
+elif args.arch == 'resnet_50':
+    cov_layer = eval('model.relu')
+    handler = cov_layer.register_forward_hook(get_feature_hook)
+    inference()
+    handler.remove()
+
+    cnt = 1
+    i = 0
+    block = eval('model.layer%d' % (i + 1))
+    # 每一个stage有5层
+    for j in range(3):
+        cov_layer = block[j].relu1
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu2
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu3
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+    i = 1
+    block = eval('model.layer%d' % (i + 1))
+    # 每一个stage有5层
+    for j in range(4):
+        cov_layer = block[j].relu1
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu2
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu3
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+    i = 2
+    block = eval('model.layer%d' % (i + 1))
+    # 每一个stage有5层
+    for j in range(6):
+        cov_layer = block[j].relu1
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu2
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu3
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+    i = 3
+    block = eval('model.layer%d' % (i + 1))
+    # 每一个stage有5层
+    for j in range(3):
+        cov_layer = block[j].relu1
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu2
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
+
+        cov_layer = block[j].relu3
+        handler = cov_layer.register_forward_hook(get_feature_hook)
+        inference()
+        handler.remove()
+        cnt += 1
 
 elif args.arch == 'adapter15resnet_34':
 

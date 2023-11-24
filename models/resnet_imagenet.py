@@ -241,7 +241,7 @@ class ResNet34(nn.Module):
         return feature, x
 
 class ResNet50(nn.Module):
-    def __init__(self, sparsity, num_classes=1000):
+    def __init__(self, sparsity, num_classes=500):
         super(ResNet50, self).__init__()
 
         overall_channel, mid_channel = adapt_channel(sparsity, stage_out_channel_50)
