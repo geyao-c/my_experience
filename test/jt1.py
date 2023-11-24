@@ -1,4 +1,3 @@
-import utils_append
 import argparse
 from data import tinyimagenet, mnist
 import os
