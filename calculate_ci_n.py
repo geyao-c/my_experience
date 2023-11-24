@@ -102,6 +102,30 @@ def special_adapter15resnet_34(repeat):
 
     return np.array(layer_ci_mean_total)
 
+def special_resnet_50(repeat):
+    num_layers = [1, 2, 3, 10, 11, 12, 22, 23, 24, 40, 41, 42]
+    layer_ci_mean_total = []
+    for j in num_layers:
+        repeat_ci_mean = []
+        start = time.time()
+        for i in range(repeat):
+            print('num layer {}, repeat {}'.format(j, i))
+            index = j * repeat + i + 1
+            # add
+            dirpath = args.feature_map_dir
+            path_conv = os.path.join(dirpath, 'conv_feature_map_tensor({}).npy'.format(str(index)))
+            batch_ci = ci_score(path_conv)
+            # 一个batch取平均值
+            single_repeat_ci_mean = np.mean(batch_ci, axis=0)
+            repeat_ci_mean.append(single_repeat_ci_mean)
+        # 5个batch取平均值
+        layer_ci_mean = np.mean(repeat_ci_mean, axis=0)
+        layer_ci_mean_total.append(layer_ci_mean)
+        end = time.time()
+        print('layer shape is {}, time cost {:.3f}'.format(layer_ci_mean.shape, (end - start)))
+
+    return np.array(layer_ci_mean_total)
+
 def main():
     repeat = args.repeat
     num_layers = args.num_layers
@@ -125,6 +149,8 @@ def main():
 
     if args.arch == 'adapter15resnet_34':
         special_adapter15resnet_34(repeat)
+    elif args.arch == 'resnet_50':
+        special_resnet_50(1)
     else:
         # 计算ci
         ci = mean_repeat_ci(repeat, num_layers)
