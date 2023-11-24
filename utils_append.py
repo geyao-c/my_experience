@@ -70,9 +70,10 @@ def supcon_dstget(args):
 
 # 根据args，返回最后一层的神经元数量
 def classes_num(datasetname):
-    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd', 'mnist', 'cifar10224', 'cifar100224']
+    dsetlist = ['cifar10', 'cifar100', 'cub', 'tinyimagenet', 'svhn', 'dtd', 'mnist', 'cifar10224', 'cifar100224',
+                'imagenet']
     # 最后一层全连接层神经元数量
-    clslist = [10, 100, 200, 200, 10, 47, 10, 10, 100]
+    clslist = [10, 100, 200, 200, 10, 47, 10, 10, 100, 500]
     idx = dsetlist.index(datasetname)
     CLASSES = clslist[idx]
     return CLASSES
