@@ -150,7 +150,7 @@ def main():
     if args.arch == 'adapter15resnet_34':
         special_adapter15resnet_34(repeat)
     elif args.arch == 'resnet_50':
-        special_resnet_50(1)
+        special_resnet_50(repeat)
     else:
         # 计算ci
         ci = mean_repeat_ci(repeat, num_layers)
