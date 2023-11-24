@@ -18,6 +18,7 @@ import numpy as np
 import torch.nn.functional as F
 import torchvision.datasets as datasets
 from models.adapter_resnet_imagenet import adapter15resnet_34
+from models.resnet_imagenet import resnet_50
 
 def fun1():
     sparsity = '[0.0]*9+[0.2]*9+[0.2]*9'
@@ -234,6 +235,10 @@ def fun16():
     # names = [item[0] for item in model._modules.items()]
     # print(names)
 
+def fun17():
+    model = resnet_50([0.] * 100)
+    torch.save(model, '../pretrained_models/1.0_resnet_50_imagenet.pth.tar')
+
 if __name__ == '__main__':
     # fun1()
     # fun2()
@@ -250,4 +255,5 @@ if __name__ == '__main__':
     # fun13()
     # fun14()
     # fun15()
-    fun16()
+    # fun16()
+    fun17()
