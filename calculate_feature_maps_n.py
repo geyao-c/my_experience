@@ -100,7 +100,9 @@ CLASSES = utils_append.classes_num(args.dataset)
 
 # Load pretrained model.
 print('Loading Pretrained Model...')
-if 'adapter' in args.arch:
+if args.arch == 'adapter15resnet_34':
+    model = eval(args.arch)(sparsity=[0.] * 100, adapter_sparsity=[0.] * 100).to(device)
+elif 'adapter' in args.arch:
     model = eval(args.arch)(sparsity=[0.]*100, num_classes=CLASSES, adapter_sparsity=[0.]*100,
                             dataset=args.dataset).to(device)
 else:
