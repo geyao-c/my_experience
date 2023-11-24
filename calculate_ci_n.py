@@ -78,6 +78,30 @@ def mean_repeat_ci(repeat, num_layers):
 
     return np.array(layer_ci_mean_total)
 
+def special_adapter15resnet_34(repeat):
+    num_layers = [1, 2, 7, 8, 15, 16, 27, 28]
+    layer_ci_mean_total = []
+    for j in num_layers:
+        repeat_ci_mean = []
+        start = time.time()
+        for i in range(repeat):
+            print('num layer {}, repeat {}'.format(j, i))
+            index = j * repeat + i + 1
+            # add
+            dirpath = args.feature_map_dir
+            path_conv = os.path.join(dirpath, 'conv_feature_map_tensor({}).npy'.format(str(index)))
+            batch_ci = ci_score(path_conv)
+            # 一个batch取平均值
+            single_repeat_ci_mean = np.mean(batch_ci, axis=0)
+            repeat_ci_mean.append(single_repeat_ci_mean)
+        # 5个batch取平均值
+        layer_ci_mean = np.mean(repeat_ci_mean, axis=0)
+        layer_ci_mean_total.append(layer_ci_mean)
+        end = time.time()
+        print('layer shape is {}, time cost {:.3f}'.format(layer_ci_mean.shape, (end - start)))
+
+    return np.array(layer_ci_mean_total)
+
 def main():
     repeat = args.repeat
     num_layers = args.num_layers
@@ -99,16 +123,19 @@ def main():
     else:
         save_dir = args.save_dir
 
-    # 计算ci
-    ci = mean_repeat_ci(repeat, num_layers)
+    if args.arch == 'adapter15resnet_34':
+        special_adapter15resnet_34(repeat)
+    else:
+        # 计算ci
+        ci = mean_repeat_ci(repeat, num_layers)
 
-    if args.arch == 'resnet_50':
-        num_layers = 53
-    for i in range(num_layers):
-        print(i)
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        np.save(save_dir + "/ci_conv{0}.npy".format(str(i + 1)), ci[i])
+        if args.arch == 'resnet_50':
+            num_layers = 53
+        for i in range(num_layers):
+            print(i)
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            np.save(save_dir + "/ci_conv{0}.npy".format(str(i + 1)), ci[i])
 
 if __name__ == '__main__':
     main()
