@@ -76,6 +76,7 @@ parser.add_argument('--batch_size', type=int, default=128, help='batch size for 
 parser.add_argument('--repeat', type=int, default=5, help='the number of different batches for calculating feature maps.')
 parser.add_argument('--save_dir', type=str, default=None, help='save dir')
 parser.add_argument('--which', type=str, default=None, help='which dataset')
+parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 # parser.add_argument('--gpu', type=str, default='0', help='gpu id')
 args = parser.parse_args()
 
