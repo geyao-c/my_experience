@@ -127,15 +127,7 @@ def special_resnet_50(repeat):
     return np.array(layer_ci_mean_total)
 
 def main():
-    import sys
-
-    # 打开一个文件以写入输出
-    f = open("output.txt", "w")
-    # 保存原来的标准输出
-    original_stdout = sys.stdout
-    # 重定向标准输出到文件
-    sys.stdout = f
-
+    print('start')
     repeat = args.repeat
     num_layers = args.num_layers
 
