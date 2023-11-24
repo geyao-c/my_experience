@@ -117,10 +117,9 @@ if args.arch=='vgg_16_bn' or args.arch=='resnet_56':
     checkpoint = torch.load(args.pretrain_dir, map_location=mapstr)
 else:
     print('come here')
+    print(model)
     checkpoint = torch.load(args.pretrain_dir, map_location=mapstr)
     print(checkpoint)
-
-print(model)
 
 print('come there')
 if args.arch=='resnet_50':
