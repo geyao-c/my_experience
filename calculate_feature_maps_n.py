@@ -23,7 +23,6 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter22resnet_56, adapter23resnet_56, adapter24resnet_56, adapter15resnet_20, adapter19resnet_20, \
     adapter16resnet_32, adapter15resnet_32, adapter25resnet_56
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
-from models.resnet_imagenet import resnet_50
 from models.supcon_adapter_resnet import supcon_adapter15resnet_56
 from models.sl_mlp_adapteresnet_cifar import sl_mlp_adapter15resnet_56
 from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15resnet_56, selfsupcon_supcon_resnet_56, \
@@ -120,6 +119,8 @@ else:
     print('come here')
     checkpoint = torch.load(args.pretrain_dir, map_location=mapstr)
     print(checkpoint)
+
+print(model)
 
 print('come there')
 if args.arch=='resnet_50':
