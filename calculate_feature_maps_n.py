@@ -118,9 +118,9 @@ if args.arch=='vgg_16_bn' or args.arch=='resnet_56':
 else:
     print('come here')
     print(model)
-    # checkpoint = torch.load(args.pretrain_dir, map_location=mapstr)
-    model.load_state_dict(torch.load(args.pretrain_dir, map_location=mapstr))
-    exit(1)
+    checkpoint = torch.load(args.pretrain_dir, map_location=mapstr)
+    # model.load_state_dict(torch.load(args.pretrain_dir, map_location=mapstr))
+    # exit(1)
     # print(checkpoint)
 
 print('come there')
