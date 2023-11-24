@@ -17,6 +17,7 @@ from models.selfsupcon_supcon_adapter_resnet import selfsupcon_supcon_adapter15r
 import numpy as np
 import torch.nn.functional as F
 import torchvision.datasets as datasets
+from models.adapter_resnet_imagenet import adapter15resnet_34
 
 def fun1():
     sparsity = '[0.0]*9+[0.2]*9+[0.2]*9'
@@ -226,6 +227,13 @@ def fun15():
     print(testset)
     print(testset.classes)
 
+def fun16():
+    model = adapter15resnet_34()
+    print(model)
+    # print(model._modules.items())
+    # names = [item[0] for item in model._modules.items()]
+    # print(names)
+
 if __name__ == '__main__':
     # fun1()
     # fun2()
@@ -241,4 +249,5 @@ if __name__ == '__main__':
     # fun12()
     # fun13()
     # fun14()
-    fun15()
+    # fun15()
+    fun16()

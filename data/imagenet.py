@@ -6,6 +6,11 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 from torch.utils.data import DataLoader
 
+def load_imagenet(args):
+    data_tmp = Data(args)
+    return data_tmp.train_loader, data_tmp.test_loader
+
+
 class Data:
     def __init__(self, args):
         pin_memory = False
