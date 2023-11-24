@@ -6,6 +6,26 @@ stage_repeat = [3, 4, 6, 3]
 stage_out_channel_50 = [64] + [256] * 3 + [512] * 4 + [1024] * 6 + [2048] * 3
 stage_out_channel_34 = [64] + [64] * 3 + [128] * 4 + [256] * 6 + [512] * 3
 
+def adapt_channel(sparsity, stage_out_channel):
+
+    stage_oup_cprate = []
+    stage_oup_cprate += [sparsity[0]]
+    for i in range(len(stage_repeat)-1):
+        stage_oup_cprate += [sparsity[i+1]] * stage_repeat[i]
+    stage_oup_cprate +=[0.] * stage_repeat[-1]
+
+    mid_scale_cprate = sparsity[len(stage_repeat):]
+
+    overall_channel = []
+    mid_channel = []
+    for i in range(len(stage_out_channel)):
+        if i == 0 :
+            overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
+        else:
+            overall_channel += [int(stage_out_channel[i] * (1-stage_oup_cprate[i]))]
+            mid_channel += [int(stage_out_channel[i]//4 * (1-mid_scale_cprate[i-1]))]
+
+    return overall_channel, mid_channel
 
 def adapt_channel_34(sparsity):
     stage_repeat = [3, 4, 6, 3]
