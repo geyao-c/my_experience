@@ -81,6 +81,7 @@ parser.add_argument('--mixup_alpha', default=0, type=float,
 parser.add_argument('--cutout', action='store_true', default=False, help='apply cutout')
 parser.add_argument('--n_holes', type=int, default=1, help='number of holes to cut out from image')
 parser.add_argument('--length', type=int, default=16, help='length of the holes')
+parser.add_argument('--blank_pruned', action='store_true', default=False, help='blank pruned')
 args = parser.parse_args()
 
 def main():
@@ -122,8 +123,8 @@ def main():
 
     logger.info('sparsity:' + str(sparsity))
     FINETUNE_CLASSES = utils_append.classes_num(args.finetune_dataset)
-    # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
-    PRETRAINED_CLASSES = 20
+    PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
+    # PRETRAINED_CLASSES = 20
     # 构建四个模型，一个训练模型，一个计算参数的模型，一个带预训练参数的模型
     if 'adapter' in args.finetune_arch:
         # 训练模型使用fintune_arch
@@ -174,23 +175,24 @@ def main():
     start_epoch = 0
     best_top1_acc= 0
 
-    # 加载训练模型，训练模型在不同的数据集上训练
-    logger.info('resuming from pretrain model')
-    # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
-    # origin_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0]*100).to(device)
-    map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    ckpt = torch.load(args.pretrain_dir, map_location=map_str)
+    if args.blank_pruned is False:
+        # 加载训练模型，训练模型在不同的数据集上训练
+        logger.info('resuming from pretrain model')
+        # PRETRAINED_CLASSES = utils_append.classes_num(args.pretrained_dataset)
+        # origin_model = eval(args.arch)(sparsity=[0.] * 100, num_classes=PRETRAINED_CLASSES, adapter_sparsity=[0.0]*100).to(device)
+        map_str = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+        ckpt = torch.load(args.pretrain_dir, map_location=map_str)
 
-    # 将原始模型参数载入到压缩模型中
-    logger.info("载入参数1")
-    # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
-    logger.info('args graf: {}'.format(args.graf))
-    if args.graf == False:
-        args.arch = args.pretrained_arch
+        # 将原始模型参数载入到压缩模型中
+        logger.info("载入参数1")
+        # utils_append.load_arch_model(args, model, origin_model, ckpt, logger, graf=True)
+        logger.info('args graf: {}'.format(args.graf))
+        if args.graf == False:
+            args.arch = args.pretrained_arch
 
-    # logger.info('random init')
-    # print(origin_model.state_dict().keys())
-    utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
+        # logger.info('random init')
+        # print(origin_model.state_dict().keys())
+        utils_append.load_arch_model(args, model, origin_model, ckpt, logger, args.graf)
 
     # 压缩原始模型，得到压缩后的精度
     # logger.info("载入参数2")
