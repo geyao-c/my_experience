@@ -23,7 +23,7 @@ from models.adapter_resnet_new_three import adapter9resnet_56, adapter10resnet_5
     adapter19resnet_56, adapter20resnet_56, adapter21resnet_56, adapter22resnet_56, \
     adapter23resnet_56, adapter24resnet_56, adapter15resnet_20, adapter16resnet_20, \
     adapter17resnet_20, adapter18resnet_20, adapter19resnet_20, adapter16resnet_32, \
-    adapter15resnet_32, adapter26resnet_56
+    adapter15resnet_32, adapter26resnet_56, adapter27resnet_56
 from models.adapter_efficientnet import adapter_efficientnet_b0_changed_v4, adapter_efficientnet_b0_changed_v4_v2, \
     adapter_efficientnet_b0_changed_v5
 from models.sl_mlp_resnet_cifar import sl_mlp_resnet_56
