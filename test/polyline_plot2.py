@@ -25,12 +25,14 @@ ax = sns.lineplot(data=df, x='Params pruning ratio(%)', y='Accuracy(%)', label='
 
 df['Params pruned ratio(%)'] = adr20_px
 df['Accuracy(%)'] = ad15r20_y
-ax = sns.lineplot(data=df, x='Params pruning ratio(%)', y='Accuracy(%)', label='Adapter-ResNet-20-V1', marker='o')
+# ax = sns.lineplot(data=df, x='Params pruning ratio(%)', y='Accuracy(%)', label='Adapter-ResNet-20-V1', marker='o')
+ax = sns.lineplot(data=df, x='Params pruning ratio(%)', y='Accuracy(%)', label='CES-ResNet-20-V1', marker='o')
 # ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
 ax.set_ylim(83, 93)
 # ax.set_xlim(0, 100)
 plt.legend(loc="best")
-plt.savefig('polyline_plot2.jpg')
+# plt.savefig('polyline_plot2.jpg')
+plt.savefig('CES-polyline_plot2.jpg')
 plt.show()
 

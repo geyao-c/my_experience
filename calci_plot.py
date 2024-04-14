@@ -5,21 +5,23 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 if __name__ == '__main__':
-    # dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
-    dirpath1 = './calculated_L1_ci/93.73_adapter15resnet_56_cifar10'
+    dirpath1 = './calculated_ci/93.73_adapter15resnet_56_cifar10'
+    # dirpath1 = './calculated_L1_ci/93.73_adapter15resnet_56_cifar10'
     # dirpath1 = './calculated_ci/93.99_adapter_vgg_16_bn_cifar10'
     # dirpath1 = 'calculated_ci/68.72_adapter19resnet_20_cifar100'
     # dirpath1 = 'calculated_ci/92.22_adapter15resnet_20_cifar10'
     # dirpath1 = './calculated_ci/93.91_adapter_vgg_16_bn_v4_cifar10'
     # dirpath2 = 'calculated_ci/92.21_resnet_20_cifar10'
-    # dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
-    dirpath2 = './calculated_L1_ci/93.59_resnet_56_cifar10'
+    dirpath2 = './calculated_ci/93.59_resnet_56_cifar10'
+    # dirpath2 = './calculated_L1_ci/93.59_resnet_56_cifar10'
     # dirpath2 = './calculated_ci/93.96_vgg_16_bn_cifar10'
     # dirpath2 = 'calculated_ci/68.70_resnet_20_cifar100'
 
+    # file = 'ci_conv16.npy'
+    # file = 'ci_conv18.npy'
     # file = 'ci_conv10.npy'
-    file = 'ci_conv52.npy'
-    # file = 'ci_conv54.npy'
+    # file = 'ci_conv52.npy'
+    file = 'ci_conv54.npy'
     filepath1 = os.path.join(dirpath1, file)
     filepath2 = os.path.join(dirpath2, file)
 
@@ -48,8 +50,10 @@ if __name__ == '__main__':
 
     df['Filter pruning ratio'] = x; df['PI'] = y1
     # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-20-V1', marker='o')
+    # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='CES-ResNet-20-V1', marker='o')
     # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-20-V2', marker='o')
-    ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-56', marker='o')
+    # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='Adapter-ResNet-56', marker='o')
+    ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='CES-ResNet-56', marker='o')
 
     df['Filter pruning ratio'] = x; df['PI'] = y2
     # ax = sns.lineplot(data=df, x='Filter pruning ratio', y='PI', label='ResNet-20', marker='o')
@@ -57,9 +61,13 @@ if __name__ == '__main__':
 
     # ax.set_title('Layer12')
     # ax.set_title('Layer18')
-    ax.set_title('Layer52')
-    # ax.set_title('Layer54')
+    # ax.set_title('Layer52')
+    ax.set_title('Layer54')
+    # ax.set_title('Layer16')
     plt.legend(loc="best", fontsize=12)
-    plt.savefig('calci_plot7.jpg')
+    # plt.savefig('ces-calci_plot7.jpg')
+    # plt.savefig('ces-calci_plot_l54.jpg')
+    plt.savefig('ces-calci_plot_l54.jpg')
+    # plt.savefig('calci_plot7.jpg')
     plt.show()
 

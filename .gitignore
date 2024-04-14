@@ -11,3 +11,5 @@ data/cifar-10-python.tar.gz
 data/svhn
 data/MNIST
 pruned_models/
+data/cifar-10-batches-py.zip
+data/cifar-100-python.zip

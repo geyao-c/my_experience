@@ -21,7 +21,8 @@ df['Accuracy(%)'] = y1
 ax = sns.lineplot(data=df, x='Single-layer filter pruning ratio(%)', y='Accuracy(%)', label='ResNet-56', marker='o')
 
 df['Accuracy(%)'] = y2
-ax = sns.lineplot(data=df, x='Single-layer filter pruning ratio(%)', y='Accuracy(%)', label='Adapter-ResNet-56', marker='o')
+# ax = sns.lineplot(data=df, x='Single-layer filter pruning ratio(%)', y='Accuracy(%)', label='Adapter-ResNet-56', marker='o')
+ax = sns.lineplot(data=df, x='Single-layer filter pruning ratio(%)', y='Accuracy(%)', label='CES-ResNet-56', marker='o')
 ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
 ax.set_ylim(92, 94.1)
@@ -30,7 +31,8 @@ ax.set_xlim(-0.05, 0.95)
 ax.set_title('Layer52')
 
 plt.legend(loc=3, fontsize='12')
-plt.savefig('resnet-56-single-layer52.jpg')
+# plt.savefig('resnet-56-single-layer52.jpg')
 # plt.savefig('resnet-56-single-layer2.jpg')
+plt.savefig('CES-resnet-56-single-layer2.jpg')
 plt.show()
 
