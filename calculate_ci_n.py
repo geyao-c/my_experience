@@ -128,6 +128,7 @@ def special_resnet_50(repeat):
 
 def main():
     print('start')
+    start = time.time()
     repeat = args.repeat
     num_layers = args.num_layers
 
@@ -163,6 +164,8 @@ def main():
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
             np.save(save_dir + "/ci_conv{0}.npy".format(str(i + 1)), ci[i])
+    end = time.time()
+    print("need {} seconds".format(int(end - start)))
 
 if __name__ == '__main__':
     main()

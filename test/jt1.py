@@ -1,4 +1,6 @@
 import argparse
+import time
+
 from data import tinyimagenet, mnist
 import os
 from PIL import Image
@@ -238,6 +240,18 @@ def fun17():
     model = resnet_50([0.] * 100)
     torch.save(model, '../pretrained_models/1.0_resnet_50_imagenet.pth.tar')
 
+def fun18():
+    start = time.time()
+    print(time.gmtime(start))
+    sum = 0
+    for i in range(100000000):
+        sum += i
+    print(sum)
+
+    end = time.time()
+    print(int(end - start))
+    print(time.gmtime(end))
+
 if __name__ == '__main__':
     # fun1()
     # fun2()
@@ -255,4 +269,5 @@ if __name__ == '__main__':
     # fun14()
     # fun15()
     # fun16()
-    fun17()
+    # fun17()
+    fun18()
