@@ -36,7 +36,8 @@ adoch_cfg = {
     'adapter22': [16 * 8] + [32 * 8] + [64 * 8],
     'adapter23': [32 * 8] + [64 * 8],
     'adapter24': [32 * 8],
-    'adapter25': [16 * 8]
+    'adapter25': [16 * 8],
+    'adapter26': [32 * 8]
 }
 
 nd_cfg = {
@@ -57,7 +58,8 @@ nd_cfg = {
     'adapter22': [8],
     'adapter23': [8],
     'adapter24': [8],
-    'adapter25': [8]
+    'adapter25': [8],
+    'adapter26': [8]
 }
 
 nd_stage = {
@@ -74,7 +76,8 @@ nd_stage = {
     'adapter22': [1, 2, 3],
     'adapter23': [2, 3],
     'adapter24': [2],
-    'adapter25': [1]
+    'adapter25': [1],
+    'adapter26': [2]
 }
 
 adoch_20_cfg = {
@@ -82,7 +85,8 @@ adoch_20_cfg = {
     'adapter16': [32 * 8] + [64 * 8],
     'adapter17': [16 * 8] + [32 * 8] + [64 * 8],
     'adapter18': [16 * 8] + [32 * 8],
-    'adapter19': [32 * 8]
+    'adapter19': [32 * 8],
+    'adapter26': [32 * 8]
 }
 
 nd_20_cfg = {
@@ -489,6 +493,17 @@ def adapter15resnet_56(sparsity=None, num_classes=None, adapter_sparsity=None, d
     return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
                       adapter_out_channel=adoch_cfg['adapter15'], need_adapter=nd_cfg['adapter15'],
                       need_stage=nd_stage['adapter15'])
+
+def adapter26resnet_56(sparsity=None, num_classes=None, adapter_sparsity=None, dataset=None):
+    if sparsity is None:
+        sparsity = [0.0] * 100
+    if adapter_sparsity is None:
+        adapter_sparsity = [0.0] * 100
+    if num_classes is None:
+        num_classes = 10
+    return ResNet_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
+                      adapter_out_channel=adoch_cfg['adapter26'], need_adapter=nd_cfg['adapter26'],
+                      need_stage=nd_stage['adapter26'])
 
 def adapter16resnet_56(sparsity, num_classes, adapter_sparsity):
     return ResNet_New_New(BasicBlock, 56, sparsity=sparsity, num_classes=num_classes, adapter_sparsity=adapter_sparsity,
