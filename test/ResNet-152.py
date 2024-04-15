@@ -173,11 +173,12 @@ def ci_score(x):
     return ci
 
 def fun1():
+    print('start: ')
     x = torch.rand((128, 64, 112, 112))
     start = time.time()
     ci_score(x)
     end = time.time()
-    print(int(end - start))
+    print('time comsume: ', int(end - start))
 
 if __name__ == '__main__':
     # model = ResNet152(10)
@@ -194,4 +195,6 @@ if __name__ == '__main__':
 8个 [128, 28, 28], [128, 28, 28], [512, 28, 28]
 36个 [256, 14, 14], [256, 14, 14], [1024, 28, 28]
 3个 [512, 7, 7], [512, 7, 7], [2048, 7, 7]
+
+nohup python ResNet-152.py > log.log &
 """
