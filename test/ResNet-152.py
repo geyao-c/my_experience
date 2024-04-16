@@ -173,12 +173,17 @@ def ci_score(x):
     return ci
 
 def fun1():
-    print('start: ')
-    x = torch.rand((128, 64, 112, 112))
-    start = time.time()
-    ci_score(x)
-    end = time.time()
-    print('time comsume: ', int(end - start))
+    # x_list = [torch.rand((128, 128, 28, 28)), torch.rand((128, 512, 28, 28)), torch.rand((128, 256, 14, 14)),
+    #           torch.rand((128, 1024, 14, 14)), torch.rand((128, 512, 7, 7)), torch.rand((128, 2048, 7, 7))]
+    x_list = [torch.rand((128, 64, 56, 56)), torch.rand((128, 512, 7, 7))]
+    for x in x_list:
+        print('start: ')
+        # x = torch.rand((128, 64, 112, 112))
+        # x = torch.rand((128, 256, 56, 56))
+        start = time.time()
+        ci_score(x)
+        end = time.time()
+        print('time comsume: ', int(end - start))
 
 if __name__ == '__main__':
     # model = ResNet152(10)
@@ -190,11 +195,35 @@ if __name__ == '__main__':
     fun1()
 
 """
-1个 [64, 112, 112]
-3个 [64, 56, 56], [64, 56, 56], [256, 56, 56]
-8个 [128, 28, 28], [128, 28, 28], [512, 28, 28]
-36个 [256, 14, 14], [256, 14, 14], [1024, 28, 28]
-3个 [512, 7, 7], [512, 7, 7], [2048, 7, 7]
+1个 [64, 112, 112] 651 S
+3个 [64, 56, 56] 71, [64, 56, 56], [256, 56, 56] 3680 = 11466 
+8个 [128, 28, 28] 107, [128, 28, 28], [512, 28, 28] 4268 = 35856
+36个 [256, 14, 14] 120, [256, 14, 14], [1024, 14, 14] 1399 = 59004
+3个 [512, 7, 7] 60, [512, 7, 7], [2048, 7, 7] 926 = 3138
 
+153个小时
 nohup python ResNet-152.py > log.log &
+
+start: 
+/Users/chenjie/code/CHIP_New_Git/test/ResNet-152.py:154: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  conv_output = torch.tensor(np.round(x, 4))
+torch.Size([128, 128, 28, 28])
+/Users/chenjie/code/CHIP_New_Git/test/ResNet-152.py:169: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  original_norm = torch.norm(torch.tensor(conv_reshape[i, :, :]), p='nuc').item()
+time comsume:  107
+start: 
+torch.Size([128, 512, 28, 28])
+time comsume:  4268
+start: 
+torch.Size([128, 256, 14, 14])
+time comsume:  120
+start: 
+torch.Size([128, 1024, 14, 14])
+time comsume:  1399
+start: 
+torch.Size([128, 512, 7, 7])
+time comsume:  60
+start: 
+torch.Size([128, 2048, 7, 7])
+time comsume:  926
 """
